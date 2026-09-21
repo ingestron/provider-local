@@ -1,0 +1,62 @@
+apiVersion: ingestron.project/v1
+id: synthetic_example
+providers:
+  packages:
+    synthetic: example/source/connector.yaml@1.0.0
+    local: ingestron/provider-local@0.4.0
+  configurations:
+    local:
+      package: local
+      binding: runtime
+defaults:
+  provider: local
+environments:
+  dev:
+    apiVersion: ingestron.environment/v1
+    environment: dev
+    bindings:
+      runtime:
+        kind: local
+connections:
+  demo:
+    package: synthetic
+    sourceId: synthetic_users
+    tenantId: demo
+    settings:
+      count: 3
+flows:
+  - apiVersion: ingestron.flow/v1
+    kind: ingestion
+    id: users_local
+    provider: local
+    ingestion:
+      connection: demo
+      timeoutSeconds: 120
+      execution:
+        mode: local
+    tables:
+      users:
+        source:
+          stream: users
+        contract:
+          apiVersion: v3.1.0
+          kind: DataContract
+          id: demo-users
+          name: Synthetic users
+          version: 1.0.0
+          status: draft
+          description:
+            purpose: Synthetic protocol and engine qualification. No real personal data.
+          schema:
+            - name: users
+              logicalType: object
+              physicalType: table
+              properties:
+                - name: id
+                  logicalType: integer
+                  physicalType: BIGINT
+                  required: true
+                - name: age
+                  logicalType: integer
+                  physicalType: BIGINT
+                  required: true

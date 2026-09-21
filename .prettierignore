@@ -1,0 +1,4 @@
+node_modules/
+build/
+plugin/commands.mjs
+plugin/lifecycle.mjs

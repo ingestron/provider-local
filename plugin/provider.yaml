@@ -1,0 +1,111 @@
+apiVersion: ingestron.provider/v1
+id: local
+version: 0.4.0
+platform: local
+activities: {}
+compatibility:
+  plan: ingestron.plan/v1
+  minimumCli: 4.2.0
+  requiredFeatures:
+    - connector-runtime-capabilities
+    - project-connections
+    - odcs-connections
+    - project-assembly
+    - provider-execution
+execution:
+  apiVersion: ingestron.execution/v1
+  transport: local-python/v1
+  entryPoint: execute.py
+  actions:
+    - prepare
+    - discover
+    - review
+    - approve
+    - run
+  status: receipt
+  retry: same-run-id
+  cancellation: interrupt
+connectorRuntimes:
+  ingestron.snapshot/python/v1:
+    selectionSchema:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          name:
+            type: string
+            minLength: 1
+          fields:
+            type: object
+            additionalProperties:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - integer
+                    - string
+                    - boolean
+                    - number
+                    - decimal
+                    - json
+                nullable:
+                  type: boolean
+                precision:
+                  type: integer
+                scale:
+                  type: integer
+              required:
+                - type
+                - nullable
+              additionalProperties: false
+        required:
+          - name
+          - fields
+        additionalProperties: false
+    executionSchema:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum:
+            - local
+      required:
+        - mode
+      additionalProperties: false
+    executionPlatforms:
+      - local
+    prepareCommand: connection prepare
+    contractsCommand: connector contracts
+lifecycle:
+  apiVersion: ingestron.provider-lifecycle/v1
+  module: ./lifecycle.mjs
+commands:
+  apiVersion: ingestron.provider-commands/v1
+  execution: offline-json
+  module: ./commands.mjs
+  definitions:
+    - name: connection prepare
+      description: Prepare a project-resolved connection, selected fields and
+        runtime-only secrets
+      inputSchema:
+        type: object
+        additionalProperties: true
+    - name: connector contracts
+      description: Export reviewed ODCS contracts
+      inputSchema:
+        type: object
+        properties:
+          review:
+            type: object
+        required:
+          - review
+        additionalProperties: false
+    - name: project assemble
+      description: Assemble one scoped platform project without deployment
+      inputSchema:
+        type: object
+        additionalProperties: true
+projectAssembly:
+  apiVersion: ingestron.project-assembly/v1
+  command: project assemble
