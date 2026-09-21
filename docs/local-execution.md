@@ -1,6 +1,6 @@
 # Run a reviewed local flow
 
-Use CLI/core 0.12.0, provider 0.4.0, Node 22 and Python 3.12 on macOS/Linux.
+Use CLI 0.12.1/core 0.12.0, provider 0.4.0, Node 22 and Python 3.12 on macOS/Linux.
 Install a source package implementing `ingestron.snapshot/python/v1` separately.
 The provider supplies compute and orchestration; the source supplies discovery,
 review, approval, extraction and snapshot recovery. There is no bundled public
@@ -69,7 +69,8 @@ integer, string, boolean, floating point and decimal (precision up to 38).
 - **Unsupported column:** change the reviewed mapping or choose a compatible
   source/provider; unsupported types fail rather than silently coercing data.
 
-Use explicit `--env-file .env` for source-declared secret variables and keep it
+CLI 0.12.1 replaces `--env-file`, which Node can intercept before CLI startup.
+Use explicit `--secrets-file .env` for source-declared secret variables and keep it
 untracked. Retain wanted output and receipts before deleting a disposable project.
 Do not edit generated files or add packages to `.ingestron/runtimes` manually.
 
