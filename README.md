@@ -9,7 +9,7 @@ Python 3.12, and macOS/Linux. Local foreground execution is a preview; source
 connectivity and snapshot behaviour depend on the selected source package.
 
 ```sh
-ingestron plugin install ingestron/provider-local@0.4.0
+ingestron plugin install ingestron/provider-local@0.4.1
 ```
 
 Configure a compatible source package, connection and ODCS table in your project,
@@ -58,3 +58,9 @@ Run `pnpm acceptance` separately for the installed command boundary. See
 
 Licensed under Apache-2.0 by Otrera Limited. Source packages and dependencies
 retain their own licences.
+
+Runtime preparation searches for an existing Python 3.12 on PATH or through uv;
+it never downloads Python. Use `--python` to select an explicit interpreter. The
+prepare result reports its Python version and reuse status; verbose run status
+includes the environment executable path. Source errors expose only recognised
+safe diagnostic messages, never upstream response bodies.
