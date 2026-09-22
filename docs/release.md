@@ -31,7 +31,7 @@ from public GitHub instead of the local plugin fixture. Both overrides are for e
 maintainer qualification and are unnecessary for normal validation.
 
 Update package and generated manifest versions together. Commit deterministic
-`plugin/` assets, pass both gates, then tag the reviewed commit as `0.4.0`.
+`plugin/` assets, pass both gates, then tag the reviewed commit as `0.4.1`.
 Tags must match the manifest and must never be moved after publication. Users
 install through Git; this repository's private npm build package is not an npm
 publication target. No extra runtime dependency on core is needed: the CLI hosts

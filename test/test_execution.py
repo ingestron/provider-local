@@ -43,4 +43,13 @@ class Execution(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,'lock syntax'):module.environment(root,info,cache,{},True)
             self.assertEqual(len(list(cache.glob('*/ready.json'))),1)
 
-if __name__=='__main__':unittest.main()
+
+
+    def test_source_errors_are_allowlisted_and_do_not_echo_messages(self):
+        import sys
+        for code,expected in [('GITHUB_AUTH','rejected the supplied token'),('GITHUB_RATE_LIMIT','rate limit'),('unknown','Runtime operation failed')]:
+            payload=json.dumps({'errorCode':code,'error':'sensitive-token-source-data'})
+            with self.assertRaises(ValueError) as caught:
+                module.child([sys.executable,'-c','import sys;print('+repr(payload)+');sys.exit(1)'],Path.cwd())
+            self.assertIn(expected,str(caught.exception))
+            self.assertNotIn('sensitive',str(caught.exception))

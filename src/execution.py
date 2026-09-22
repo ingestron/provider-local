@@ -68,7 +68,21 @@ def child(args, cwd, timeout=900, env=None):
                           start_new_session=True) as process:
         try:
             output, _ = process.communicate(timeout=timeout)
-            require(process.returncode == 0, 'Runtime operation failed; check the locked environment, source access and review')
+            if process.returncode != 0:
+                messages = {
+                    'GITHUB_AUTH': 'GitHub rejected the supplied token. Check or replace it; no anonymous fallback was attempted.',
+                    'GITHUB_FORBIDDEN': 'GitHub denied access. Check permissions or retry after any secondary rate limit.',
+                    'GITHUB_NOT_FOUND': 'Repository not found or inaccessible. Check owner/name and permissions.',
+                    'GITHUB_RATE_LIMIT': 'GitHub rate limit reached. Wait before retrying or configure an authorised token.',
+                    'GITHUB_UNAVAILABLE': 'GitHub is temporarily unavailable. Retry later.',
+                    'GITHUB_RESPONSE': 'GitHub returned an unsupported response or redirect. Check the repository name.',
+                    'GITHUB_NETWORK': 'Cannot reach GitHub. Check network access and retry.',
+                }
+                try:
+                    code = json.loads(output).get('errorCode') if len(output) <= 10000 else None
+                except (ValueError, AttributeError):
+                    code = None
+                raise ValueError(messages.get(code, 'Runtime operation failed; check the locked environment, source access and review'))
             require(len(output) <= 10_000_000, 'Runtime response exceeds limit')
             return output.decode()
         finally:
@@ -154,7 +168,8 @@ def execute(request):
         runtime = project['environments'][info['runtime']]
         python, key, reused = environment(root, runtime, cache, request, action == 'prepare')
         if action == 'prepare':
-            results.append({'flow': flow, 'environment': key, 'reused': reused})
+            results.append({'flow': flow, 'environment': key, 'reused': reused,
+                            'python': python, 'pythonVersion': load(cache / key / 'ready.json')['python']})
             continue
         # All flows are verified against their exact source-owned runtime before source access.
         child([python, '-c', 'import json,pathlib,singer_runtime as r; p=pathlib.Path.cwd(); r.runtime_identity(json.loads((p/"connector.json").read_text()),p)'], folder, 30)
