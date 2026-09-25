@@ -4,7 +4,7 @@ Build and run reviewed ingestion flows on your own machine using Ingestron and
 Python. The provider prepares execution files, manages locked Python environments,
 and launches independently installed source packages. It does not bundle connectors.
 
-**Compatibility:** Ingestron CLI 0.12.0, `@ingestron/core` 0.12.0, Node 22,
+**Compatibility:** Ingestron CLI 0.15.1, `@ingestron/core` 0.12.4, Node 22,
 Python 3.12, and macOS/Linux. Local foreground execution is a preview; source
 connectivity and snapshot behaviour depend on the selected source package.
 
@@ -34,7 +34,8 @@ explains source requirements, output ownership and recovery.
 
 This repository includes a test-only source that writes three JSON records. It
 exercises the installed CLI, registry core, Git plugin installation, Python
-environment preparation, approval, execution and retry without private packages.
+environment preparation, installed model-contract resolution, approval, execution
+and retry without private packages.
 It is not a production connector or a Parquet implementation.
 
 ```sh
@@ -44,9 +45,8 @@ node scripts/install-cli.mjs
 pnpm acceptance
 ```
 
-The installer builds the exact public CLI GitHub commit documented in
-[release instructions](docs/release.md), then installs its package and registry
-core in `.cli-host`. It does not use sibling checkouts. The example and results
+The installer installs the exact published npm CLI and core versions listed in
+[release instructions](docs/release.md) into `.cli-host`. It does not use sibling checkouts. The example and results
 are retained in `build/execution-acceptance`; the script replaces this disposable
 folder on each run. Source files start at [project.yaml](examples/synthetic/project.yaml).
 
