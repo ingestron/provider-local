@@ -1,17 +1,17 @@
 # Run a reviewed local flow
 
-Use CLI 0.12.1/core 0.12.0, provider 0.4.1, Node 22 and Python 3.12 on macOS/Linux.
+Use CLI 0.15.1/core 0.12.4, provider 0.4.1, Node 22 and Python 3.12 on macOS/Linux.
 Install a source package implementing `ingestron.snapshot/python/v1` separately.
 The provider supplies compute and orchestration; the source supplies discovery,
-review, approval, extraction and snapshot recovery. There is no bundled public
-connector catalogue. The repository's synthetic example exercises the boundary
+review, approval, extraction and snapshot recovery. The CLI can resolve qualified public connector names; the provider does not
+bundle their runtimes. The repository's synthetic example exercises the boundary
 using JSON output, not a production source.
 
 ## Configure and build
 
 Install `ingestron/provider-local@0.4.1`. Install your source using its explicit
 `owner/repository/path/connector.yaml@version` reference. Lock both packages and
-commit the project lockfile. Configure `providers.packages`, a `local` provider
+commit the project lockfile. Configure top-level `packages`, a `local` provider
 configuration, a `kind: local` environment binding, and a connection referencing
 the source package. Ingestion flows use `execution: { mode: local }` and ODCS tables.
 The [synthetic project](../examples/synthetic/project.yaml) shows this structure;

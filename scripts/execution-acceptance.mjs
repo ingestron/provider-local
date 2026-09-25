@@ -24,12 +24,13 @@ const cli = resolve(".cli-host/node_modules/ingestron/build/cli/cli/index.js");
 const host = JSON.parse(
   readFileSync(".cli-host/node_modules/ingestron/package.json"),
 );
-assert.equal(host.version, "0.12.0");
-assert.equal(host.dependencies["@ingestron/core"], "0.12.0");
+const baseline = JSON.parse(readFileSync("scripts/cli-baseline.json"));
+assert.equal(host.version, baseline.cli);
+assert.equal(host.dependencies["@ingestron/core"], baseline.core);
 const core = JSON.parse(
   readFileSync(".cli-host/node_modules/@ingestron/core/package.json"),
 );
-assert.equal(core.version, "0.12.0");
+assert.equal(core.version, baseline.core);
 const { syntheticSource } = await import("./synthetic-source.mjs");
 const sourceDirectory = process.env.INGESTRON_TEST_SOURCE_DIRECTORY;
 const sourceVersion = sourceDirectory
@@ -83,8 +84,35 @@ try {
     },
     configurations: { local: { package: "local", binding: "runtime" } },
   };
+  p.packages = p.providers.packages;
+  delete p.providers.packages;
   p.flows = p.flows.filter((f) => f.provider === "local");
   p.environments.dev.bindings = { runtime: { kind: "local" } };
+  const contract = structuredClone(p.flows[0].tables.users.contract);
+  const modelFixture = resolve(temp, "model-fixture");
+  mkdirSync(modelFixture);
+  writeFileSync(
+    resolve(modelFixture, "pack.yaml"),
+    stringify({
+      apiVersion: "ingestron.extension-pack/v2",
+      kind: "model",
+      id: "synthetic-model",
+      description: "Synthetic model contract for installed provider acceptance",
+      version: "1.0.0",
+      contracts: { users: contract },
+      provenance: {
+        sources: ["test-only synthetic fixture"],
+        retrieved: "2026-09-25",
+        status: "documented-projection",
+        notes: "No real source or personal data",
+      },
+    }),
+  );
+  const modelOrigin = origin("models", modelFixture, ".", "1.0.0");
+  p.modelPacks = {
+    demo: { source: "example/models/pack.yaml", version: "1.0.0" },
+  };
+  p.flows[0].tables.users.contract = { $model: "demo:users" };
   p.flows.push({ ...structuredClone(p.flows[0]), id: "users_second" });
   writeFileSync(resolve(project, "project.yaml"), stringify(p));
   const call = (ok, ...args) => {
@@ -99,6 +127,8 @@ try {
     } catch {
       throw Error(proc.stderr + proc.stdout);
     }
+    assert.equal(proc.error, undefined);
+    assert.equal(proc.status === 0, ok, proc.stdout + proc.stderr);
     assert.equal(r.ok, ok, JSON.stringify(r));
     return r;
   };
@@ -121,6 +151,15 @@ try {
     source,
     "--cache-only",
   );
+  call(
+    true,
+    "plugin",
+    "install",
+    "example/models/pack.yaml@1.0.0",
+    "--from-git",
+    modelOrigin,
+    "--cache-only",
+  );
   call(true, "plugin", "show", "local");
   writeFileSync(
     resolve(project, "contract-request.json"),
@@ -128,7 +167,7 @@ try {
       review: {
         apiVersion: "ingestron.singer-review/v1",
         status: "approved",
-        contracts: { users: p.flows[0].tables.users.contract },
+        contracts: { users: contract },
       },
     }),
   );
@@ -242,6 +281,7 @@ print('Two Parquet files: three rows and id/age columns verified')
           : "synthetic JSON fixture",
         local: version,
         managedEnvironment: true,
+        modelContractResolved: true,
         storedRowsReadBack: true,
         flows: 2,
         rowsPerFlow: 3,

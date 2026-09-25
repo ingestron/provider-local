@@ -1,9 +1,9 @@
 apiVersion: ingestron.project/v1
 id: synthetic_example
+packages:
+  synthetic: example/source/connector.yaml@1.0.0
+  local: ingestron/provider-local@0.4.1
 providers:
-  packages:
-    synthetic: example/source/connector.yaml@1.0.0
-    local: ingestron/provider-local@0.4.1
   configurations:
     local:
       package: local

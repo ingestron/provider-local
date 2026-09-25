@@ -4,9 +4,14 @@ const walk = (directory) =>
   readdirSync(directory, { withFileTypes: true })
     .filter(
       (entry) =>
-        !["node_modules", ".git", ".venv", "__pycache__", "build"].includes(
-          entry.name,
-        ),
+        ![
+          "node_modules",
+          ".git",
+          ".cli-host",
+          ".venv",
+          "__pycache__",
+          "build",
+        ].includes(entry.name),
     )
     .flatMap((entry) =>
       entry.isDirectory()
