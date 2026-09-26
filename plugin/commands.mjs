@@ -448,7 +448,9 @@ function validateProjectConnection(input, descriptor) {
         throw Error("Invalid decimal precision/scale");
     }
   for (const table of Object.values(selection)) {
-    const targets = Object.entries(table.fields).map(([source, field2]) => field2.target ?? source);
+    const targets = Object.entries(table.fields).map(
+      ([source, field2]) => field2.target ?? source
+    );
     if (new Set(targets).size !== targets.length || targets.some((target) => !/^[A-Za-z_][A-Za-z0-9_]*$/.test(target)))
       throw Error("Invalid or duplicate target field");
   }
@@ -542,7 +544,11 @@ function selectionFromTables(tables) {
         scale: Number(decimal[2]),
         nullable: !column.required,
         ...target !== column.name ? { target } : {}
-      } : { type: mapped, nullable: !column.required, ...target !== column.name ? { target } : {} };
+      } : {
+        type: mapped,
+        nullable: !column.required,
+        ...target !== column.name ? { target } : {}
+      };
     }
     selected[table.source.stream] = { name, fields };
   }
