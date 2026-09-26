@@ -10,10 +10,10 @@ pnpm acceptance
 git diff --exit-code -- plugin src/execution-source.mjs
 ```
 
-The acceptance installer uses published npm CLI 0.15.1 and core 0.12.4, pinned in
+The acceptance installer uses published npm CLI 0.16.1 and core 0.12.5, pinned in
 `scripts/cli-baseline.json`. It verifies both installed versions before acceptance.
 Update this baseline deliberately when qualifying another release. Runtime assets
-remain at provider 0.4.1; changing acceptance tooling does not move its release tag.
+are at provider 0.4.2; changing acceptance tooling does not move its release tag.
 
 The standalone gate installs the provider and a test-only source from separate
 local Git origins, creates real managed Python environments, writes and reads
