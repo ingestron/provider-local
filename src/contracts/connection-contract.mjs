@@ -7,6 +7,7 @@ const field = object(
       enum: ["integer", "string", "boolean", "number", "decimal", "json"],
     },
     nullable: { type: "boolean" },
+    target: { type: "string", minLength: 1 },
     precision: { type: "integer" },
     scale: { type: "integer" },
   },
@@ -125,6 +126,16 @@ export function validateProjectConnection(input, descriptor) {
       )
         throw Error("Invalid decimal precision/scale");
     }
+  for (const table of Object.values(selection)) {
+    const targets = Object.entries(table.fields).map(
+      ([source, field]) => field.target ?? source,
+    );
+    if (
+      new Set(targets).size !== targets.length ||
+      targets.some((target) => !/^[A-Za-z_][A-Za-z0-9_]*$/.test(target))
+    )
+      throw Error("Invalid or duplicate target field");
+  }
   return selection;
 }
 
@@ -222,6 +233,7 @@ export function selectionFromTables(tables) {
     )
       throw Error("Invalid or duplicate contracted stream");
     const fields = {};
+    const targets = new Set();
     for (const column of table.columns) {
       const type = column.type.toUpperCase();
       const mapped = {
@@ -239,14 +251,23 @@ export function selectionFromTables(tables) {
         throw Error(
           `Snapshot projection does not support ODCS physical type ${type}`,
         );
+      const target = column.target ?? column.name;
+      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(target) || targets.has(target))
+        throw Error("Invalid or duplicate target field");
+      targets.add(target);
       fields[column.name] = decimal
         ? {
             type: "decimal",
             precision: Number(decimal[1]),
             scale: Number(decimal[2]),
             nullable: !column.required,
+            ...(target !== column.name ? { target } : {}),
           }
-        : { type: mapped, nullable: !column.required };
+        : {
+            type: mapped,
+            nullable: !column.required,
+            ...(target !== column.name ? { target } : {}),
+          };
     }
     selected[table.source.stream] = { name, fields };
   }

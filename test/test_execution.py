@@ -9,6 +9,32 @@ spec=importlib.util.spec_from_file_location('executor',Path(__file__).parents[1]
 module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 
 class Execution(unittest.TestCase):
+    def test_rediscovery_archives_evidence_and_requires_fresh_review(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);folder=root/'flows/sample';folder.mkdir(parents=True)
+            cache=root/'cache'
+            (root/'project-runtime.json').write_text(json.dumps({
+                'flows':{'sample':{'directory':'flows/sample','runtime':'local'}},
+                'environments':{'local':{}}}))
+            (folder/'connector.json').write_text('{}')
+            (folder/'discovery.json').write_text('{"old":true}')
+            (folder/'review.json').write_text('{"status":"approved"}')
+            request={'apiVersion':'ingestron.execution-request/v1','flows':['sample'],
+                     'cache':str(cache),'action':'discover'}
+            def child(args,*unused):
+                if '--output' in args:
+                    Path(args[args.index('--output')+1]).write_text('{"new":true}')
+                    return '{"status":"Succeeded"}'
+                return ''
+            with (patch.object(module,'__file__',str(root/'execute.py')),
+                  patch.object(module,'environment',return_value=('python','key',True)),
+                  patch.object(module,'child',side_effect=child)):
+                result=module.execute(request)
+            self.assertEqual(result['status'],'succeeded')
+            self.assertEqual(json.loads((folder/'discovery.json').read_text()),{'new':True})
+            self.assertFalse((folder/'review.json').exists())
+            self.assertEqual(len(list((folder/'history').glob('*.json'))),2)
+
     def test_path_and_cache_lock_safety(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)

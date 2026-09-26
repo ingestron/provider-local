@@ -175,14 +175,31 @@ def execute(request):
         child([python, '-c', 'import json,pathlib,singer_runtime as r; p=pathlib.Path.cwd(); r.runtime_identity(json.loads((p/"connector.json").read_text()),p)'], folder, 30)
         config = load(folder / 'connector.json')
         args = [python, str(folder / 'singer_runtime.py'), action, '--config', str(folder / 'connector.json')]
+        staged = folder / ('.' + action + '.' + uuid.uuid4().hex + '.tmp') if action in ('discover', 'review') else None
         if action == 'discover':
-            args += ['--output', str(folder / 'discovery.json')]
+            args += ['--output', str(staged)]
         if action == 'review':
-            args += ['--discovery', str(folder / 'discovery.json'), '--output', str(folder / 'review.json')]
+            args += ['--discovery', str(folder / 'discovery.json'), '--output', str(staged)]
         if action == 'run':
             args += ['--run-id', request['runId'], '--output', str(inside(root, 'data/' + flow))]
         with locked(folder / '.execution.lock'):
-            output = child(args, folder, config.get('timeoutSeconds', 120) * 2 + 300)
+            try:
+                output = child(args, folder, config.get('timeoutSeconds', 120) * 2 + 300)
+                if staged is not None:
+                    history = folder / 'history'
+                    require(not history.is_symlink(), 'Evidence history cannot be a symlink')
+                    history.mkdir(exist_ok=True)
+                    names = ('discovery.json', 'review.json') if action == 'discover' else ('review.json',)
+                    for name in names:
+                        previous = folder / name
+                        require(not previous.is_symlink(), 'Evidence cannot be a symlink')
+                        if previous.exists():
+                            shutil.copy2(previous, history / (name[:-5] + '-' + uuid.uuid4().hex + '.json'))
+                    staged.replace(folder / ('discovery.json' if action == 'discover' else 'review.json'))
+                    if action == 'discover':
+                        (folder / 'review.json').unlink(missing_ok=True)
+            finally:
+                if staged is not None: staged.unlink(missing_ok=True)
         result = json.loads(output)
         results.append({'flow': flow, 'status': result.get('status'), 'tables': result.get('tables', [])})
     return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'action': action, 'flows': results}
