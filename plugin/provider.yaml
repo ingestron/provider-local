@@ -1,6 +1,6 @@
 apiVersion: ingestron.provider/v1
 id: local
-version: 0.4.2
+version: 0.4.3
 platform: local
 activities: {}
 compatibility:
