@@ -73,7 +73,7 @@ class Execution(unittest.TestCase):
 
     def test_source_errors_are_allowlisted_and_do_not_echo_messages(self):
         import sys
-        for code,expected in [('GITHUB_AUTH','rejected the supplied token'),('GITHUB_RATE_LIMIT','rate limit'),('unknown','Runtime operation failed')]:
+        for code,expected in [('SQL_CONNECT','Cannot connect to SQL'),('SQL_TABLE','metadata is not visible'),('SQL_READ','SQL read failed'),('GITHUB_AUTH','rejected the supplied token'),('GITHUB_RATE_LIMIT','rate limit'),('unknown','Runtime operation failed')]:
             payload=json.dumps({'errorCode':code,'error':'sensitive-token-source-data'})
             with self.assertRaises(ValueError) as caught:
                 module.child([sys.executable,'-c','import sys;print('+repr(payload)+');sys.exit(1)'],Path.cwd())

@@ -70,6 +70,10 @@ def child(args, cwd, timeout=900, env=None):
             output, _ = process.communicate(timeout=timeout)
             if process.returncode != 0:
                 messages = {
+                    'SQL_CONNECT': 'Cannot connect to SQL. Check network access, credentials and TLS. If the database was paused, wait for it to resume before retrying.',
+                    'SQL_READ': 'SQL read failed. Check table permissions and source availability.',
+                    'SQL_TABLE': 'SQL table is absent or its metadata is not visible. Check schema, table and metadata permissions.',
+
                     'GITHUB_AUTH': 'GitHub rejected the supplied token. Check or replace it; no anonymous fallback was attempted.',
                     'GITHUB_FORBIDDEN': 'GitHub denied access. Check permissions or retry after any secondary rate limit.',
                     'GITHUB_NOT_FOUND': 'Repository not found or inaccessible. Check owner/name and permissions.',
