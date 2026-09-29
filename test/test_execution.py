@@ -79,3 +79,15 @@ class Execution(unittest.TestCase):
                 module.child([sys.executable,'-c','import sys;print('+repr(payload)+');sys.exit(1)'],Path.cwd())
             self.assertIn(expected,str(caught.exception))
             self.assertNotIn('sensitive',str(caught.exception))
+
+    def test_quality_failures_report_rule_identities_and_counts_only(self):
+        import sys
+        payload=json.dumps({'errorCode':'QUALITY_FAILED','error':'sensitive-row','failed':[
+            {'id':'orders.key-unique','stream':'orders','metric':'duplicateValues','value':2},
+            {'id':'bad id <sensitive-value>','value':'sensitive-text'}]})
+        with self.assertRaises(ValueError) as caught:
+            module.child([sys.executable,'-c','import sys;print('+repr(payload)+');sys.exit(1)'],Path.cwd())
+        message=str(caught.exception)
+        self.assertIn('nothing was committed: orders.key-unique (2), bad_id__sensitive-value_',message)
+        self.assertNotIn('sensitive-text',message)
+        self.assertNotIn('sensitive-row',message)

@@ -61,6 +61,19 @@ def locked(path):
             fcntl.flock(handle, fcntl.LOCK_UN)
 
 
+def quality_message(failed):
+    # Contract rule identities and counts only; never row values.
+    rules = []
+    for rule in failed if isinstance(failed, list) else []:
+        if not isinstance(rule, dict): continue
+        name = re.sub(r'[^A-Za-z0-9_.:-]', '_', str(rule.get('id', 'rule')))[:80]
+        value = rule.get('value')
+        rules.append(name + (f' ({value})' if isinstance(value, (int, float)) and not isinstance(value, bool) else ''))
+    listed = ', '.join(rules[:10]) or 'unreported rules'
+    return ('Contract quality rules failed; nothing was committed: ' + listed +
+            '. Fix the source data or review the rule severity, then retry with the same run ID.')
+
+
 def child(args, cwd, timeout=900, env=None):
     # Discard upstream errors: they can contain credentials or data.
     with subprocess.Popen(args, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
@@ -83,9 +96,12 @@ def child(args, cwd, timeout=900, env=None):
                     'GITHUB_NETWORK': 'Cannot reach GitHub. Check network access and retry.',
                 }
                 try:
-                    code = json.loads(output).get('errorCode') if len(output) <= 10000 else None
+                    failure = json.loads(output) if len(output) <= 10000 else {}
+                    code = failure.get('errorCode')
                 except (ValueError, AttributeError):
-                    code = None
+                    failure, code = {}, None
+                if code == 'QUALITY_FAILED':
+                    raise ValueError(quality_message(failure.get('failed')))
                 raise ValueError(messages.get(code, 'Runtime operation failed; check the locked environment, source access and review'))
             require(len(output) <= 10_000_000, 'Runtime response exceeds limit')
             return output.decode()
@@ -205,7 +221,8 @@ def execute(request):
             finally:
                 if staged is not None: staged.unlink(missing_ok=True)
         result = json.loads(output)
-        results.append({'flow': flow, 'status': result.get('status'), 'tables': result.get('tables', [])})
+        results.append({'flow': flow, 'status': result.get('status'), 'tables': result.get('tables', []),
+                        **({'quality': result['quality']} if isinstance(result.get('quality'), list) else {})})
     return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'action': action, 'flows': results}
 
 
