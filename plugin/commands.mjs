@@ -106,7 +106,13 @@ def child(args, cwd, timeout=900, env=None):
                     failure, code = {}, None
                 if code == 'QUALITY_FAILED':
                     raise ValueError(quality_message(failure.get('failed')))
-                raise ValueError(messages.get(code, 'Runtime operation failed; check the locked environment, source access and review'))
+                if code in messages:
+                    raise ValueError(messages[code])
+                # Other connectors' codes are named, never their messages; each
+                # connector's documentation explains its codes.
+                if isinstance(code, str) and re.fullmatch(r'[A-Z][A-Z0-9_]{2,40}', code):
+                    raise ValueError(f'Source error {code}; see the connector documentation for this code')
+                raise ValueError('Runtime operation failed; check the locked environment, source access and review')
             require(len(output) <= 10_000_000, 'Runtime response exceeds limit')
             return output.decode()
         finally:
