@@ -87,6 +87,9 @@ def child(args, cwd, timeout=900, env=None):
                     'SQL_CONNECT': 'Cannot connect to SQL. Check network access, credentials and TLS. If the database was paused, wait for it to resume before retrying.',
                     'SQL_READ': 'SQL read failed. Check table permissions and source availability.',
                     'SQL_TABLE': 'SQL table is absent or its metadata is not visible. Check schema, table and metadata permissions.',
+                    'DB_CONNECT': 'Cannot connect to the database. Check host, port, network access, credentials and TLS.',
+                    'DB_READ': 'Database read failed. Check table permissions and source availability.',
+                    'DB_TABLE': 'Database table is absent or its metadata is not visible. Check schema, table and permissions.',
 
                     'GITHUB_AUTH': 'GitHub rejected the supplied token. Check or replace it; no anonymous fallback was attempted.',
                     'GITHUB_FORBIDDEN': 'GitHub denied access. Check permissions or retry after any secondary rate limit.',
