@@ -18,6 +18,7 @@ execution:
   entryPoint: execute.py
   actions:
     - prepare
+    - catalogue
     - discover
     - review
     - approve

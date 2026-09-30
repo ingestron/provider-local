@@ -189,7 +189,7 @@ def execute(request):
     require(not cache.is_symlink(), 'Runtime cache cannot be a symlink')
     cache.mkdir(parents=True, exist_ok=True)
     action = request['action']
-    require(action in ('prepare', 'discover', 'review', 'approve', 'run'), 'Unsupported local action')
+    require(action in ('prepare', 'catalogue', 'discover', 'review', 'approve', 'run'), 'Unsupported local action')
     results = []
     for flow in ids:
         info = project['flows'][flow]
@@ -204,8 +204,8 @@ def execute(request):
         child([python, '-c', 'import json,pathlib,singer_runtime as r; p=pathlib.Path.cwd(); r.runtime_identity(json.loads((p/"connector.json").read_text()),p)'], folder, 30)
         config = load(folder / 'connector.json')
         args = [python, str(folder / 'singer_runtime.py'), action, '--config', str(folder / 'connector.json')]
-        staged = folder / ('.' + action + '.' + uuid.uuid4().hex + '.tmp') if action in ('discover', 'review') else None
-        if action == 'discover':
+        staged = folder / ('.' + action + '.' + uuid.uuid4().hex + '.tmp') if action in ('catalogue', 'discover', 'review') else None
+        if action in ('catalogue', 'discover'):
             args += ['--output', str(staged)]
         if action == 'review':
             args += ['--discovery', str(folder / 'discovery.json'), '--output', str(staged)]
@@ -218,18 +218,26 @@ def execute(request):
                     history = folder / 'history'
                     require(not history.is_symlink(), 'Evidence history cannot be a symlink')
                     history.mkdir(exist_ok=True)
-                    names = ('discovery.json', 'review.json') if action == 'discover' else ('review.json',)
+                    names = {'catalogue': ('catalogue.json',), 'discover': ('discovery.json', 'review.json'),
+                             'review': ('review.json',)}[action]
                     for name in names:
                         previous = folder / name
                         require(not previous.is_symlink(), 'Evidence cannot be a symlink')
                         if previous.exists():
                             shutil.copy2(previous, history / (name[:-5] + '-' + uuid.uuid4().hex + '.json'))
-                    staged.replace(folder / ('discovery.json' if action == 'discover' else 'review.json'))
+                    staged.replace(folder / names[0])
                     if action == 'discover':
                         (folder / 'review.json').unlink(missing_ok=True)
             finally:
                 if staged is not None: staged.unlink(missing_ok=True)
         result = json.loads(output)
+        if action == 'catalogue':
+            # Field names and types only; the full catalogue stays in the flow folder.
+            catalogue = load(folder / 'catalogue.json')
+            results.append({'flow': flow, 'status': result.get('status'),
+                            'catalogue': str((folder / 'catalogue.json').relative_to(root)),
+                            'tables': {t: len(v.get('columns', [])) for t, v in catalogue.get('tables', {}).items()}})
+            continue
         results.append({'flow': flow, 'status': result.get('status'), 'tables': result.get('tables', []),
                         **({'quality': result['quality']} if isinstance(result.get('quality'), list) else {})})
     return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'action': action, 'flows': results}
