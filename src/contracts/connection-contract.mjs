@@ -102,7 +102,10 @@ export function validateProjectConnection(input, descriptor) {
     names.some((name) => !/^[A-Za-z_][A-Za-z0-9_]*$/.test(name))
   )
     throw Error("Invalid or duplicate selected table name");
-  if (!Object.keys(selection).length)
+  // Discovery-only builds (every table still without a contract) select nothing yet.
+  const discoveryOnly =
+    input.tables && Object.values(input.tables).every((t) => !t.contract);
+  if (!Object.keys(selection).length && !discoveryOnly)
     throw Error("Select at least one source stream");
   for (const [stream, table] of Object.entries(selection)) {
     if (!/^[A-Za-z0-9_-]+$/.test(stream) || !Object.keys(table.fields).length)
@@ -223,13 +226,23 @@ export function selectionFromTables(tables) {
   if (!tables || typeof tables !== "object" || Array.isArray(tables))
     throw Error("Invalid ODCS table map");
   const selected = {};
+  const streams = new Set();
   for (const [name, table] of Object.entries(tables)) {
+    if (!table.source?.stream || streams.has(table.source.stream))
+      throw Error("Invalid or duplicate contracted stream");
+    streams.add(table.source.stream);
+    // Discovery runs before contracts exist (PB-064 phase 6); such tables
+    // have no selection yet, and review refuses them until a contract is set.
+    if (
+      !table.contract &&
+      Array.isArray(table.columns) &&
+      !table.columns.length
+    )
+      continue;
     if (
       !table.contract ||
       !Array.isArray(table.columns) ||
-      !table.columns.length ||
-      !table.source?.stream ||
-      selected[table.source.stream]
+      !table.columns.length
     )
       throw Error("Invalid or duplicate contracted stream");
     const fields = {};

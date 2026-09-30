@@ -42,7 +42,7 @@ const manifest = {
     apiVersion: "ingestron.execution/v1",
     transport: "local-python/v1",
     entryPoint: "execute.py",
-    actions: ["prepare", "discover", "review", "approve", "run"],
+    actions: ["prepare", "catalogue", "discover", "review", "approve", "run"],
     status: "receipt",
     retry: "same-run-id",
     cancellation: "interrupt",
