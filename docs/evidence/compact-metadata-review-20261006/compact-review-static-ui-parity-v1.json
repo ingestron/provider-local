@@ -1,0 +1,6 @@
+{
+  "result": "passed",
+  "bundleSha256": "80e38f744bd4add9a2c30dd175e9f802032f2f6ba5b39e85c6f684e116cd13ef",
+  "actualOwnerSourceFilesCompared": 52,
+  "scope": "Frozen actual UI models and static actual views; no mounted/browser/keyboard interaction."
+}

@@ -1,0 +1,18 @@
+{
+  "status": "failed",
+  "error": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Input for 'connection validate' is \\d+ bytes; the limit is 2000000 bytes\\. Split large flows or select fewer fields, then retry\\./. Input:\n\n\"LIMIT: Input for 'connection prepare' is 4452977 bytes; the limit is 2000000 bytes. Split large flows or select fewer fields, then retry.\"\n\n    at file:///Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/compact-review-hundred-limit-v1.mjs:11:43\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)",
+  "checks": [],
+  "details": {
+    "root": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-hundred-limit-RdkaFY",
+    "tables": 100,
+    "columnsPerTable": 200,
+    "projectSchemaFields": 20000,
+    "candidate": {
+      "cli": "0.17.21",
+      "core": "0.12.52"
+    },
+    "scope": "Actual installed compiler and frozen shared host with real local synthetic CSV, shared model and provider Parquet; static actual UI rows/paging, no mounted/browser/native-vendor proof.",
+    "resolveBytes": 2371135
+  },
+  "remaining": "The hundred-table project remains beyond the existing transport boundary; this is refusal evidence, not readiness"
+}

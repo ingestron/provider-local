@@ -10,13 +10,39 @@ import { object } from "./contracts/shape.mjs";
 export const connectorRuntimes = {
   [runtimeContract]: {
     selectionSchema,
-    executionSchema: object({ mode: { type: "string", enum: ["local"] } }),
+    executionSchema: object(
+      {
+        mode: { type: "string", enum: ["local"] },
+        ingestion: { type: "string", enum: ["incremental"] },
+      },
+      ["mode"],
+    ),
     executionPlatforms: ["local"],
+    scheduling: {
+      apiVersion: "ingestron.connector-schedule/v1",
+      clock: "portable",
+      recurrences: ["interval", "daily", "weekly", "monthly"],
+    },
     prepareCommand: "connection prepare",
+    metadataDocuments: "ingestron.metadata-documents/v1",
     contractsCommand: "connector contracts",
   },
 };
 export const definitions = [
+  {
+    name: "execution resources",
+    description:
+      "Declare the selected compiled local output namespaces without source access",
+    inputSchema: object({
+      packageRoot: { type: "string", minLength: 1, maxLength: 2048 },
+      flows: {
+        type: "array",
+        items: { type: "string", minLength: 1, maxLength: 100 },
+        minItems: 1,
+        maxItems: 100,
+      },
+    }),
+  },
   projectConnectionDefinition,
   {
     name: "connector contracts",
@@ -25,13 +51,17 @@ export const definitions = [
   },
 ];
 export function prepare(request) {
-  const { runtimeAssets, ...input } = request;
+  const { runtimeAssets, projectionTables, ...input } = request;
   if (!runtimeAssets || !input.runtimeAssetSha256)
     throw Error("Install a source package with locked runtime assets");
-  const selection = validateProjectConnection(input, {
-    ...connectorRuntimes[runtimeContract],
-    settingsSchema: JSON.parse(runtimeAssets["settings.schema.json"]),
-  });
+  const selection = validateProjectConnection(
+    input,
+    {
+      ...connectorRuntimes[runtimeContract],
+      settingsSchema: JSON.parse(runtimeAssets["settings.schema.json"]),
+    },
+    projectionTables,
+  );
   if (
     ![input.sourceId, input.tenantId].every(
       (v) =>
@@ -67,9 +97,9 @@ export function prepare(request) {
     execution: "local-posix-preview",
     artifacts: {
       ...runtimeAssets,
-      "connector.json": JSON.stringify(config, null, 2),
-      "selection.json": JSON.stringify(selection, null, 2),
-      "project-connection.lock.json": JSON.stringify(input, null, 2),
+      "connector.json": JSON.stringify(config),
+      "selection.json": JSON.stringify(selection),
+      "project-connection.lock.json": JSON.stringify(input),
     },
     review: [
       "Prepare a separate hash-locked Python 3.12 environment on POSIX.",
@@ -81,6 +111,43 @@ export function prepare(request) {
 export function command(request) {
   if (request.apiVersion !== "ingestron.provider-command-request/v1")
     throw Error("Unsupported command request");
+  if (request.command === "execution resources") {
+    const { packageRoot, flows } = request.input;
+    if (
+      typeof packageRoot !== "string" ||
+      packageRoot.length > 2048 ||
+      !packageRoot.startsWith("/") ||
+      packageRoot.includes("\\") ||
+      packageRoot
+        .split("/")
+        .slice(1)
+        .some((part) => !part || [".", ".."].includes(part)) ||
+      !Array.isArray(flows) ||
+      !flows.length ||
+      flows.length > 100 ||
+      new Set(flows).size !== flows.length ||
+      flows.some(
+        (flow) =>
+          typeof flow !== "string" ||
+          !/^[A-Za-z0-9][A-Za-z0-9_-]{0,99}$/.test(flow),
+      )
+    )
+      throw Error(
+        "Select a canonical POSIX package directory and unique compiled flows",
+      );
+    return {
+      apiVersion: "ingestron.execution-resources/v1",
+      flows: flows.map((flow) => ({
+        flow,
+        resources: [
+          {
+            namespace: "local-filesystem",
+            identity: packageRoot + "/data/" + flow,
+          },
+        ],
+      })),
+    };
+  }
   if (request.command === "project assemble") return assemble(request.input);
   if (request.command === "connection prepare") return prepare(request.input);
   if (request.command === "connector contracts")

@@ -1,0 +1,966 @@
+--- before/core/src/core/provider-commands.ts
++++ after/core/src/core/provider-commands.ts
+@@ -186,13 +186,15 @@
+     "PROVIDER",
+     `Unknown provider command ${args.command}; inspect provider_commands for ${args.configuration}`,
+   );
+-  check(
+-    Buffer.byteLength(JSON.stringify(args.input)) <=
+-      (s.manifest.projectAssembly?.command === args.command
++  const inputBytes = Buffer.byteLength(JSON.stringify(args.input)),
++    inputLimit =
++      s.manifest.projectAssembly?.command === args.command
+         ? 7_000_000
+-        : 2_000_000),
++        : 2_000_000;
++  check(
++    inputBytes <= inputLimit,
+     "LIMIT",
+-    "Command input exceeds its bounded transport limit",
++    `Input for '${args.command}' is ${inputBytes} bytes; the limit is ${inputLimit} bytes. Split large flows or select fewer fields, then retry.`,
+   );
+   const ajv = new Ajv2020({
+     strict: true,
+--- before/core/package.json
++++ after/core/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "@ingestron/core",
+-  "version": "0.12.51",
++  "version": "0.12.53",
+   "type": "module",
+   "description": "Shared Ingestron project compiler, operations and editor schemas",
+   "license": "Apache-2.0",
+--- before/provider-local/src/commands.mjs
++++ after/provider-local/src/commands.mjs
+@@ -92,9 +92,9 @@
+     execution: "local-posix-preview",
+     artifacts: {
+       ...runtimeAssets,
+-      "connector.json": JSON.stringify(config, null, 2),
+-      "selection.json": JSON.stringify(selection, null, 2),
+-      "project-connection.lock.json": JSON.stringify(input, null, 2),
++      "connector.json": JSON.stringify(config),
++      "selection.json": JSON.stringify(selection),
++      "project-connection.lock.json": JSON.stringify(input),
+     },
+     review: [
+       "Prepare a separate hash-locked Python 3.12 environment on POSIX.",
+--- before/provider-local/src/execution.py
++++ after/provider-local/src/execution.py
+@@ -107,6 +107,7 @@
+             output, _ = process.communicate(timeout=timeout)
+             if process.returncode != 0:
+                 messages = {
++                    'SOURCE_METADATA_LIMIT': 'This flow exceeds the 2 MB metadata limit. Split tables into smaller flows or select fewer fields, then prepare again.',
+                     'SQL_CONNECT': 'Cannot connect to SQL. Check network access, credentials and TLS. If the database was paused, wait for it to resume before retrying.',
+                     'SQL_READ': 'SQL read failed. Check table permissions and source availability.',
+                     'SQL_TABLE': 'SQL table is absent or its metadata is not visible. Check schema, table and metadata permissions.',
+@@ -143,7 +144,7 @@
+                 if code == 'QUALITY_FAILED':
+                     raise QualityFailure(failure.get('failed'))
+                 if code in messages:
+-                    if code.startswith(('TEMPORAL_', 'CHECKPOINT_')) or code == 'OUTPUT_BUSY':raise SourceFailure(code,messages[code])
++                    if code.startswith(('TEMPORAL_', 'CHECKPOINT_')) or code in ('OUTPUT_BUSY', 'SOURCE_METADATA_LIMIT'):raise SourceFailure(code,messages[code])
+                     raise ValueError(messages[code])
+                 # Other connectors' codes are named, never their messages; each
+                 # connector's documentation explains its codes.
+@@ -315,6 +316,7 @@
+ 
+ 
+ CHECKPOINT_FAILURES = ('CHECKPOINT_MIGRATION', 'CHECKPOINT_MIGRATION_STALE', 'CHECKPOINT_POLICY', 'CHECKPOINT_HISTORY', 'CHECKPOINT_LIMIT', 'CHECKPOINT_CURSOR', 'CHECKPOINT_MISSING', 'OUTPUT_BUSY')
++EXECUTION_FAILURES = (*CHECKPOINT_FAILURES, 'SOURCE_METADATA_LIMIT')
+ 
+ SETUP_ACTIONS = ('prepare', 'catalogue', 'discover', 'review', 'approve', 'checkpoint_preview', 'checkpoint_apply')
+ 
+@@ -362,7 +364,7 @@
+             and result['apiVersion'] == 'ingestron.execution-result/v1' and result['action'] == binding['action']
+             and result['status'] in ('succeeded', 'failed') and isinstance(result['flows'], list)
+             and len(result['flows']) <= 100, 'Invalid original operation result')
+-    require('errorCode' not in result or (result['status'] == 'failed' and result['errorCode'] in CHECKPOINT_FAILURES), 'Invalid checkpoint failure evidence')
++    require('errorCode' not in result or (result['status'] == 'failed' and result['errorCode'] in EXECUTION_FAILURES), 'Invalid execution failure evidence')
+     require(result['status'] == 'failed' or [flow.get('flow') for flow in result['flows']] == binding['flows'], 'Original operation result has another selection')
+     return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'acknowledgement': ack}
+ 
+@@ -395,7 +397,7 @@
+                            'result': {'apiVersion': 'ingestron.execution-result/v1',
+                                       'status': 'succeeded' if result['status'] == 'succeeded' else 'failed',
+                                       'action': binding['action'], 'flows': result.get('flows', []),
+-                                      **({'errorCode': result['errorCode']} if result.get('status') == 'failed' and result.get('errorCode') in CHECKPOINT_FAILURES else {})}}
++                                      **({'errorCode': result['errorCode']} if result.get('status') == 'failed' and result.get('errorCode') in EXECUTION_FAILURES else {})}}
+         # No executable operation or source write follows this atomic commit.
+         write(inside(folder, 'acknowledgement.json'), acknowledgement)
+         return result
+--- before/provider-local/src/execution-source.mjs
++++ after/provider-local/src/execution-source.mjs
+@@ -1,2 +1,2 @@
+ export const execution =
+-  "\"\"\"Explicit local execution adapter. No source implementation lives here.\"\"\"\nimport contextlib\nimport datetime\nimport fcntl\nimport hashlib\nimport json\nimport math\nimport os\nfrom pathlib import Path\nimport platform\nimport re\nimport shutil\nimport signal\nimport subprocess\nimport sys\nimport uuid\n\n\ndef require(condition, message):\n    if not condition:\n        raise ValueError(message)\n\n\ndef digest(data):\n    return hashlib.sha256(data).hexdigest()\n\n\ndef load(path):\n    require(path.stat().st_size <= 10_000_000, 'Runtime metadata exceeds limit')\n    return json.loads(path.read_text())\n\n\ndef write(path, data):\n    temporary = path.with_name(path.name + '.' + uuid.uuid4().hex + '.tmp')\n    temporary.write_text(json.dumps(data, sort_keys=True) + '\\n')\n    temporary.chmod(0o600)\n    temporary.replace(path)\n\n\ndef inside(root, name):\n    path = root / name\n    require(not Path(name).is_absolute() and '..' not in Path(name).parts, 'Unsafe runtime path')\n    for part in [path, *path.parents]:\n        if part == root.parent:\n            break\n        require(not part.is_symlink(), 'Runtime paths cannot cross symlinks')\n    require(path.resolve().is_relative_to(root.resolve()), 'Runtime path leaves root')\n    return path\n\n\n@contextlib.contextmanager\ndef locked(path):\n    require(not path.is_symlink(), 'Lock cannot be a symlink')\n    with path.open('a') as handle:\n        try:\n            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)\n        except BlockingIOError:\n            raise ValueError('Operation is already active; wait for completion')\n        try:\n            yield None\n        finally:\n            fcntl.flock(handle, fcntl.LOCK_UN)\n\n\ndef quality_message(failed):\n    # Contract rule identities and counts only; never row values.\n    rules = []\n    for rule in failed if isinstance(failed, list) else []:\n        if not isinstance(rule, dict): continue\n        name = re.sub(r'[^A-Za-z0-9_.:-]', '_', str(rule.get('id', 'rule')))[:80]\n        value = rule.get('value')\n        rules.append(name + (f' ({value})' if isinstance(value, (int, float)) and not isinstance(value, bool) else ''))\n    listed = ', '.join(rules[:10]) or 'unreported rules'\n    return ('Contract quality rules failed; nothing was committed: ' + listed +\n            '. Fix the source data or review the rule severity, then retry with the same run ID.')\n\n\nclass SourceFailure(ValueError):\n    def __init__(self,code,message):\n        self.code=code\n        super().__init__(message)\n\n\nclass QualityFailure(ValueError):\n    def __init__(self, failed):\n        self.quality = []\n        for rule in failed[:20] if isinstance(failed, list) else []:\n            if not isinstance(rule, dict):\n                continue\n            value = rule.get('value')\n            if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value) or value < 0:\n                continue\n            if rule.get('metric') not in ('nullValues', 'missingValues', 'invalidValues', 'duplicateValues', 'rowCount'):\n                continue\n            if any(not isinstance(rule.get(k), str) or not re.fullmatch(r'[A-Za-z0-9_.:-]{1,120}', rule[k]) for k in ('id', 'stream')):\n                continue\n            self.quality.append({k: rule[k] for k in ('id', 'stream', 'metric', 'value')})\n        super().__init__(quality_message(self.quality))\n\n\ndef child(args, cwd, timeout=900, env=None):\n    # Discard upstream errors: they can contain credentials or data.\n    with subprocess.Popen(args, cwd=cwd, env=env, stdin=subprocess.DEVNULL,\n                          stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,\n                          start_new_session=True) as process:\n        try:\n            output, _ = process.communicate(timeout=timeout)\n            if process.returncode != 0:\n                messages = {\n                    'SQL_CONNECT': 'Cannot connect to SQL. Check network access, credentials and TLS. If the database was paused, wait for it to resume before retrying.',\n                    'SQL_READ': 'SQL read failed. Check table permissions and source availability.',\n                    'SQL_TABLE': 'SQL table is absent or its metadata is not visible. Check schema, table and metadata permissions.',\n                    'DB_CONNECT': 'Cannot connect to the database. Check host, port, network access, credentials and TLS.',\n                    'DB_READ': 'Database read failed. Check table permissions and source availability.',\n                    'DB_TABLE': 'Database table is absent or its metadata is not visible. Check schema, table and permissions.',\n                    'TEMPORAL_DATE': 'DATE requires a valid calendar date in YYYY-MM-DD format; review the source field or contract mapping.',\n                    'TEMPORAL_TIMESTAMP': 'TIMESTAMP requires a valid full calendar date and time; review the source field or contract mapping.',\n                    'TEMPORAL_TIMEZONE': 'TIMESTAMP requires a timezone-less value; review an explicit timezone mapping before ingestion.',\n                    'TEMPORAL_PRECISION': 'Source timestamp precision exceeds six fractional digits; review an exact precision mapping before ingestion.',\n                    'TEMPORAL_TYPE': 'Select a supported reviewed temporal type.',\n                    'CHECKPOINT_HISTORY': 'Incremental commit history is incomplete or changed. Restore the committed output and receipts before retrying.',\n                    'CHECKPOINT_MIGRATION': 'The reviewed checkpoint transition is absent, changed or belongs to another history. Inspect the retained build and review again.',\n                    'CHECKPOINT_MIGRATION_STALE': 'The committed checkpoint head changed after review. Preview the current migration before applying.',\n                    'CHECKPOINT_POLICY': 'The incremental source, schema or policy changed. Review a migration before continuing this output namespace.',\n                    'CHECKPOINT_LIMIT': 'Incremental history reached 10000 batches. Review an archive migration before continuing.',\n                    'CHECKPOINT_CURSOR': 'The connector returned an invalid or regressing cursor. Check the reviewed ordered append policy before retrying.',\n                    'CHECKPOINT_MISSING': 'The connector omitted its final checkpoint. Output and cursor were not committed.',\n                    'OUTPUT_BUSY': 'Another run is writing this output namespace. Retry after that run finishes.',\n\n                    'GITHUB_AUTH': 'GitHub rejected the supplied token. Check or replace it; no anonymous fallback was attempted.',\n                    'GITHUB_FORBIDDEN': 'GitHub denied access. Check permissions or retry after any secondary rate limit.',\n                    'GITHUB_NOT_FOUND': 'Repository not found or inaccessible. Check owner/name and permissions.',\n                    'GITHUB_RATE_LIMIT': 'GitHub rate limit reached. Wait before retrying or configure an authorised token.',\n                    'GITHUB_UNAVAILABLE': 'GitHub is temporarily unavailable. Retry later.',\n                    'GITHUB_RESPONSE': 'GitHub returned an unsupported response or redirect. Check the repository name.',\n                    'GITHUB_NETWORK': 'Cannot reach GitHub. Check network access and retry.',\n                }\n                try:\n                    failure = json.loads(output) if len(output) <= 10000 else {}\n                    code = failure.get('errorCode')\n                except (ValueError, AttributeError):\n                    failure, code = {}, None\n                if code == 'QUALITY_FAILED':\n                    raise QualityFailure(failure.get('failed'))\n                if code in messages:\n                    if code.startswith(('TEMPORAL_', 'CHECKPOINT_')) or code == 'OUTPUT_BUSY':raise SourceFailure(code,messages[code])\n                    raise ValueError(messages[code])\n                # Other connectors' codes are named, never their messages; each\n                # connector's documentation explains its codes.\n                if isinstance(code, str) and re.fullmatch(r'[A-Z][A-Z0-9_]{2,40}', code):\n                    raise ValueError(f'Source error {code}; see the connector documentation for this code')\n                raise ValueError('Runtime operation failed; check the locked environment, source access and review')\n            require(len(output) <= 10_000_000, 'Runtime response exceeds limit')\n            return output.decode()\n        finally:\n            if process.poll() is None:\n                os.killpg(process.pid, signal.SIGINT)\n                try:\n                    process.wait(timeout=5)\n                except subprocess.TimeoutExpired:\n                    os.killpg(process.pid, signal.SIGKILL)\n                    process.wait()\n\n\ndef bootstrap(explicit):\n    candidate = explicit or shutil.which('python3.12')\n    if not candidate and sys.version_info[:2] == (3, 12):\n        candidate = sys.executable\n    if not candidate and shutil.which('uv'):\n        try:\n            candidate = child(['uv', 'python', 'find', '3.12', '--no-python-downloads'], Path.cwd(), 15).strip()\n        except ValueError:\n            pass\n    require(candidate, 'Install Python 3.12, then repeat runtime prepare; --python is an optional override')\n    candidate = os.path.abspath(candidate)\n    version = child([candidate, '-I', '-c', 'import sys; print(\".\".join(map(str,sys.version_info[:3])))'], Path.cwd(), 15).strip()\n    require(version.startswith('3.12.'), 'The locked connector runtime requires Python 3.12')\n    return candidate, version\n\n\ndef clean_install_env():\n    env = {k: os.environ[k] for k in ('PATH', 'HOME', 'TMPDIR', 'LANG', 'SSL_CERT_FILE', 'HTTPS_PROXY', 'HTTP_PROXY', 'NO_PROXY') if k in os.environ}\n    env.update({'PIP_CONFIG_FILE': os.devnull, 'PIP_DISABLE_PIP_VERSION_CHECK': '1', 'PYTHONNOUSERSITE': '1'})\n    return env\n\n\ndef environment(root, info, cache, request, prepare=False):\n    requirements = inside(root, info['requirements'])\n    tools = inside(root, info['buildTools'])\n    lock_key = digest(requirements.read_bytes() + b'\\0' + tools.read_bytes() + platform.platform().encode() + platform.machine().encode())\n    folder = inside(cache, lock_key)\n    marker = folder / 'ready.json'\n    python = folder / 'bin/python'\n    if prepare:\n        with locked(cache / (lock_key + '.lock')):\n            if marker.exists():\n                require(load(marker)['lock'] == lock_key and python.exists(), 'Runtime cache is incomplete; remove its directory and prepare again')\n                return str(python), lock_key, True\n            executable, version = bootstrap(request.get('python'))\n            if folder.exists():\n                shutil.rmtree(folder)\n            try:\n                child([executable, '-I', '-m', 'venv', str(folder)], root)\n                for lock in [tools, requirements]:\n                    # Restrict installer input to exact package versions and hashes.\n                    for line in lock.read_text().splitlines():\n                        text = line.strip()\n                        require(not text or text.startswith('#') or re.fullmatch(r'[A-Za-z0-9_.-]+==[A-Za-z0-9_.+!-]+(?:\\s*;[A-Za-z0-9_ .\\\"\\'=!<>()-]+)?(?:\\s*\\\\)?', text) or re.fullmatch(r'--hash=sha256:[a-f0-9]{64}(?:\\s*\\\\)?', text), 'Unsupported dependency lock syntax')\n                    child([str(python), '-I', '-m', 'pip', 'install', '--require-hashes', '--no-build-isolation', '--index-url', 'https://pypi.org/simple', '-r', str(lock)], root, 900, clean_install_env())\n                write(marker, {'lock': lock_key, 'python': version})\n            except BaseException:\n                shutil.rmtree(folder, ignore_errors=True)\n                raise\n            return str(python), lock_key, False\n    require(marker.exists() and python.exists() and load(marker)['lock'] == lock_key,\n            'Runtime is not prepared. Run ingestron runtime prepare with the same --from and selection')\n    return str(python), lock_key, True\n\n\ndef execute(request):\n    require(request.get('apiVersion') == 'ingestron.execution-request/v1' and os.name == 'posix', 'Unsupported execution protocol/platform')\n    root = Path(__file__).resolve().parent\n    project = load(root / 'project-runtime.json')\n    ids = request['flows']\n    require(ids and len(ids) == len(set(ids)) and all(i in project['flows'] for i in ids), 'Unknown or duplicate flow selection')\n    cache = Path(request['cache'])\n    require(not cache.is_symlink(), 'Runtime cache cannot be a symlink')\n    cache.mkdir(parents=True, exist_ok=True)\n    action = request['action']\n    require(action in ('prepare', 'catalogue', 'discover', 'review', 'approve', 'run', 'checkpoint_preview', 'checkpoint_apply'), 'Unsupported local action')\n    maintenance = action in ('checkpoint_preview', 'checkpoint_apply')\n    require(not maintenance or len(ids) == 1, 'Checkpoint maintenance requires one flow')\n    results = []\n    for flow in ids:\n        info = project['flows'][flow]\n        folder = inside(root, info['directory'])\n        runtime = project['environments'][info['runtime']]\n        python, key, reused = environment(root, runtime, cache, request, action == 'prepare')\n        if action == 'prepare':\n            results.append({'flow': flow, 'environment': key, 'reused': reused,\n                            'python': python, 'pythonVersion': load(cache / key / 'ready.json')['python']})\n            continue\n        if maintenance:\n            declaration = info.get('checkpointMigration')\n            require(declaration == {'apiVersion': 'ingestron.checkpoint-migration/v1', 'strategy': 'preserve-cursor-runtime-upgrade'}, 'Upgrade the selected source package to support reviewed checkpoint migration')\n            project_root, prior_root = Path(request.get('projectRoot', '')), Path(request.get('previousRoot', ''))\n            require(project_root.is_absolute() and prior_root.is_absolute() and root.resolve().is_relative_to(project_root.resolve()) and prior_root.resolve().is_relative_to(project_root.resolve()), 'Checkpoint baseline must remain in the selected project')\n            # Validate all path components, including the retained package root.\n            prior_root = inside(project_root, str(prior_root.relative_to(project_root)))\n            prior = load(inside(prior_root, 'project-runtime.json'))\n            require(all(prior.get(key) == project.get(key) for key in ('project', 'environment', 'configuration')) and flow in prior.get('flows', {}), 'Checkpoint baseline has another project or flow scope')\n            previous_folder = inside(prior_root, prior['flows'][flow]['directory'])\n            args = [python, '-B', str(inside(folder, 'singer_runtime.py')), action, '--config', str(inside(folder, 'connector.json')), '--previous-config', str(inside(previous_folder, 'connector.json')), '--output', str(inside(root, 'data/' + flow))]\n            if action == 'checkpoint_apply':\n                require(isinstance(request.get('expectedDigest'), str) and re.fullmatch(r'[a-f0-9]{64}', request['expectedDigest']), 'Review the exact checkpoint migration digest before apply')\n                args += ['--expected-digest', request['expectedDigest']]\n            with locked(folder / '.execution.lock'):\n                result = json.loads(child(args, folder, 300))\n            require(set(result) == {'status', 'migration'} and result['status'] == 'Succeeded', 'Invalid source checkpoint response')\n            results.append({'flow': flow, 'status': 'Succeeded', 'migration': result['migration']})\n            continue\n        # All flows are verified against their exact source-owned runtime before source access.\n        child([python, '-c', 'import json,pathlib,singer_runtime as r; p=pathlib.Path.cwd(); r.runtime_identity(json.loads((p/\"connector.json\").read_text()),p)'], folder, 30)\n        config = load(folder / 'connector.json')\n        args = [python, str(folder / 'singer_runtime.py'), action, '--config', str(folder / 'connector.json')]\n        staged = folder / ('.' + action + '.' + uuid.uuid4().hex + '.tmp') if action in ('catalogue', 'discover', 'review') else None\n        if action in ('catalogue', 'discover'):\n            args += ['--output', str(staged)]\n        if action == 'review':\n            args += ['--discovery', str(folder / 'discovery.json'), '--output', str(staged)]\n        if action == 'run':\n            args += ['--run-id', request['runId'], '--output', str(inside(root, 'data/' + flow))]\n        with locked(folder / '.execution.lock'):\n            try:\n                output = child(args, folder, config.get('timeoutSeconds', 120) * 2 + 300)\n                if staged is not None:\n                    history = folder / 'history'\n                    require(not history.is_symlink(), 'Evidence history cannot be a symlink')\n                    history.mkdir(exist_ok=True)\n                    names = {'catalogue': ('catalogue.json',), 'discover': ('discovery.json', 'review.json'),\n                             'review': ('review.json',)}[action]\n                    for name in names:\n                        previous = folder / name\n                        require(not previous.is_symlink(), 'Evidence cannot be a symlink')\n                        if previous.exists():\n                            shutil.copy2(previous, history / (name[:-5] + '-' + uuid.uuid4().hex + '.json'))\n                    staged.replace(folder / names[0])\n                    if action == 'discover':\n                        (folder / 'review.json').unlink(missing_ok=True)\n            finally:\n                if staged is not None: staged.unlink(missing_ok=True)\n        result = json.loads(output)\n        if action == 'catalogue':\n            # Field names and types only; the full catalogue stays in the flow folder.\n            catalogue = load(folder / 'catalogue.json')\n            results.append({'flow': flow, 'status': result.get('status'),\n                            'catalogue': str((folder / 'catalogue.json').relative_to(root)),\n                            'tables': {t: len(v.get('columns', [])) for t, v in catalogue.get('tables', {}).items()}})\n            continue\n        checkpoint = result.get('checkpoint')\n        if checkpoint is not None:\n            require(isinstance(checkpoint, dict) and set(checkpoint) == {'sequence', 'bookmarks', 'hasMore'}\n                    and type(checkpoint['sequence']) is int and 1 <= checkpoint['sequence'] <= 10000\n                    and type(checkpoint['hasMore']) is bool and isinstance(checkpoint['bookmarks'], dict)\n                    and 1 <= len(checkpoint['bookmarks']) <= 100,\n                    'Invalid incremental checkpoint result')\n            for name, value in checkpoint['bookmarks'].items():\n                require(isinstance(name, str) and re.fullmatch(r'[A-Za-z_][A-Za-z0-9_-]{0,100}', name)\n                        and isinstance(value, str) and re.fullmatch(r'0|[1-9][0-9]{0,18}', value)\n                        and int(value) <= 9223372036854775807, 'Invalid incremental cursor result')\n        results.append({'flow': flow, 'status': result.get('status'), 'tables': result.get('tables', []),\n                        **({'quality': result['quality']} if isinstance(result.get('quality'), list) else {}),\n                        **({'checkpoint': checkpoint} if checkpoint is not None else {})})\n    return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'action': action, 'flows': results}\n\n\nCHECKPOINT_FAILURES = ('CHECKPOINT_MIGRATION', 'CHECKPOINT_MIGRATION_STALE', 'CHECKPOINT_POLICY', 'CHECKPOINT_HISTORY', 'CHECKPOINT_LIMIT', 'CHECKPOINT_CURSOR', 'CHECKPOINT_MISSING', 'OUTPUT_BUSY')\n\nSETUP_ACTIONS = ('prepare', 'catalogue', 'discover', 'review', 'approve', 'checkpoint_preview', 'checkpoint_apply')\n\n\nclass OperationUncertain(ValueError):\n    \"\"\"No durable provider acknowledgement exists; never claim a known failure.\"\"\"\n\n\ndef operation_location(request):\n    action = request.get('originalAction') if request.get('action') == 'acknowledge' else request.get('action')\n    require(action in SETUP_ACTIONS, 'Only setup actions use this acknowledgement protocol')\n    run_id, fingerprint, flows = request.get('runId'), request.get('fingerprint'), request.get('flows')\n    require(isinstance(run_id, str) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,99}', run_id), 'Invalid original operation identity')\n    require(isinstance(fingerprint, str) and re.fullmatch(r'[a-f0-9]{64}', fingerprint), 'Invalid operation build fingerprint')\n    require(isinstance(flows, list) and 1 <= len(flows) <= 100 and len(flows) == len(set(flows))\n            and all(isinstance(flow, str) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,99}', flow) for flow in flows), 'Invalid original flow selection')\n    cache = Path(request['cache'])\n    require(cache.is_absolute() and not cache.is_symlink(), 'Invalid operation cache')\n    cache.mkdir(parents=True, exist_ok=True)\n    area = inside(cache, '.ingestron-operation-receipts')\n    area.mkdir(mode=0o700, exist_ok=True)\n    namespace = inside(cache, '.ingestron-operation-receipts/' + fingerprint)\n    namespace.mkdir(mode=0o700, exist_ok=True)\n    folder = inside(namespace, run_id)\n    binding = {'apiVersion': 'ingestron.execution-operation/v1', 'id': run_id,\n               'action': action, 'flows': flows, 'fingerprint': fingerprint}\n    return folder, binding\n\n\ndef journal_read(folder, name):\n    path = inside(folder, name)\n    require(path.is_file() and not path.is_symlink(), 'Invalid operation acknowledgement file')\n    return load(path)\n\n\ndef operation_acknowledgement(request):\n    folder, binding = operation_location(request)\n    if not folder.exists() or not (folder / 'acknowledgement.json').exists():\n        raise OperationUncertain('Original operation has no durable acknowledgement; retain its build ownership')\n    ack = journal_read(folder, 'acknowledgement.json')\n    expected = {'apiVersion': 'ingestron.execution-acknowledgement/v1', **{k: binding[k] for k in ('id', 'action', 'flows', 'fingerprint')}}\n    require(isinstance(ack, dict) and set(ack) == {*expected, 'result'} and all(ack[k] == v for k, v in expected.items()), 'Original operation acknowledgement does not match its binding')\n    result = ack['result']\n    require(isinstance(result, dict) and {'apiVersion', 'status', 'action', 'flows'} <= set(result) <= {'apiVersion', 'status', 'action', 'flows', 'errorCode'}\n            and result['apiVersion'] == 'ingestron.execution-result/v1' and result['action'] == binding['action']\n            and result['status'] in ('succeeded', 'failed') and isinstance(result['flows'], list)\n            and len(result['flows']) <= 100, 'Invalid original operation result')\n    require('errorCode' not in result or (result['status'] == 'failed' and result['errorCode'] in CHECKPOINT_FAILURES), 'Invalid checkpoint failure evidence')\n    require(result['status'] == 'failed' or [flow.get('flow') for flow in result['flows']] == binding['flows'], 'Original operation result has another selection')\n    return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'acknowledgement': ack}\n\n\ndef operation_response(request):\n    try:\n        return execute(request)\n    except KeyboardInterrupt:\n        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'interrupted'}\n    except QualityFailure as error:\n        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed', 'errorCode': 'QUALITY_FAILED', 'quality': error.quality, 'message': str(error)}\n    except SourceFailure as error:\n        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed', 'errorCode': error.code, 'message': str(error)}\n    except Exception as error:\n        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed', 'message': str(error) if isinstance(error, ValueError) else 'Local execution failed; check runtime preparation and reviewed inputs'}\n\n\ndef operation_worker(request):\n    # This independently grouped finaliser survives the original adapter parent.\n    # It records evidence only after execute has finished all owned child work.\n    folder, binding = operation_location(request)\n    submission = journal_read(folder, 'submission.json')\n    require(submission == {'binding': binding, 'nonce': request.get('operationNonce')}, 'Operation worker does not own this submission')\n    with locked(inside(folder, 'worker.lock')):\n        require(not (folder / 'acknowledgement.json').exists(), 'Original operation already finalised')\n        write(inside(folder, 'worker.json'), {'pid': os.getpid(), 'nonce': submission['nonce']})\n        result = operation_response(request)\n        acknowledgement = {'apiVersion': 'ingestron.execution-acknowledgement/v1',\n                           **{k: binding[k] for k in ('id', 'action', 'flows', 'fingerprint')},\n                           'result': {'apiVersion': 'ingestron.execution-result/v1',\n                                      'status': 'succeeded' if result['status'] == 'succeeded' else 'failed',\n                                      'action': binding['action'], 'flows': result.get('flows', []),\n                                      **({'errorCode': result['errorCode']} if result.get('status') == 'failed' and result.get('errorCode') in CHECKPOINT_FAILURES else {})}}\n        # No executable operation or source write follows this atomic commit.\n        write(inside(folder, 'acknowledgement.json'), acknowledgement)\n        return result\n\n\ndef operation_dispatch(request):\n    require(request.get('apiVersion') == 'ingestron.execution-request/v1', 'Unsupported execution protocol')\n    if request.get('action') == 'acknowledge':\n        return operation_acknowledgement(request)\n    if request.get('action') not in SETUP_ACTIONS:\n        return operation_response(request)\n    folder, binding = operation_location(request)\n    try:\n        require(sum(1 for _ in folder.parent.iterdir()) < 10000, 'Review an operation receipt archive before starting more setup work')\n        folder.mkdir(mode=0o700)\n    except FileExistsError:\n        submission = journal_read(folder, 'submission.json')\n        require(submission.get('binding') == binding, 'Original identity belongs to another operation')\n        return operation_acknowledgement(request)['acknowledgement']['result']\n    nonce = uuid.uuid4().hex\n    write(inside(folder, 'submission.json'), {'binding': binding, 'nonce': nonce})\n    worker_request = {**request, 'operationNonce': nonce}\n    with subprocess.Popen([sys.executable, str(Path(__file__).resolve()), '--operation-worker'],\n                          stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,\n                          start_new_session=True) as worker:\n        worker.communicate(json.dumps(worker_request).encode())\n    # Child absence, a failed exit, or elapsed time is not an acknowledgement.\n    return operation_acknowledgement(request)['acknowledgement']['result']\n\n\nif __name__ == '__main__':\n    try:\n        payload = sys.stdin.read(2_000_001)\n        require(len(payload) <= 2_000_000, 'Execution request exceeds limit')\n        request = json.loads(payload)\n        if sys.argv[1:] == ['--operation-worker']:\n            def interrupt_worker(_signal, _frame):\n                raise KeyboardInterrupt()\n            signal.signal(signal.SIGTERM, interrupt_worker)\n        response = operation_worker(request) if sys.argv[1:] == ['--operation-worker'] else operation_dispatch(request)\n    except (KeyboardInterrupt, OperationUncertain):\n        response = {'apiVersion': 'ingestron.execution-result/v1', 'status': 'interrupted', 'message': 'Original operation outcome is unconfirmed; inspect its durable acknowledgement'}\n    except Exception:\n        # Failure to read or write acknowledgement metadata cannot prove that an\n        # already dispatched worker stopped. Retain source uncertainty.\n        response = {'apiVersion': 'ingestron.execution-result/v1', 'status': 'interrupted', 'message': 'Operation acknowledgement is unavailable; retain the original identity'}\n    print(json.dumps(response))\n    sys.exit(0 if response['status'] == 'succeeded' else 1)\n";
++  "\"\"\"Explicit local execution adapter. No source implementation lives here.\"\"\"\nimport contextlib\nimport datetime\nimport fcntl\nimport hashlib\nimport json\nimport math\nimport os\nfrom pathlib import Path\nimport platform\nimport re\nimport shutil\nimport signal\nimport subprocess\nimport sys\nimport uuid\n\n\ndef require(condition, message):\n    if not condition:\n        raise ValueError(message)\n\n\ndef digest(data):\n    return hashlib.sha256(data).hexdigest()\n\n\ndef load(path):\n    require(path.stat().st_size <= 10_000_000, 'Runtime metadata exceeds limit')\n    return json.loads(path.read_text())\n\n\ndef write(path, data):\n    temporary = path.with_name(path.name + '.' + uuid.uuid4().hex + '.tmp')\n    temporary.write_text(json.dumps(data, sort_keys=True) + '\\n')\n    temporary.chmod(0o600)\n    temporary.replace(path)\n\n\ndef inside(root, name):\n    path = root / name\n    require(not Path(name).is_absolute() and '..' not in Path(name).parts, 'Unsafe runtime path')\n    for part in [path, *path.parents]:\n        if part == root.parent:\n            break\n        require(not part.is_symlink(), 'Runtime paths cannot cross symlinks')\n    require(path.resolve().is_relative_to(root.resolve()), 'Runtime path leaves root')\n    return path\n\n\n@contextlib.contextmanager\ndef locked(path):\n    require(not path.is_symlink(), 'Lock cannot be a symlink')\n    with path.open('a') as handle:\n        try:\n            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)\n        except BlockingIOError:\n            raise ValueError('Operation is already active; wait for completion')\n        try:\n            yield None\n        finally:\n            fcntl.flock(handle, fcntl.LOCK_UN)\n\n\ndef quality_message(failed):\n    # Contract rule identities and counts only; never row values.\n    rules = []\n    for rule in failed if isinstance(failed, list) else []:\n        if not isinstance(rule, dict): continue\n        name = re.sub(r'[^A-Za-z0-9_.:-]', '_', str(rule.get('id', 'rule')))[:80]\n        value = rule.get('value')\n        rules.append(name + (f' ({value})' if isinstance(value, (int, float)) and not isinstance(value, bool) else ''))\n    listed = ', '.join(rules[:10]) or 'unreported rules'\n    return ('Contract quality rules failed; nothing was committed: ' + listed +\n            '. Fix the source data or review the rule severity, then retry with the same run ID.')\n\n\nclass SourceFailure(ValueError):\n    def __init__(self,code,message):\n        self.code=code\n        super().__init__(message)\n\n\nclass QualityFailure(ValueError):\n    def __init__(self, failed):\n        self.quality = []\n        for rule in failed[:20] if isinstance(failed, list) else []:\n            if not isinstance(rule, dict):\n                continue\n            value = rule.get('value')\n            if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value) or value < 0:\n                continue\n            if rule.get('metric') not in ('nullValues', 'missingValues', 'invalidValues', 'duplicateValues', 'rowCount'):\n                continue\n            if any(not isinstance(rule.get(k), str) or not re.fullmatch(r'[A-Za-z0-9_.:-]{1,120}', rule[k]) for k in ('id', 'stream')):\n                continue\n            self.quality.append({k: rule[k] for k in ('id', 'stream', 'metric', 'value')})\n        super().__init__(quality_message(self.quality))\n\n\ndef child(args, cwd, timeout=900, env=None):\n    # Discard upstream errors: they can contain credentials or data.\n    with subprocess.Popen(args, cwd=cwd, env=env, stdin=subprocess.DEVNULL,\n                          stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,\n                          start_new_session=True) as process:\n        try:\n            output, _ = process.communicate(timeout=timeout)\n            if process.returncode != 0:\n                messages = {\n                    'SOURCE_METADATA_LIMIT': 'This flow exceeds the 2 MB metadata limit. Split tables into smaller flows or select fewer fields, then prepare again.',\n                    'SQL_CONNECT': 'Cannot connect to SQL. Check network access, credentials and TLS. If the database was paused, wait for it to resume before retrying.',\n                    'SQL_READ': 'SQL read failed. Check table permissions and source availability.',\n                    'SQL_TABLE': 'SQL table is absent or its metadata is not visible. Check schema, table and metadata permissions.',\n                    'DB_CONNECT': 'Cannot connect to the database. Check host, port, network access, credentials and TLS.',\n                    'DB_READ': 'Database read failed. Check table permissions and source availability.',\n                    'DB_TABLE': 'Database table is absent or its metadata is not visible. Check schema, table and permissions.',\n                    'TEMPORAL_DATE': 'DATE requires a valid calendar date in YYYY-MM-DD format; review the source field or contract mapping.',\n                    'TEMPORAL_TIMESTAMP': 'TIMESTAMP requires a valid full calendar date and time; review the source field or contract mapping.',\n                    'TEMPORAL_TIMEZONE': 'TIMESTAMP requires a timezone-less value; review an explicit timezone mapping before ingestion.',\n                    'TEMPORAL_PRECISION': 'Source timestamp precision exceeds six fractional digits; review an exact precision mapping before ingestion.',\n                    'TEMPORAL_TYPE': 'Select a supported reviewed temporal type.',\n                    'CHECKPOINT_HISTORY': 'Incremental commit history is incomplete or changed. Restore the committed output and receipts before retrying.',\n                    'CHECKPOINT_MIGRATION': 'The reviewed checkpoint transition is absent, changed or belongs to another history. Inspect the retained build and review again.',\n                    'CHECKPOINT_MIGRATION_STALE': 'The committed checkpoint head changed after review. Preview the current migration before applying.',\n                    'CHECKPOINT_POLICY': 'The incremental source, schema or policy changed. Review a migration before continuing this output namespace.',\n                    'CHECKPOINT_LIMIT': 'Incremental history reached 10000 batches. Review an archive migration before continuing.',\n                    'CHECKPOINT_CURSOR': 'The connector returned an invalid or regressing cursor. Check the reviewed ordered append policy before retrying.',\n                    'CHECKPOINT_MISSING': 'The connector omitted its final checkpoint. Output and cursor were not committed.',\n                    'OUTPUT_BUSY': 'Another run is writing this output namespace. Retry after that run finishes.',\n\n                    'GITHUB_AUTH': 'GitHub rejected the supplied token. Check or replace it; no anonymous fallback was attempted.',\n                    'GITHUB_FORBIDDEN': 'GitHub denied access. Check permissions or retry after any secondary rate limit.',\n                    'GITHUB_NOT_FOUND': 'Repository not found or inaccessible. Check owner/name and permissions.',\n                    'GITHUB_RATE_LIMIT': 'GitHub rate limit reached. Wait before retrying or configure an authorised token.',\n                    'GITHUB_UNAVAILABLE': 'GitHub is temporarily unavailable. Retry later.',\n                    'GITHUB_RESPONSE': 'GitHub returned an unsupported response or redirect. Check the repository name.',\n                    'GITHUB_NETWORK': 'Cannot reach GitHub. Check network access and retry.',\n                }\n                try:\n                    failure = json.loads(output) if len(output) <= 10000 else {}\n                    code = failure.get('errorCode')\n                except (ValueError, AttributeError):\n                    failure, code = {}, None\n                if code == 'QUALITY_FAILED':\n                    raise QualityFailure(failure.get('failed'))\n                if code in messages:\n                    if code.startswith(('TEMPORAL_', 'CHECKPOINT_')) or code in ('OUTPUT_BUSY', 'SOURCE_METADATA_LIMIT'):raise SourceFailure(code,messages[code])\n                    raise ValueError(messages[code])\n                # Other connectors' codes are named, never their messages; each\n                # connector's documentation explains its codes.\n                if isinstance(code, str) and re.fullmatch(r'[A-Z][A-Z0-9_]{2,40}', code):\n                    raise ValueError(f'Source error {code}; see the connector documentation for this code')\n                raise ValueError('Runtime operation failed; check the locked environment, source access and review')\n            require(len(output) <= 10_000_000, 'Runtime response exceeds limit')\n            return output.decode()\n        finally:\n            if process.poll() is None:\n                os.killpg(process.pid, signal.SIGINT)\n                try:\n                    process.wait(timeout=5)\n                except subprocess.TimeoutExpired:\n                    os.killpg(process.pid, signal.SIGKILL)\n                    process.wait()\n\n\ndef bootstrap(explicit):\n    candidate = explicit or shutil.which('python3.12')\n    if not candidate and sys.version_info[:2] == (3, 12):\n        candidate = sys.executable\n    if not candidate and shutil.which('uv'):\n        try:\n            candidate = child(['uv', 'python', 'find', '3.12', '--no-python-downloads'], Path.cwd(), 15).strip()\n        except ValueError:\n            pass\n    require(candidate, 'Install Python 3.12, then repeat runtime prepare; --python is an optional override')\n    candidate = os.path.abspath(candidate)\n    version = child([candidate, '-I', '-c', 'import sys; print(\".\".join(map(str,sys.version_info[:3])))'], Path.cwd(), 15).strip()\n    require(version.startswith('3.12.'), 'The locked connector runtime requires Python 3.12')\n    return candidate, version\n\n\ndef clean_install_env():\n    env = {k: os.environ[k] for k in ('PATH', 'HOME', 'TMPDIR', 'LANG', 'SSL_CERT_FILE', 'HTTPS_PROXY', 'HTTP_PROXY', 'NO_PROXY') if k in os.environ}\n    env.update({'PIP_CONFIG_FILE': os.devnull, 'PIP_DISABLE_PIP_VERSION_CHECK': '1', 'PYTHONNOUSERSITE': '1'})\n    return env\n\n\ndef environment(root, info, cache, request, prepare=False):\n    requirements = inside(root, info['requirements'])\n    tools = inside(root, info['buildTools'])\n    lock_key = digest(requirements.read_bytes() + b'\\0' + tools.read_bytes() + platform.platform().encode() + platform.machine().encode())\n    folder = inside(cache, lock_key)\n    marker = folder / 'ready.json'\n    python = folder / 'bin/python'\n    if prepare:\n        with locked(cache / (lock_key + '.lock')):\n            if marker.exists():\n                require(load(marker)['lock'] == lock_key and python.exists(), 'Runtime cache is incomplete; remove its directory and prepare again')\n                return str(python), lock_key, True\n            executable, version = bootstrap(request.get('python'))\n            if folder.exists():\n                shutil.rmtree(folder)\n            try:\n                child([executable, '-I', '-m', 'venv', str(folder)], root)\n                for lock in [tools, requirements]:\n                    # Restrict installer input to exact package versions and hashes.\n                    for line in lock.read_text().splitlines():\n                        text = line.strip()\n                        require(not text or text.startswith('#') or re.fullmatch(r'[A-Za-z0-9_.-]+==[A-Za-z0-9_.+!-]+(?:\\s*;[A-Za-z0-9_ .\\\"\\'=!<>()-]+)?(?:\\s*\\\\)?', text) or re.fullmatch(r'--hash=sha256:[a-f0-9]{64}(?:\\s*\\\\)?', text), 'Unsupported dependency lock syntax')\n                    child([str(python), '-I', '-m', 'pip', 'install', '--require-hashes', '--no-build-isolation', '--index-url', 'https://pypi.org/simple', '-r', str(lock)], root, 900, clean_install_env())\n                write(marker, {'lock': lock_key, 'python': version})\n            except BaseException:\n                shutil.rmtree(folder, ignore_errors=True)\n                raise\n            return str(python), lock_key, False\n    require(marker.exists() and python.exists() and load(marker)['lock'] == lock_key,\n            'Runtime is not prepared. Run ingestron runtime prepare with the same --from and selection')\n    return str(python), lock_key, True\n\n\ndef execute(request):\n    require(request.get('apiVersion') == 'ingestron.execution-request/v1' and os.name == 'posix', 'Unsupported execution protocol/platform')\n    root = Path(__file__).resolve().parent\n    project = load(root / 'project-runtime.json')\n    ids = request['flows']\n    require(ids and len(ids) == len(set(ids)) and all(i in project['flows'] for i in ids), 'Unknown or duplicate flow selection')\n    cache = Path(request['cache'])\n    require(not cache.is_symlink(), 'Runtime cache cannot be a symlink')\n    cache.mkdir(parents=True, exist_ok=True)\n    action = request['action']\n    require(action in ('prepare', 'catalogue', 'discover', 'review', 'approve', 'run', 'checkpoint_preview', 'checkpoint_apply'), 'Unsupported local action')\n    maintenance = action in ('checkpoint_preview', 'checkpoint_apply')\n    require(not maintenance or len(ids) == 1, 'Checkpoint maintenance requires one flow')\n    results = []\n    for flow in ids:\n        info = project['flows'][flow]\n        folder = inside(root, info['directory'])\n        runtime = project['environments'][info['runtime']]\n        python, key, reused = environment(root, runtime, cache, request, action == 'prepare')\n        if action == 'prepare':\n            results.append({'flow': flow, 'environment': key, 'reused': reused,\n                            'python': python, 'pythonVersion': load(cache / key / 'ready.json')['python']})\n            continue\n        if maintenance:\n            declaration = info.get('checkpointMigration')\n            require(declaration == {'apiVersion': 'ingestron.checkpoint-migration/v1', 'strategy': 'preserve-cursor-runtime-upgrade'}, 'Upgrade the selected source package to support reviewed checkpoint migration')\n            project_root, prior_root = Path(request.get('projectRoot', '')), Path(request.get('previousRoot', ''))\n            require(project_root.is_absolute() and prior_root.is_absolute() and root.resolve().is_relative_to(project_root.resolve()) and prior_root.resolve().is_relative_to(project_root.resolve()), 'Checkpoint baseline must remain in the selected project')\n            # Validate all path components, including the retained package root.\n            prior_root = inside(project_root, str(prior_root.relative_to(project_root)))\n            prior = load(inside(prior_root, 'project-runtime.json'))\n            require(all(prior.get(key) == project.get(key) for key in ('project', 'environment', 'configuration')) and flow in prior.get('flows', {}), 'Checkpoint baseline has another project or flow scope')\n            previous_folder = inside(prior_root, prior['flows'][flow]['directory'])\n            args = [python, '-B', str(inside(folder, 'singer_runtime.py')), action, '--config', str(inside(folder, 'connector.json')), '--previous-config', str(inside(previous_folder, 'connector.json')), '--output', str(inside(root, 'data/' + flow))]\n            if action == 'checkpoint_apply':\n                require(isinstance(request.get('expectedDigest'), str) and re.fullmatch(r'[a-f0-9]{64}', request['expectedDigest']), 'Review the exact checkpoint migration digest before apply')\n                args += ['--expected-digest', request['expectedDigest']]\n            with locked(folder / '.execution.lock'):\n                result = json.loads(child(args, folder, 300))\n            require(set(result) == {'status', 'migration'} and result['status'] == 'Succeeded', 'Invalid source checkpoint response')\n            results.append({'flow': flow, 'status': 'Succeeded', 'migration': result['migration']})\n            continue\n        # All flows are verified against their exact source-owned runtime before source access.\n        child([python, '-c', 'import json,pathlib,singer_runtime as r; p=pathlib.Path.cwd(); r.runtime_identity(json.loads((p/\"connector.json\").read_text()),p)'], folder, 30)\n        config = load(folder / 'connector.json')\n        args = [python, str(folder / 'singer_runtime.py'), action, '--config', str(folder / 'connector.json')]\n        staged = folder / ('.' + action + '.' + uuid.uuid4().hex + '.tmp') if action in ('catalogue', 'discover', 'review') else None\n        if action in ('catalogue', 'discover'):\n            args += ['--output', str(staged)]\n        if action == 'review':\n            args += ['--discovery', str(folder / 'discovery.json'), '--output', str(staged)]\n        if action == 'run':\n            args += ['--run-id', request['runId'], '--output', str(inside(root, 'data/' + flow))]\n        with locked(folder / '.execution.lock'):\n            try:\n                output = child(args, folder, config.get('timeoutSeconds', 120) * 2 + 300)\n                if staged is not None:\n                    history = folder / 'history'\n                    require(not history.is_symlink(), 'Evidence history cannot be a symlink')\n                    history.mkdir(exist_ok=True)\n                    names = {'catalogue': ('catalogue.json',), 'discover': ('discovery.json', 'review.json'),\n                             'review': ('review.json',)}[action]\n                    for name in names:\n                        previous = folder / name\n                        require(not previous.is_symlink(), 'Evidence cannot be a symlink')\n                        if previous.exists():\n                            shutil.copy2(previous, history / (name[:-5] + '-' + uuid.uuid4().hex + '.json'))\n                    staged.replace(folder / names[0])\n                    if action == 'discover':\n                        (folder / 'review.json').unlink(missing_ok=True)\n            finally:\n                if staged is not None: staged.unlink(missing_ok=True)\n        result = json.loads(output)\n        if action == 'catalogue':\n            # Field names and types only; the full catalogue stays in the flow folder.\n            catalogue = load(folder / 'catalogue.json')\n            results.append({'flow': flow, 'status': result.get('status'),\n                            'catalogue': str((folder / 'catalogue.json').relative_to(root)),\n                            'tables': {t: len(v.get('columns', [])) for t, v in catalogue.get('tables', {}).items()}})\n            continue\n        checkpoint = result.get('checkpoint')\n        if checkpoint is not None:\n            require(isinstance(checkpoint, dict) and set(checkpoint) == {'sequence', 'bookmarks', 'hasMore'}\n                    and type(checkpoint['sequence']) is int and 1 <= checkpoint['sequence'] <= 10000\n                    and type(checkpoint['hasMore']) is bool and isinstance(checkpoint['bookmarks'], dict)\n                    and 1 <= len(checkpoint['bookmarks']) <= 100,\n                    'Invalid incremental checkpoint result')\n            for name, value in checkpoint['bookmarks'].items():\n                require(isinstance(name, str) and re.fullmatch(r'[A-Za-z_][A-Za-z0-9_-]{0,100}', name)\n                        and isinstance(value, str) and re.fullmatch(r'0|[1-9][0-9]{0,18}', value)\n                        and int(value) <= 9223372036854775807, 'Invalid incremental cursor result')\n        results.append({'flow': flow, 'status': result.get('status'), 'tables': result.get('tables', []),\n                        **({'quality': result['quality']} if isinstance(result.get('quality'), list) else {}),\n                        **({'checkpoint': checkpoint} if checkpoint is not None else {})})\n    return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'action': action, 'flows': results}\n\n\nCHECKPOINT_FAILURES = ('CHECKPOINT_MIGRATION', 'CHECKPOINT_MIGRATION_STALE', 'CHECKPOINT_POLICY', 'CHECKPOINT_HISTORY', 'CHECKPOINT_LIMIT', 'CHECKPOINT_CURSOR', 'CHECKPOINT_MISSING', 'OUTPUT_BUSY')\nEXECUTION_FAILURES = (*CHECKPOINT_FAILURES, 'SOURCE_METADATA_LIMIT')\n\nSETUP_ACTIONS = ('prepare', 'catalogue', 'discover', 'review', 'approve', 'checkpoint_preview', 'checkpoint_apply')\n\n\nclass OperationUncertain(ValueError):\n    \"\"\"No durable provider acknowledgement exists; never claim a known failure.\"\"\"\n\n\ndef operation_location(request):\n    action = request.get('originalAction') if request.get('action') == 'acknowledge' else request.get('action')\n    require(action in SETUP_ACTIONS, 'Only setup actions use this acknowledgement protocol')\n    run_id, fingerprint, flows = request.get('runId'), request.get('fingerprint'), request.get('flows')\n    require(isinstance(run_id, str) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,99}', run_id), 'Invalid original operation identity')\n    require(isinstance(fingerprint, str) and re.fullmatch(r'[a-f0-9]{64}', fingerprint), 'Invalid operation build fingerprint')\n    require(isinstance(flows, list) and 1 <= len(flows) <= 100 and len(flows) == len(set(flows))\n            and all(isinstance(flow, str) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,99}', flow) for flow in flows), 'Invalid original flow selection')\n    cache = Path(request['cache'])\n    require(cache.is_absolute() and not cache.is_symlink(), 'Invalid operation cache')\n    cache.mkdir(parents=True, exist_ok=True)\n    area = inside(cache, '.ingestron-operation-receipts')\n    area.mkdir(mode=0o700, exist_ok=True)\n    namespace = inside(cache, '.ingestron-operation-receipts/' + fingerprint)\n    namespace.mkdir(mode=0o700, exist_ok=True)\n    folder = inside(namespace, run_id)\n    binding = {'apiVersion': 'ingestron.execution-operation/v1', 'id': run_id,\n               'action': action, 'flows': flows, 'fingerprint': fingerprint}\n    return folder, binding\n\n\ndef journal_read(folder, name):\n    path = inside(folder, name)\n    require(path.is_file() and not path.is_symlink(), 'Invalid operation acknowledgement file')\n    return load(path)\n\n\ndef operation_acknowledgement(request):\n    folder, binding = operation_location(request)\n    if not folder.exists() or not (folder / 'acknowledgement.json').exists():\n        raise OperationUncertain('Original operation has no durable acknowledgement; retain its build ownership')\n    ack = journal_read(folder, 'acknowledgement.json')\n    expected = {'apiVersion': 'ingestron.execution-acknowledgement/v1', **{k: binding[k] for k in ('id', 'action', 'flows', 'fingerprint')}}\n    require(isinstance(ack, dict) and set(ack) == {*expected, 'result'} and all(ack[k] == v for k, v in expected.items()), 'Original operation acknowledgement does not match its binding')\n    result = ack['result']\n    require(isinstance(result, dict) and {'apiVersion', 'status', 'action', 'flows'} <= set(result) <= {'apiVersion', 'status', 'action', 'flows', 'errorCode'}\n            and result['apiVersion'] == 'ingestron.execution-result/v1' and result['action'] == binding['action']\n            and result['status'] in ('succeeded', 'failed') and isinstance(result['flows'], list)\n            and len(result['flows']) <= 100, 'Invalid original operation result')\n    require('errorCode' not in result or (result['status'] == 'failed' and result['errorCode'] in EXECUTION_FAILURES), 'Invalid execution failure evidence')\n    require(result['status'] == 'failed' or [flow.get('flow') for flow in result['flows']] == binding['flows'], 'Original operation result has another selection')\n    return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'acknowledgement': ack}\n\n\ndef operation_response(request):\n    try:\n        return execute(request)\n    except KeyboardInterrupt:\n        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'interrupted'}\n    except QualityFailure as error:\n        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed', 'errorCode': 'QUALITY_FAILED', 'quality': error.quality, 'message': str(error)}\n    except SourceFailure as error:\n        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed', 'errorCode': error.code, 'message': str(error)}\n    except Exception as error:\n        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed', 'message': str(error) if isinstance(error, ValueError) else 'Local execution failed; check runtime preparation and reviewed inputs'}\n\n\ndef operation_worker(request):\n    # This independently grouped finaliser survives the original adapter parent.\n    # It records evidence only after execute has finished all owned child work.\n    folder, binding = operation_location(request)\n    submission = journal_read(folder, 'submission.json')\n    require(submission == {'binding': binding, 'nonce': request.get('operationNonce')}, 'Operation worker does not own this submission')\n    with locked(inside(folder, 'worker.lock')):\n        require(not (folder / 'acknowledgement.json').exists(), 'Original operation already finalised')\n        write(inside(folder, 'worker.json'), {'pid': os.getpid(), 'nonce': submission['nonce']})\n        result = operation_response(request)\n        acknowledgement = {'apiVersion': 'ingestron.execution-acknowledgement/v1',\n                           **{k: binding[k] for k in ('id', 'action', 'flows', 'fingerprint')},\n                           'result': {'apiVersion': 'ingestron.execution-result/v1',\n                                      'status': 'succeeded' if result['status'] == 'succeeded' else 'failed',\n                                      'action': binding['action'], 'flows': result.get('flows', []),\n                                      **({'errorCode': result['errorCode']} if result.get('status') == 'failed' and result.get('errorCode') in EXECUTION_FAILURES else {})}}\n        # No executable operation or source write follows this atomic commit.\n        write(inside(folder, 'acknowledgement.json'), acknowledgement)\n        return result\n\n\ndef operation_dispatch(request):\n    require(request.get('apiVersion') == 'ingestron.execution-request/v1', 'Unsupported execution protocol')\n    if request.get('action') == 'acknowledge':\n        return operation_acknowledgement(request)\n    if request.get('action') not in SETUP_ACTIONS:\n        return operation_response(request)\n    folder, binding = operation_location(request)\n    try:\n        require(sum(1 for _ in folder.parent.iterdir()) < 10000, 'Review an operation receipt archive before starting more setup work')\n        folder.mkdir(mode=0o700)\n    except FileExistsError:\n        submission = journal_read(folder, 'submission.json')\n        require(submission.get('binding') == binding, 'Original identity belongs to another operation')\n        return operation_acknowledgement(request)['acknowledgement']['result']\n    nonce = uuid.uuid4().hex\n    write(inside(folder, 'submission.json'), {'binding': binding, 'nonce': nonce})\n    worker_request = {**request, 'operationNonce': nonce}\n    with subprocess.Popen([sys.executable, str(Path(__file__).resolve()), '--operation-worker'],\n                          stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,\n                          start_new_session=True) as worker:\n        worker.communicate(json.dumps(worker_request).encode())\n    # Child absence, a failed exit, or elapsed time is not an acknowledgement.\n    return operation_acknowledgement(request)['acknowledgement']['result']\n\n\nif __name__ == '__main__':\n    try:\n        payload = sys.stdin.read(2_000_001)\n        require(len(payload) <= 2_000_000, 'Execution request exceeds limit')\n        request = json.loads(payload)\n        if sys.argv[1:] == ['--operation-worker']:\n            def interrupt_worker(_signal, _frame):\n                raise KeyboardInterrupt()\n            signal.signal(signal.SIGTERM, interrupt_worker)\n        response = operation_worker(request) if sys.argv[1:] == ['--operation-worker'] else operation_dispatch(request)\n    except (KeyboardInterrupt, OperationUncertain):\n        response = {'apiVersion': 'ingestron.execution-result/v1', 'status': 'interrupted', 'message': 'Original operation outcome is unconfirmed; inspect its durable acknowledgement'}\n    except Exception:\n        # Failure to read or write acknowledgement metadata cannot prove that an\n        # already dispatched worker stopped. Retain source uncertainty.\n        response = {'apiVersion': 'ingestron.execution-result/v1', 'status': 'interrupted', 'message': 'Operation acknowledgement is unavailable; retain the original identity'}\n    print(json.dumps(response))\n    sys.exit(0 if response['status'] == 'succeeded' else 1)\n";
+--- before/provider-local/package.json
++++ after/provider-local/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "@ingestron/provider-local",
+-  "version": "0.4.14",
++  "version": "0.4.16",
+   "private": true,
+   "type": "module",
+   "license": "Apache-2.0",
+--- before/provider-local/plugin/commands.mjs
++++ after/provider-local/plugin/commands.mjs
+@@ -108,6 +108,7 @@
+             output, _ = process.communicate(timeout=timeout)
+             if process.returncode != 0:
+                 messages = {
++                    'SOURCE_METADATA_LIMIT': 'This flow exceeds the 2 MB metadata limit. Split tables into smaller flows or select fewer fields, then prepare again.',
+                     'SQL_CONNECT': 'Cannot connect to SQL. Check network access, credentials and TLS. If the database was paused, wait for it to resume before retrying.',
+                     'SQL_READ': 'SQL read failed. Check table permissions and source availability.',
+                     'SQL_TABLE': 'SQL table is absent or its metadata is not visible. Check schema, table and metadata permissions.',
+@@ -144,7 +145,7 @@
+                 if code == 'QUALITY_FAILED':
+                     raise QualityFailure(failure.get('failed'))
+                 if code in messages:
+-                    if code.startswith(('TEMPORAL_', 'CHECKPOINT_')) or code == 'OUTPUT_BUSY':raise SourceFailure(code,messages[code])
++                    if code.startswith(('TEMPORAL_', 'CHECKPOINT_')) or code in ('OUTPUT_BUSY', 'SOURCE_METADATA_LIMIT'):raise SourceFailure(code,messages[code])
+                     raise ValueError(messages[code])
+                 # Other connectors' codes are named, never their messages; each
+                 # connector's documentation explains its codes.
+@@ -316,6 +317,7 @@
+ 
+ 
+ CHECKPOINT_FAILURES = ('CHECKPOINT_MIGRATION', 'CHECKPOINT_MIGRATION_STALE', 'CHECKPOINT_POLICY', 'CHECKPOINT_HISTORY', 'CHECKPOINT_LIMIT', 'CHECKPOINT_CURSOR', 'CHECKPOINT_MISSING', 'OUTPUT_BUSY')
++EXECUTION_FAILURES = (*CHECKPOINT_FAILURES, 'SOURCE_METADATA_LIMIT')
+ 
+ SETUP_ACTIONS = ('prepare', 'catalogue', 'discover', 'review', 'approve', 'checkpoint_preview', 'checkpoint_apply')
+ 
+@@ -363,7 +365,7 @@
+             and result['apiVersion'] == 'ingestron.execution-result/v1' and result['action'] == binding['action']
+             and result['status'] in ('succeeded', 'failed') and isinstance(result['flows'], list)
+             and len(result['flows']) <= 100, 'Invalid original operation result')
+-    require('errorCode' not in result or (result['status'] == 'failed' and result['errorCode'] in CHECKPOINT_FAILURES), 'Invalid checkpoint failure evidence')
++    require('errorCode' not in result or (result['status'] == 'failed' and result['errorCode'] in EXECUTION_FAILURES), 'Invalid execution failure evidence')
+     require(result['status'] == 'failed' or [flow.get('flow') for flow in result['flows']] == binding['flows'], 'Original operation result has another selection')
+     return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'acknowledgement': ack}
+ 
+@@ -396,7 +398,7 @@
+                            'result': {'apiVersion': 'ingestron.execution-result/v1',
+                                       'status': 'succeeded' if result['status'] == 'succeeded' else 'failed',
+                                       'action': binding['action'], 'flows': result.get('flows', []),
+-                                      **({'errorCode': result['errorCode']} if result.get('status') == 'failed' and result.get('errorCode') in CHECKPOINT_FAILURES else {})}}
++                                      **({'errorCode': result['errorCode']} if result.get('status') == 'failed' and result.get('errorCode') in EXECUTION_FAILURES else {})}}
+         # No executable operation or source write follows this atomic commit.
+         write(inside(folder, 'acknowledgement.json'), acknowledgement)
+         return result
+@@ -949,9 +951,9 @@
+     execution: "local-posix-preview",
+     artifacts: {
+       ...runtimeAssets,
+-      "connector.json": JSON.stringify(config, null, 2),
+-      "selection.json": JSON.stringify(selection, null, 2),
+-      "project-connection.lock.json": JSON.stringify(input, null, 2)
++      "connector.json": JSON.stringify(config),
++      "selection.json": JSON.stringify(selection),
++      "project-connection.lock.json": JSON.stringify(input)
+     },
+     review: [
+       "Prepare a separate hash-locked Python 3.12 environment on POSIX.",
+--- before/provider-local/plugin/execution.py
++++ after/provider-local/plugin/execution.py
+@@ -107,6 +107,7 @@
+             output, _ = process.communicate(timeout=timeout)
+             if process.returncode != 0:
+                 messages = {
++                    'SOURCE_METADATA_LIMIT': 'This flow exceeds the 2 MB metadata limit. Split tables into smaller flows or select fewer fields, then prepare again.',
+                     'SQL_CONNECT': 'Cannot connect to SQL. Check network access, credentials and TLS. If the database was paused, wait for it to resume before retrying.',
+                     'SQL_READ': 'SQL read failed. Check table permissions and source availability.',
+                     'SQL_TABLE': 'SQL table is absent or its metadata is not visible. Check schema, table and metadata permissions.',
+@@ -143,7 +144,7 @@
+                 if code == 'QUALITY_FAILED':
+                     raise QualityFailure(failure.get('failed'))
+                 if code in messages:
+-                    if code.startswith(('TEMPORAL_', 'CHECKPOINT_')) or code == 'OUTPUT_BUSY':raise SourceFailure(code,messages[code])
++                    if code.startswith(('TEMPORAL_', 'CHECKPOINT_')) or code in ('OUTPUT_BUSY', 'SOURCE_METADATA_LIMIT'):raise SourceFailure(code,messages[code])
+                     raise ValueError(messages[code])
+                 # Other connectors' codes are named, never their messages; each
+                 # connector's documentation explains its codes.
+@@ -315,6 +316,7 @@
+ 
+ 
+ CHECKPOINT_FAILURES = ('CHECKPOINT_MIGRATION', 'CHECKPOINT_MIGRATION_STALE', 'CHECKPOINT_POLICY', 'CHECKPOINT_HISTORY', 'CHECKPOINT_LIMIT', 'CHECKPOINT_CURSOR', 'CHECKPOINT_MISSING', 'OUTPUT_BUSY')
++EXECUTION_FAILURES = (*CHECKPOINT_FAILURES, 'SOURCE_METADATA_LIMIT')
+ 
+ SETUP_ACTIONS = ('prepare', 'catalogue', 'discover', 'review', 'approve', 'checkpoint_preview', 'checkpoint_apply')
+ 
+@@ -362,7 +364,7 @@
+             and result['apiVersion'] == 'ingestron.execution-result/v1' and result['action'] == binding['action']
+             and result['status'] in ('succeeded', 'failed') and isinstance(result['flows'], list)
+             and len(result['flows']) <= 100, 'Invalid original operation result')
+-    require('errorCode' not in result or (result['status'] == 'failed' and result['errorCode'] in CHECKPOINT_FAILURES), 'Invalid checkpoint failure evidence')
++    require('errorCode' not in result or (result['status'] == 'failed' and result['errorCode'] in EXECUTION_FAILURES), 'Invalid execution failure evidence')
+     require(result['status'] == 'failed' or [flow.get('flow') for flow in result['flows']] == binding['flows'], 'Original operation result has another selection')
+     return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'acknowledgement': ack}
+ 
+@@ -395,7 +397,7 @@
+                            'result': {'apiVersion': 'ingestron.execution-result/v1',
+                                       'status': 'succeeded' if result['status'] == 'succeeded' else 'failed',
+                                       'action': binding['action'], 'flows': result.get('flows', []),
+-                                      **({'errorCode': result['errorCode']} if result.get('status') == 'failed' and result.get('errorCode') in CHECKPOINT_FAILURES else {})}}
++                                      **({'errorCode': result['errorCode']} if result.get('status') == 'failed' and result.get('errorCode') in EXECUTION_FAILURES else {})}}
+         # No executable operation or source write follows this atomic commit.
+         write(inside(folder, 'acknowledgement.json'), acknowledgement)
+         return result
+--- before/provider-local/plugin/provider.yaml
++++ after/provider-local/plugin/provider.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.provider/v1
+ id: local
+-version: 0.4.14
++version: 0.4.16
+ platform: local
+ activities: {}
+ compatibility:
+--- before/connectors/runtime/singer_runtime.py
++++ after/connectors/runtime/singer_runtime.py
+@@ -42,9 +42,40 @@
+         raise ValueError(message)
+ 
+ 
++DOCUMENT_LIMIT = 2_000_000
++METADATA_LIMIT_MESSAGE = 'This flow exceeds the 2 MB metadata limit. Split tables into smaller flows or select fewer fields, then prepare again.'
++
++
++class MetadataLimit(ValueError):
++    code = 'SOURCE_METADATA_LIMIT'
++
++    def __init__(self):
++        super().__init__(METADATA_LIMIT_MESSAGE)
++
++
++def document_text(path):
++    path = Path(path)
++    if path.stat().st_size > DOCUMENT_LIMIT:
++        raise MetadataLimit()
++    # The bounded read also refuses a file that grew after its size was checked.
++    with path.open('rb') as source:
++        value = source.read(DOCUMENT_LIMIT + 1)
++    if len(value) > DOCUMENT_LIMIT:
++        raise MetadataLimit()
++    return value.decode('utf8')
++
++
+ def load(path):
+-    check(Path(path).stat().st_size <= 2_000_000, 'Configuration/catalogue exceeds 2 MB')
+-    return json.loads(Path(path).read_text())
++    return json.loads(document_text(path))
++
++
++def encoded_document(value):
++    text = canonical(value) + '\n'
++    # Approval changes 'draft' to 'approved'; reserve its three extra bytes.
++    reserve = 3 if value.get('status') == 'draft' else 0
++    if len(text.encode('utf8')) + reserve > DOCUMENT_LIMIT:
++        raise MetadataLimit()
++    return text
+ 
+ 
+ def field_from_column(type_name, required):
+@@ -107,7 +138,7 @@
+         project = dict(config['projectLock'])
+         check(project.get('runtimeContract') == 'ingestron.snapshot/python/v1', 'Unsupported project runtime contract')
+         expected = project.pop('specificationSha256')
+-        project_text = (folder / 'project-connection.lock.json').read_text()
++        project_text = document_text(folder / 'project-connection.lock.json')
+         check(project_specification_digest(project_text) == expected, 'Project specification hash mismatch')
+         check(json.loads(project_text) == config['projectLock'], 'Project lock changed')
+         check(config['sourceSettings'] == project['settings'], 'Connection settings differ from project lock')
+@@ -337,13 +368,17 @@
+             check(actual == expected, 'ODCS fields differ from extraction projection')
+         contracts = authored_contracts
+     return {'apiVersion':'ingestron.singer-review/v1','status':'draft','identity':discovery['identity'],
+-            'catalog':catalog,'projection':tables,'contracts':contracts,'selection':selection, **({'authoredContracts':authored_contracts} if authored_contracts is not None else {})}
++            'catalog':catalog,'projection':tables,'contracts':contracts,'selection':selection, **({'contractSource':'project'} if authored_contracts is not None else {})}
+ 
+ 
+ def accepted(bundle, identity):
+     check(bundle.get('status') == 'approved' and bundle.get('apiVersion') == 'ingestron.singer-review/v1', 'Review bundle must be explicitly approved')
+     check(bundle['identity'] == identity, 'Discovery runtime/source identity differs')
+-    rebuilt = review({'apiVersion':'ingestron.singer-discovery/v1','identity':identity,'catalog':bundle['catalog']}, bundle['selection'], bundle.get('authoredContracts'))
++    check(bundle.get('contractSource') in (None, 'project'), 'Unsupported contract source')
++    check(not ('contractSource' in bundle and 'authoredContracts' in bundle), 'Ambiguous authored contract source')
++    # Older reviewed bundles embed a second copy. Keep reading them unchanged.
++    authored = bundle['contracts'] if bundle.get('contractSource') == 'project' else bundle.get('authoredContracts')
++    rebuilt = review({'apiVersion':'ingestron.singer-discovery/v1','identity':identity,'catalog':bundle['catalog']}, bundle['selection'], authored)
+     check(rebuilt['projection'] == bundle['projection'] and rebuilt['contracts'] == bundle['contracts'] and rebuilt['catalog'] == bundle['catalog'], 'Review artefacts disagree; regenerate from selection')
+     return bundle['projection']
+ 
+@@ -479,7 +514,8 @@
+             result['status'] = 'approved'
+             accepted(result, identity)
+             temporary = target.with_suffix('.approved.tmp')
+-            with temporary.open('x') as output: output.write(canonical(result)+'\n')
++            text = encoded_document(result)
++            with temporary.open('x') as output: output.write(text)
+             temporary.replace(target)
+             print(canonical({'status':'Succeeded','approved':True})); return
+         elif args.action in ('checkpoint_preview', 'checkpoint_apply'):
+@@ -498,8 +534,12 @@
+                                 if receipt['format'] == 'ingestron-local-incremental/v1' else {})})); return
+         check(args.output is not None, 'Explicit output path required')
+         # Never overwrite an existing discovery/review file silently.
+-        with Path(args.output).open('x') as target: target.write(canonical(result)+'\n')
++        text = encoded_document(result)
++        with Path(args.output).open('x') as target: target.write(text)
+         print(canonical({'status':'Succeeded','applied':False}))
++    except MetadataLimit as error:
++        print(canonical({'status':'Failed','errorCode':error.code,'error':METADATA_LIMIT_MESSAGE}))
++        raise SystemExit(1) from None
+     except QualityFailed as error:
+         # Rule identities and counts only; row values never leave the runtime.
+         print(canonical({'status':'Failed','errorCode':'QUALITY_FAILED','error':str(error),
+--- before/connectors/test/runtime/test_project_identity.py
++++ after/connectors/test/runtime/test_project_identity.py
+@@ -89,9 +89,36 @@
+                 path.write_text(json.dumps(changed))
+                 with self.assertRaisesRegex(ValueError, 'specification hash mismatch'):
+                     singer_runtime.runtime_identity(config, root)
++                path.write_bytes(b' ' * 2_000_001)
++                with patch('singer_runtime.project_specification_digest', side_effect=AssertionError('Oversized project reached hashing')), self.assertRaises(singer_runtime.MetadataLimit):
++                    singer_runtime.runtime_identity(config, root)
+                 path.write_text(compiled({**project, 'sourceId': 'foreign'})['text'])
+                 with self.assertRaisesRegex(ValueError, 'specification hash mismatch|Project lock changed'):
+                     singer_runtime.runtime_identity(config, root)
+ 
+ 
++    def test_document_limits_count_bytes_and_reserve_approval_space(self):
++        from types import SimpleNamespace
++        from unittest.mock import mock_open
++        with tempfile.TemporaryDirectory() as directory:
++            path = Path(directory) / 'review.json'
++            path.write_text(json.dumps({'description': 'Māori 日本語 😀'}))
++            self.assertEqual(singer_runtime.load(path)['description'], 'Māori 日本語 😀')
++            path.write_bytes(b'x' * 2_000_001)
++            with self.assertRaises(singer_runtime.MetadataLimit): singer_runtime.load(path)
++            opened = mock_open(read_data=b'x' * 2_000_001)
++            with patch.object(Path, 'stat', return_value=SimpleNamespace(st_size=1)), \
++                 patch.object(Path, 'open', opened), self.assertRaises(singer_runtime.MetadataLimit):
++                singer_runtime.document_text(path)
++            opened.return_value.read.assert_called_once_with(2_000_001)
++        draft = {'status': 'draft', 'description': ''}
++        overhead = len(singer_runtime.canonical(draft).encode()) + 1
++        draft['description'] = 'x' * (2_000_000 - overhead - 3)
++        self.assertEqual(len(singer_runtime.encoded_document(draft).encode()), 1_999_997)
++        approved = dict(draft, status='approved')
++        self.assertEqual(len(singer_runtime.encoded_document(approved).encode()), 2_000_000)
++        draft['description'] += 'x'
++        with self.assertRaises(singer_runtime.MetadataLimit): singer_runtime.encoded_document(draft)
++
++
+ if __name__ == '__main__': unittest.main()
+--- before/connectors/scripts/build-source-access.mjs
++++ after/connectors/scripts/build-source-access.mjs
+@@ -5,22 +5,22 @@
+ import { format } from "prettier";
+ import { selectionSchema } from "../src/connection-contract.mjs";
+ const candidateVersions = {
+-  "azure-blob": "2.1.8",
+-  files: "1.5.10",
+-  gcs: "0.1.8",
+-  github: "1.36.8",
+-  hubspot: "0.1.6",
+-  jira: "0.1.6",
+-  mysql: "1.1.7",
+-  onedrive: "0.1.9",
+-  oracle: "1.1.7",
+-  postgresql: "1.1.8",
+-  s3: "1.0.8",
+-  salesforce: "0.1.6",
+-  sftp: "1.0.9",
+-  sharepoint: "0.1.9",
+-  "sql-server": "1.5.7",
+-  stripe: "0.1.6",
++  "azure-blob": "2.1.9",
++  files: "1.5.11",
++  gcs: "0.1.9",
++  github: "1.36.9",
++  hubspot: "0.1.7",
++  jira: "0.1.7",
++  mysql: "1.1.8",
++  onedrive: "0.1.10",
++  oracle: "1.1.8",
++  postgresql: "1.1.9",
++  s3: "1.0.9",
++  salesforce: "0.1.7",
++  sftp: "1.0.10",
++  sharepoint: "0.1.10",
++  "sql-server": "1.5.8",
++  stripe: "0.1.7",
+ };
+ const jsonSchemaOptions = {
+   type: "object",
+--- before/connectors/connectors/postgresql/connector.yaml
++++ after/connectors/connectors/postgresql/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: postgresql
+-version: 1.1.8
++version: 1.1.9
+ description: Reviewed local snapshots from PostgreSQL tables
+ connector: singer:postgresql@1.31.5
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/postgresql.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/postgresql/runtime.json
+-  sha256: 3321cc9e745b0ff7f918c42a7dc37c3e1cbe794f6897976122379a0161b6c9e3
++  sha256: 17915b4064d8698cbac221a5e043f9c87720e2116bb5008e9496d91470e06658
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/s3/connector.yaml
++++ after/connectors/connectors/s3/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: s3
+-version: 1.0.8
++version: 1.0.9
+ description: Reviewed local snapshots of Amazon S3 objects
+ connector: singer:s3@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/s3.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/s3/runtime.json
+-  sha256: 63f7e5cd3da43331b6878c222e4dd079c1ea104ff301900b4e098d3580cc3642
++  sha256: 614cf38ffb23c4e61d6636476431c636fb8fe1e4ccbd32ae83f29671993dc8a9
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/onedrive/connector.yaml
++++ after/connectors/connectors/onedrive/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: onedrive
+-version: 0.1.9
++version: 0.1.10
+ description: Reviewed local snapshots of OneDrive files through Microsoft Graph
+ connector: singer:onedrive@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/onedrive.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/onedrive/runtime.json
+-  sha256: 1bc0712c64ea2817250177a1c55bfe4b4463e32ff64d6dd88533a8530200e636
++  sha256: 22af4ebe703b6daea5a1eb3d058c5e05b08acec89d2a6fa0328897261f29cf2a
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/oracle/connector.yaml
++++ after/connectors/connectors/oracle/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: oracle
+-version: 1.1.7
++version: 1.1.8
+ description: Reviewed local snapshots from Oracle tables
+ connector: singer:oracle@26.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/oracle.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/oracle/runtime.json
+-  sha256: 7a5a13af6430bf65c76614ad2b5320a21b5d4cddf1816fcee8c8be472d07d9de
++  sha256: 1939e2704e860ad54eb7f88f4e3acffd1f8228e7c96235bbbb3d25cfb8bc9847
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/sftp/connector.yaml
++++ after/connectors/connectors/sftp/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: sftp
+-version: 1.0.9
++version: 1.0.10
+ description: Reviewed local snapshots of files on SFTP servers
+ connector: singer:sftp@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/sftp.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/sftp/runtime.json
+-  sha256: 010092f01517d1e2018a1c9f6c3d0890531b58b8579d59ec20fb5a5c2824dd1e
++  sha256: 0a4e10dbefb2f78102fac2a8b1090c33192d144e5f6413ba6796c76c2a0c7ee6
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/hubspot/connector.yaml
++++ after/connectors/connectors/hubspot/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: hubspot
+-version: 0.1.6
++version: 0.1.7
+ description: Reviewed local snapshots of HubSpot CRM objects
+ connector: singer:hubspot@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/hubspot.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/hubspot/runtime.json
+-  sha256: 74a772c7af88d436f924001ab851ba82052114adee2850beae7deff07cfa41a3
++  sha256: 05eea431f1a266577d6a97756e88a9b34e9613e070e72cb664e476a455ba6bc5
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/jira/connector.yaml
++++ after/connectors/connectors/jira/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: jira
+-version: 0.1.6
++version: 0.1.7
+ description: Reviewed local snapshots of Jira Cloud issues and projects
+ connector: singer:jira@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/jira.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/jira/runtime.json
+-  sha256: 2b9c814ab12426a9b41b46a92c52a0ec2f6a9611ae80509662436f4615f2afd3
++  sha256: edf19bb7dece17f29c0172975977b8df6828e98b0ce559947e9c0353ccf8f09d
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/github/connector.yaml
++++ after/connectors/connectors/github/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: github
+-version: 1.36.8
++version: 1.36.9
+ description: github customer-operated full snapshot connector
+ connector: singer:github@1.29.2
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/github.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/github/runtime.json
+-  sha256: 9a126ff1b89caddcf7df993070add8621b32cfc7d39fc37c98fb3d4f3246093f
++  sha256: ae9c6c67920cc6673f3cb42eddce342f6319584cd90f6ee27bffd6d2bac0bbbe
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/sql-server/connector.yaml
++++ after/connectors/connectors/sql-server/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: sql-server
+-version: 1.5.7
++version: 1.5.8
+ description: Reviewed local snapshots from multiple SQL Server or Azure SQL tables
+ connector: singer:sql-server@1.15.0
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/sql-server.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/sql-server/runtime.json
+-  sha256: 26a098abfcce398d975583751d9b7c111e4520180963d5f959dd9e504467506d
++  sha256: 364281fda88abbef22bbc1d7cb0206361ca4a619a1ed76951d0130169a6d47cf
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/mysql/connector.yaml
++++ after/connectors/connectors/mysql/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: mysql
+-version: 1.1.7
++version: 1.1.8
+ description: Reviewed local snapshots from MySQL and MariaDB tables
+ connector: singer:mysql@1.2.3
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/mysql.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/mysql/runtime.json
+-  sha256: 4be1d7d6ddb5b872c4238122d246a2560c0cf77cf0328340bd2dad37b8ec6771
++  sha256: 89da347b3f1d3567a1d6f0b77aab377711ec67f9a9e3865407cbaab6769fbc97
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/azure-blob/connector.yaml
++++ after/connectors/connectors/azure-blob/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: azure-blob
+-version: 2.1.8
++version: 2.1.9
+ description: Reviewed local snapshots from Azure Blob or ADLS Gen2 files
+ connector: singer:azure-blob@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/azure-blob.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/azure-blob/runtime.json
+-  sha256: c640dececaec667a0ea2384ce8fd94816c7c15bd499223b006014ec4687acb7f
++  sha256: 548108f2fe17f2cea6ac3a809421fcad7a41a4244728af90ae7ccf51d21e883e
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/sharepoint/connector.yaml
++++ after/connectors/connectors/sharepoint/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: sharepoint
+-version: 0.1.9
++version: 0.1.10
+ description: Reviewed local snapshots of SharePoint files through Microsoft Graph
+ connector: singer:sharepoint@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/sharepoint.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/sharepoint/runtime.json
+-  sha256: 323d1d3c6cc44e510a2baf1eace1398a87b0003937b8cb84bd0e4ffd22dff3f5
++  sha256: 8aba86effc9372d35666598bc84695cba5bcc53410e3e0a8ec5fe27041ed5a0a
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/files/connector.yaml
++++ after/connectors/connectors/files/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: files
+-version: 1.5.10
++version: 1.5.11
+ description: Reviewed snapshots from local CSV, TSV, JSON, JSONL and Parquet files
+ connector: singer:files@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/files.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/files/runtime.json
+-  sha256: 18c50245a71867c9dfc5ec5095e06c7fc1cb68860038152e916a57992d1441c9
++  sha256: ec475ac3111c10f59d6fc7e44f479f29d95d7c07a0b0ab8e1a6cb108e2ac8e35
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/salesforce/connector.yaml
++++ after/connectors/connectors/salesforce/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: salesforce
+-version: 0.1.6
++version: 0.1.7
+ description: Reviewed local snapshots of Salesforce objects
+ connector: singer:salesforce@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/salesforce.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/salesforce/runtime.json
+-  sha256: 523e9d43215642ba8b33f44491631f0e7404c4fc3717376d3f1887cf29accc53
++  sha256: 7ce3adaed46fb5e82571758b02b564ef4f33539500d02b2f73ab7bff04dceb55
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/stripe/connector.yaml
++++ after/connectors/connectors/stripe/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: stripe
+-version: 0.1.6
++version: 0.1.7
+ description: Reviewed local snapshots of Stripe objects
+ connector: singer:stripe@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/stripe.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/stripe/runtime.json
+-  sha256: b1bae5be3fe776ebbf443c3f92a17bae46ef0931a6ebec2524b1d45a81ad0a17
++  sha256: 9348b60930dcd3d104810239c56fc5b8a4a2d609be037cbb818b01864a45b0cc
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/connectors/connectors/gcs/connector.yaml
++++ after/connectors/connectors/gcs/connector.yaml
+@@ -1,6 +1,6 @@
+ apiVersion: ingestron.connector/v1
+ id: gcs
+-version: 0.1.8
++version: 0.1.9
+ description: Reviewed local snapshots of Google Cloud Storage objects
+ connector: singer:gcs@23.0.1
+ documentation: https://github.com/ingestron/connectors/blob/main/docs/gcs.md
+@@ -15,7 +15,7 @@
+   licenceStatus: evidenced
+ runtime:
+   path: connectors/gcs/runtime.json
+-  sha256: bc073eeecea9fd3bd53cd62429c04042a2a69cb4cfd33f0d22b3a3f468d0c38a
++  sha256: f57a23954098736bba16e2f8723c70d6d299a9b38cf41113278fa5a174b99a88
+   contract: ingestron.snapshot/python/v1
+ quality:
+   library:
+--- before/provider-local/test/connections.test.mjs
++++ after/provider-local/test/connections.test.mjs
+@@ -170,3 +170,61 @@
+   assert.equal(result.artifacts["pipeline.arm.json"], undefined);
+   assert.equal(JSON.parse(result.artifacts["connector.json"]).azure, undefined);
+ });
++
++test("wide multilingual metadata keeps exact contracts within the runtime byte bound", () => {
++  const request = input();
++  delete request.selection;
++  const properties = Array.from({ length: 200 }, (_, n) => ({
++    name: `business_${n}`,
++    physicalName: `column_${n}`,
++    description: "Māori 日本語 😀 — synthetic reviewed field metadata",
++    logicalType: "string",
++    physicalType: "STRING",
++    required: true,
++  }));
++  request.tables = Object.fromEntries(
++    Array.from({ length: 20 }, (_, n) => [
++      `table_${n}`,
++      {
++        source: { stream: `table_${n}` },
++        contract: {
++          apiVersion: "v3.1.0",
++          kind: "DataContract",
++          id: "reviewed",
++          name: "records",
++          version: "1.0.0",
++          status: "draft",
++          schema: [
++            {
++              name: "records",
++              logicalType: "object",
++              physicalType: "table",
++              properties,
++            },
++          ],
++        },
++        columns: properties.map((p) => ({
++          name: p.physicalName,
++          target: p.name,
++          type: "STRING",
++          required: true,
++          key: false,
++        })),
++      },
++    ]),
++  );
++  const result = projectConnectionPrepare(request);
++  const config = JSON.parse(result.artifacts["connector.json"]);
++  const { runtimeAssets, ...reviewed } = request;
++  assert.deepEqual(config.projectLock, reviewed);
++  assert.deepEqual(
++    JSON.parse(result.artifacts["project-connection.lock.json"]),
++    reviewed,
++  );
++  assert.ok(Buffer.byteLength(JSON.stringify(config, null, 2)) > 2_000_000);
++  assert.ok(Buffer.byteLength(result.artifacts["connector.json"]) < 2_000_000);
++  assert.ok(
++    Buffer.byteLength(result.artifacts["project-connection.lock.json"]) <
++      2_000_000,
++  );
++});
+--- before/connectors/test/runtime/test_runtime.py
++++ after/connectors/test/runtime/test_runtime.py
+@@ -49,11 +49,31 @@
+         authored['orders']['schema'][0]['properties'][1]['primaryKey'] = True
+         result = review(DISCOVERY, SELECT, authored)
+         self.assertEqual(result['contracts'], authored)
++        self.assertEqual(result['contractSource'], 'project')
++        self.assertNotIn('authoredContracts', result)
+         result['status'] = 'approved'
+         accepted(result, DISCOVERY['identity'])
+         authored['orders']['schema'][0]['properties'][1]['required'] = False
+         with self.assertRaises(ValueError): review(DISCOVERY, SELECT, authored)
+ 
++
++
++    def test_compact_authored_review_and_legacy_review_preserve_the_same_projection(self):
++        authored = review(DISCOVERY, SELECT)['contracts']
++        current = review(DISCOVERY, SELECT, authored)
++        current['status'] = 'approved'
++        legacy = copy.deepcopy(current)
++        del legacy['contractSource']
++        legacy['authoredContracts'] = copy.deepcopy(authored)
++        self.assertEqual(accepted(current, DISCOVERY['identity']),
++                         accepted(legacy, DISCOVERY['identity']))
++        for changed in [dict(current, contractSource='unknown'),
++                        dict(current, authoredContracts=authored)]:
++            with self.assertRaisesRegex(ValueError, 'contract source'):
++                accepted(changed, DISCOVERY['identity'])
++        changed = copy.deepcopy(current)
++        changed['contracts']['orders']['schema'][0]['properties'][0]['name'] = 'foreign'
++        with self.assertRaises(ValueError): accepted(changed, DISCOVERY['identity'])
+ 
+     def test_project_secrets_resolve_only_at_runtime(self):
+         reference = {'password': {'$secret': {'env':'SYNTHETIC_PASSWORD'}}}
+--- before/core/src/core/execution.ts
++++ after/core/src/core/execution.ts
+@@ -246,21 +246,26 @@
+             ? new ExecutionQualityFailure(
+                 qualityFailureEvidence(result.quality),
+               )
+-            : checkpointFailureCodes.includes(result.errorCode)
++            : result.errorCode === "SOURCE_METADATA_LIMIT"
+               ? new Problem(
+-                  result.errorCode,
+-                  result.errorCode === "CHECKPOINT_MIGRATION_STALE"
+-                    ? "The committed checkpoint head changed after review; preview the current migration before applying"
+-                    : result.errorCode === "OUTPUT_BUSY"
+-                      ? "Another operation owns this output namespace; wait for its original outcome"
+-                      : "Checkpoint history or policy requires review before continuing",
++                  "SOURCE_METADATA_LIMIT",
++                  "This flow exceeds the 2 MB metadata limit. Split tables into smaller flows or select fewer fields, then prepare again",
+                 )
+-              : new Problem(
+-                  "RUNTIME",
+-                  typeof result.message === "string"
+-                    ? result.message
+-                    : "Provider execution failed",
+-                ),
++              : checkpointFailureCodes.includes(result.errorCode)
++                ? new Problem(
++                    result.errorCode,
++                    result.errorCode === "CHECKPOINT_MIGRATION_STALE"
++                      ? "The committed checkpoint head changed after review; preview the current migration before applying"
++                      : result.errorCode === "OUTPUT_BUSY"
++                        ? "Another operation owns this output namespace; wait for its original outcome"
++                        : "Checkpoint history or policy requires review before continuing",
++                  )
++                : new Problem(
++                    "RUNTIME",
++                    typeof result.message === "string"
++                      ? result.message
++                      : "Provider execution failed",
++                  ),
+         );
+         return;
+       }
+--- before/core/src/core/execution-acknowledgement.ts
++++ after/core/src/core/execution-acknowledgement.ts
+@@ -21,6 +21,10 @@
+   "CHECKPOINT_MISSING",
+   "OUTPUT_BUSY",
+ ] as const;
++export const executionFailureCodes = [
++  ...checkpointFailureCodes,
++  "SOURCE_METADATA_LIMIT",
++] as const;
+ const acknowledgement = z
+   .object({
+     apiVersion: z.literal("ingestron.execution-acknowledgement/v1"),
+@@ -34,7 +38,7 @@
+         status: z.enum(["succeeded", "failed"]),
+         action,
+         flows: z.array(z.record(z.string(), z.unknown())).max(100),
+-        errorCode: z.enum(checkpointFailureCodes).optional(),
++        errorCode: z.enum(executionFailureCodes).optional(),
+       })
+       .strict(),
+   })
+--- before/core/test/unit/execution-quality.test.ts
++++ after/core/test/unit/execution-quality.test.ts
+@@ -35,6 +35,24 @@
+   ]);
+   assert.equal(qualityFailureEvidence(Array(100).fill(input[0])).length, 20);
+ });
++test("the execution launcher maps a metadata limit to safe actionable guidance", async (t) => {
++  const root = mkdtempSync(join(tmpdir(), "core-metadata-limit-"));
++  t.after(() => rmSync(root, { recursive: true, force: true }));
++  const entry = join(root, "executor.py");
++  writeFileSync(
++    entry,
++    `import json,sys\njson.loads(sys.stdin.read())\nprint(json.dumps({'apiVersion':'ingestron.execution-result/v1','status':'failed','errorCode':'SOURCE_METADATA_LIMIT','message':'SYNTHETIC_PRIVATE_SOURCE_DETAIL'}))\nsys.exit(1)\n`,
++  );
++  await assert.rejects(
++    launch("python3", entry, {}, root, { PATH: process.env.PATH }),
++    (error: any) => {
++      assert.equal(error.code, "SOURCE_METADATA_LIMIT");
++      assert.match(error.message, /Split tables into smaller flows/);
++      assert.doesNotMatch(error.message, /SYNTHETIC_PRIVATE_SOURCE_DETAIL/);
++      return true;
++    },
++  );
++});
+ test("the explicit execution launcher preserves sanitised quality failure evidence", async (t) => {
+   const root = mkdtempSync(join(tmpdir(), "core-quality-"));
+   t.after(() => rmSync(root, { recursive: true, force: true }));
+--- before/core/test/unit/execution-acknowledgement.test.ts
++++ after/core/test/unit/execution-acknowledgement.test.ts
+@@ -21,6 +21,26 @@
+         status === "succeeded" ? [{ flow: "orders", status: "Succeeded" }] : [],
+     },
+   },
++});
++test("durable metadata failure accepts only its code on a confirmed failure", () => {
++  const failure: any = response("failed");
++  failure.acknowledgement.result.errorCode = "SOURCE_METADATA_LIMIT";
++  assert.equal(
++    validateOperationAcknowledgement(failure, original).errorCode,
++    "SOURCE_METADATA_LIMIT",
++  );
++  for (const change of [
++    { status: "succeeded" },
++    { errorCode: "PRIVATE_SOURCE_CODE" },
++    { message: "SYNTHETIC_PRIVATE_SOURCE_DETAIL" },
++  ]) {
++    const changed = structuredClone(failure);
++    Object.assign(changed.acknowledgement.result, change);
++    assert.throws(
++      () => validateOperationAcknowledgement(changed, original),
++      (error: any) => error.code === "EXECUTION_UNCERTAIN",
++    );
++  }
+ });
+ test("setup acknowledgement accepts original success and confirmed failure without replay arguments", () => {
+   assert.equal(
+--- /dev/null
++++ after/provider-local/test/test_metadata_limit.py
+@@ -0,0 +1,41 @@
++"""Source size failures retain their code and safe guidance at the provider boundary."""
++from pathlib import Path
++import json
++import sys
++import tempfile
++import unittest
++from unittest.mock import patch
++sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
++import execution
++
++
++class MetadataLimit(unittest.TestCase):
++    def test_metadata_limit_retains_code_without_upstream_details(self):
++        with tempfile.TemporaryDirectory() as directory:
++            script = "import json;print(json.dumps({'errorCode':'SOURCE_METADATA_LIMIT','error':'SYNTHETIC_PRIVATE_SOURCE_DETAIL'}));raise SystemExit(1)"
++            with self.assertRaises(execution.SourceFailure) as raised:
++                execution.child([sys.executable, '-c', script], Path(directory), 10)
++            self.assertEqual(raised.exception.code, 'SOURCE_METADATA_LIMIT')
++            self.assertIn('Split tables into smaller flows', str(raised.exception))
++            self.assertNotIn('SYNTHETIC_PRIVATE_SOURCE_DETAIL', str(raised.exception))
++
++    def test_durable_metadata_failure_keeps_only_its_code_without_replaying(self):
++        with tempfile.TemporaryDirectory() as directory:
++            request = {'apiVersion': 'ingestron.execution-request/v1', 'action': 'review',
++                       'flows': ['records'], 'cache': str(Path(directory).resolve() / 'cache'),
++                       'runId': 'metadata-original', 'fingerprint': 'a' * 64, 'operationNonce': 'owned'}
++            folder, binding = execution.operation_location(request)
++            folder.mkdir()
++            execution.write(folder / 'submission.json', {'binding': binding, 'nonce': 'owned'})
++            with patch.object(execution, 'execute', side_effect=execution.SourceFailure('SOURCE_METADATA_LIMIT', 'SYNTHETIC_PRIVATE_SOURCE_DETAIL')):
++                execution.operation_worker(request)
++            with patch.object(execution, 'execute', side_effect=AssertionError('Recovery must not replay source review')):
++                response = execution.operation_acknowledgement({**request, 'action': 'acknowledge', 'originalAction': 'review'})
++            result = response['acknowledgement']['result']
++            self.assertEqual(result, {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed',
++                                     'action': 'review', 'flows': [], 'errorCode': 'SOURCE_METADATA_LIMIT'})
++            self.assertNotIn('SYNTHETIC_PRIVATE_SOURCE_DETAIL', json.dumps(response))
++            result['errorCode'] = 'PRIVATE_SOURCE_CODE'
++            execution.write(folder / 'acknowledgement.json', response['acknowledgement'])
++            with self.assertRaisesRegex(ValueError, 'failure evidence'):
++                execution.operation_acknowledgement({**request, 'action': 'acknowledge', 'originalAction': 'review'})

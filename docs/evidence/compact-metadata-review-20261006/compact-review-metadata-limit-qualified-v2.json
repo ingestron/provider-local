@@ -1,0 +1,28 @@
+{
+  "result": "passed",
+  "root": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-metadata-limit-4sAEUV",
+  "candidate": {
+    "cli": "0.17.21",
+    "core": "0.12.53"
+  },
+  "error": "SOURCE_METADATA_LIMIT: This flow exceeds the 2 MB metadata limit. Split tables into smaller flows or select fewer fields, then prepare again. Run 671505ce-9114-4b56-89eb-87dbe4c58bd8; inspect run_status for this run identity",
+  "failedAction": "review",
+  "measurements": {
+    "encodedReviewBytes": 2717398,
+    "configBytes": 1378437,
+    "projectLockBytes": 1378187
+  },
+  "reviewNotPublished": true,
+  "managedParquetNotPublished": true,
+  "temporaryReviewRemoved": true,
+  "allJobsTerminal": true,
+  "acknowledgements": [
+    {
+      "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-metadata-limit-4sAEUV/.ingestron/runtimes/.ingestron-operation-receipts/7c8236f683287a63da130341efefa7b8b006c874bea287be3a167b40eb64016e/671505ce-9114-4b56-89eb-87dbe4c58bd8/acknowledgement.json",
+      "sha256": "17bc4770563dabb8a91a2fdccefcf99ee99a13ea1c4e231d19b3377641844556",
+      "code": "SOURCE_METADATA_LIMIT",
+      "noUpstreamMessage": true
+    }
+  ],
+  "scope": "Actual installed source workflow through provider durable acknowledgement and frozen Studio host; no browser interaction"
+}

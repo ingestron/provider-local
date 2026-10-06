@@ -1,0 +1,1181 @@
+{
+  "result": "passed",
+  "archives": [
+    {
+      "owner": "core",
+      "archive": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-runtime-v2/ingestron-core-0.12.53.tgz",
+      "archiveSha256": "28539a55cb7555b2f8691d9bebc2dd97f1c9cab61ad0e2a9e99747e281694389",
+      "freshParityRequired": false,
+      "filesCompared": 156,
+      "metadataExceptions": [
+        {
+          "file": "package.json",
+          "normalPackagingRemovedFields": [
+            "packageManager",
+            "scripts.prepack",
+            "scripts.prepublishOnly"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "file": "LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "NOTICE",
+          "sha256": "395571dd5c2c87de1d7986d5f31cf22f90012b7964ae8f84f2eda0be6cdece61",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/assets/schemas/ODCS-LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/sdk/adapter.js",
+          "sha256": "743f51d1fc228a7e3f651ad6e8712542e85f11f7fa79442cd8773ed3f5190de3",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/authoring.js",
+          "sha256": "616fd04dac1075c758b63807ea0498dd996113a6098ff7c30cfe20ff460a1272",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/plugins/authoring.js",
+          "sha256": "ff985a7173c7aeda4a431a8603a4ab8631dc5134486578ede7d1301ebc3e6a19",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/bridge-connections.js",
+          "sha256": "79db073c3cc8bae728f41cf3f6ed38932cb277d1af840e808d94f13d6c77705b",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/build-access.js",
+          "sha256": "455291720bf4ec5a23f0aff748c6f6a7b98932b9c33cbb3970d220b7a896e9b3",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/build-retention.js",
+          "sha256": "4ebb3a88039eba54fbfc1094e18d4988c58a4ec8958432099eb6876878334e8b",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/checkpoint-migration.js",
+          "sha256": "45d25e3806af8d2a9fa101693b9cbb701eeffc56096a5ebb8d0971a52593e1e3",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/plugins/compatibility.js",
+          "sha256": "800f930fa865ac9c69e8f915043297ffcd4f0bb26bc78e0d989d6cae77b3dcd5",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/compiler-identity.js",
+          "sha256": "b57f7e3c3f68f906fbdf1c7d857b10c2c28739de3af37c394ab7e9e077e9c59e",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/config.js",
+          "sha256": "6c4f9f20ef3b22efde2df4e1070066b61ddfd135537e88068c2d7ab8498c483a",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/connection-settings.js",
+          "sha256": "6855e25d389b0950830ec9330bfc8eba9d0c1167d6aaa6b2aba4432ee781ff9f",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/connections.js",
+          "sha256": "949f90bd2a333ef6be7f7fa4656493ba4dbe4feef61d86d136c2e0e5fad66256",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/connector-package.js",
+          "sha256": "5f09b63f60236d30c9ea90655dd558af5f2178dc2b15502ecfe4e6e49635b5cf",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/connector-schedule-schema.js",
+          "sha256": "710db9d715c3d97bf1a22103012a2a60193a49327a665b3a4b136e5bf5ab5b17",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/connector-schedule.js",
+          "sha256": "f21a818515a411541ee5140f851d2ad8414387c88409f0713eff4f843772354a",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/contracts.js",
+          "sha256": "6f37f468a284001a3bdac2a1ef155d04f0cc5578f56fbc85a0c4d297b9b82a1b",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/deliveries.js",
+          "sha256": "a4d2cb1213bc4c02cffb962dcb943ba98e261d37cfb21041948ec637599db080",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/delivery-exports.js",
+          "sha256": "3764b03bb9673f3c1ee1928013020781c72e6a23eb8bc2b9dee94d97335426f4",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/delivery-plan-schema.js",
+          "sha256": "b79a0429b5f1841ca8c2ac6df853615ee4e0d36d9277eef86b4c3c22d7208166",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/delivery-plan.js",
+          "sha256": "d5d4c0e688eca2a789e4db6247d034db8814bae27f6a58ae29ee736dc8a582c6",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/development.js",
+          "sha256": "dab55f534815264961381e3034ee7b1c89354a9a5196b64b51086736f32030e4",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/discovery.js",
+          "sha256": "9852a75bd1ad537c1e446d1d20f1c08ed1a4ea8cc1e6a087da699f796960f618",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/ecosystem-authoring.js",
+          "sha256": "4320560eac2d2060e9e20be6a097759512c709a04fb7dc0520147ecd5ff6655e",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/errors.js",
+          "sha256": "8117e35fba84ae34627cb7d3bef46aaf6d8718c512140fa0ab08ccbdeeeec8c3",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution-acknowledgement.js",
+          "sha256": "21b300d8526eda6012047b8dde1683a322563ee14329c4e240e319aa57d53770",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution-outcome.js",
+          "sha256": "05c9ec4ee7739aa9cc5c5b6e357d7028e33948a8035e287460a461ac317dc277",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution-profiles.js",
+          "sha256": "8651283b3febb79ab1bb022c56e64b783a44a69ea4b6d1f44f38acbd54756caa",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution-quality.js",
+          "sha256": "09a368adc526bfd5e87d1ecc147be2f06b4fbabd813a605408efc33a7b7d9de6",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution-resources.js",
+          "sha256": "6516c06d26068c620cff2dfd46a1321638ddfe7e215fbb68fbbb2b83e10ebb51",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution.js",
+          "sha256": "ed66f7b5012ae59dca0eb648bdbdeeb3c6cf501346acc2dd323499789f896f49",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/extension-packs.js",
+          "sha256": "6b2aaa83e51f40e176cc4cfed574a4a17646bb3f526666fe8e0456d2912a8045",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/fingerprint.js",
+          "sha256": "0edb56b544171ac20cc97fd58850eda5acefd3c725114b9d8bcc15b4971c5a36",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/generate.js",
+          "sha256": "75dcf02b38c4f300593260caa92b0387514146992f13f40604199cc46c74c833",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/plugins/generation.js",
+          "sha256": "1a7d2618387bbec97f99d243d9bd0db35191fad7268adffef17ce7d926d49034",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/governance.js",
+          "sha256": "a93869b497490c62232d0df06606c1add0a16bd3144d7b5ded117c6bd8618f5e",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/sdk/index.js",
+          "sha256": "6d136aaf90903fbcc2de4b40fbed9f361472161c60fc5b1b8a9b9e5583ceefdd",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/installation.js",
+          "sha256": "1eacb76525839743a2ebda9c24dc0a96edf485113fd4892e799663c60c31b548",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/installed-plugins.js",
+          "sha256": "8d50cedcae7d241a41dc49ae4dfc83eab714da2ce5060cbb4b03ad87e6cb77d2",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/model-pack-schema.js",
+          "sha256": "e3eb7ff33ddc652643e3f896637de0034004cd0cf26b0e296a074f830ae0b870",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/model-packs.js",
+          "sha256": "2493133e6b71a492e859f5d10c8638357f7c3242a181a7485df12f08219d541b",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/native-connections.js",
+          "sha256": "fabc8e4f66d91b9dd6e058e5ee50ac3c40d88f0ed629c0352c2a86af6b9a6360",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/operations.js",
+          "sha256": "ffc6e65a96432097ead23b2fbed08c3c39d38c2ccadbe0834874d90b3bac45c9",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/package-references.js",
+          "sha256": "553b45e90094e622c6752c9e1833bd1c28c1882086cf5a0af99f03727d59f260",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/packages.js",
+          "sha256": "9e8d6f8309a7c5300e501a36f381203d97991162ad8a00bf5950a7aef3d0deb3",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/planner.js",
+          "sha256": "7b8a45b2d278f89799801a21da357e0dd09c36e1e97613a7d773dae5faa91cd9",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/policy-schema.js",
+          "sha256": "d64cdc4b60cee5d07c595d85de9655de18166f172c2422ee27e958b17e9d89d4",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/project-build.js",
+          "sha256": "5e819ce34c306a49f69cb8376a2725cfda6cdbf1673e8220fca526b972783a26",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/project-governance.js",
+          "sha256": "e37c67a6809f36ce2aef58ff6b6dde6338bdcfab9784f0b327ee19089b30e665",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/project-packages.js",
+          "sha256": "b031dd9e3c5c147e8e1ed589b5eab21b9067acbefc1d4cd1dc5b6b7018cc39cf",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/provider-commands.js",
+          "sha256": "e0f11bf9b79516c8b9529a29e3f4e34e5247fa807ad5ac3c0efdbd8f1118adbb",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/provider-configuration.js",
+          "sha256": "4e856a83c13451d42a5ada93bac4ebc96d5dec7bdb2b88ee3ba14536f9aa82e8",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/plugins/provider-renderer.js",
+          "sha256": "b05c469e19cfd57a47fb81e2dcf7fc01f27fcd09bdf2e6f5679a39e99365753f",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/provider-starter.js",
+          "sha256": "69795c1b79360e48664e91db0768f813fe4efc91aede003e1bf032f71731754c",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/plugins/provider-worker.js",
+          "sha256": "ad66928002e95eefd0026c7d246e12e0b32f67e26f97164190f2c91518142602",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/quality.js",
+          "sha256": "d57ee301dc81cf3ad4019a039ab9e0644f724e44f6023618e167e91d6ea907bb",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/report-pack-schema.js",
+          "sha256": "fe8ecdc2b8deacd8b2a1e46588ee06744a7b6d8e7342786e320f74cc848665fa",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/schedule-boundaries.js",
+          "sha256": "22e52905490d44afac74e819e31f514d3054cf48cb9a86f3c01d07015cbdcd77",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/schedule-clock-metadata.js",
+          "sha256": "f39e8378769c481777c1ca15016086b0696245d1b9099a14a50c125b121b9864",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/schedule-clock.js",
+          "sha256": "421ae1b7262df7da63121e252167fc9185ed033ce9ffc994e0494b1a4b4f153d",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/schedule-schema.js",
+          "sha256": "6443b67f0333a2f27668b05a8d9a4d9276294aaba0f326497a38adb7a26b581e",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler-journal.js",
+          "sha256": "f796b6ae0310ff41dc8a6eaf60c4a1f18ec9f55525cafdc311b6bc9916cd8384",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler-state.js",
+          "sha256": "85a8565c3df03abbb909b968a9594d226beefb647fefde7b177633af2dc719fb",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler-worker-main.js",
+          "sha256": "9fff061e58fb98a538d4390e81d2a0d18f37021c5748236d1afaff1657197466",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler-worker-state.js",
+          "sha256": "ac23fb2ba35390b9c87fe7e3cce5bccea9dc33798cb41f09f846a5911c2ea977",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler-worker.js",
+          "sha256": "9ba0eb2b1405303bd95ec234eadd03f306b8f3a01255c073acd6d457c22379e7",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler.js",
+          "sha256": "bf8e2b9e28854841018a23b777cf136cb30cf012ba3651b95855b348345d32ff",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/schema.js",
+          "sha256": "80478b5d4e1244cbdd1744182285e543f62846ca0455d3e757ccd6937da0e1a8",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/sdk/schemas.js",
+          "sha256": "db7c3bf7031b03d4d988a791bac3a3c95f4c64b7e017b149b42642cc830c0b13",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/source-access.js",
+          "sha256": "57e344fdd652e82bc2a2e072fb9a0baa4826e5422acf5020abe2d11e65198f15",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/source-flow.js",
+          "sha256": "b623690e4ff1d0481ed68019899b3909c15ac7362e81046f053a658524a6e479",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/sources.js",
+          "sha256": "0afa12348a93bbbd2e3e10388d4e86ed71e2791f88b23f6aaa865f7f1469d565",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/version.js",
+          "sha256": "48af2aa1e425f1e387c082bbf0ad2c0c8d757c468101a614c3864153a94e6889",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/workflows.js",
+          "sha256": "6a4b36f10bf4c9908449a81e574d5f0d7aee67c8c32c94e12ace8f60df517c35",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/compiler-fingerprint.json",
+          "sha256": "d50ecb21e097806d04b0a44d9a8fc7c3de7fbc6feb7ccdacab99725ed9421560",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/assets/schemas/odcs-3.1.0.json",
+          "sha256": "1a35de14c688b400fef306564f66e2af3304f057cd5cd6e7b847c1a8bf252c5b",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "package.json",
+          "sha256": "7df4d73d61e7eb367e87892d238ee21df736957300c61b826d88973ff47afe04",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/assets/schemas/provenance.json",
+          "sha256": "4b5eb1fd89b81223f7946113b651d5a3a18adaa28948e43c3615dd851fb6844e",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "README.md",
+          "sha256": "4b1cfc3b302e337c30c3913097d2983b6c36df81270920d9ed45517cfd4fbf77",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "SECURITY.md",
+          "sha256": "468f4fde18db830f4a0f450d01c81f34c78ed04d2d200322c02b53ac4878c4df",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "THIRD_PARTY_NOTICES.md",
+          "sha256": "c1b07199c36f8e6ef1180b78303cebdf8a2c22bf3d372af358870cc9d9979583",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/sdk/adapter.d.ts",
+          "sha256": "97919fdffc8bbb5e6b73e4af23808d7097bfe424e97299a7ffa75ab3f03a078f",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/authoring.d.ts",
+          "sha256": "c6bfc3bf7def46f3221e1b013fb45995494d6c461cb5e46fb06e648626516d4b",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/plugins/authoring.d.ts",
+          "sha256": "1f97db9a16e64c76886ddfe1442afdd0d12fbe729c556fe38f1e6db8904fcc01",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/bridge-connections.d.ts",
+          "sha256": "83a20e8a3bcdd46d1211a49811c4774f8b383b39bf7863c2a1025b3b8ab77358",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/build-access.d.ts",
+          "sha256": "c113ab86b01da111a1567a5207f67b7b7c9512c71d6038eebd5974866af7abba",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/build-retention.d.ts",
+          "sha256": "6e9a509cb72a87270b1ae2894d538cedf05adf2ab6d8664367a5225416827e36",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/checkpoint-migration.d.ts",
+          "sha256": "0aaa0f2c38d9c040711e99fa30c3b23490322a39ab963f3dfa6621d5424986ad",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/plugins/compatibility.d.ts",
+          "sha256": "c2babc099166e9bd1e8596f5a82fa54f03b591a2f6045accf14bdabe151bff3c",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/compiler-identity.d.ts",
+          "sha256": "c1d797de95b09ab68fdbb37832453c61ed0871b079fa8121752bcb6675fb4cc7",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/config.d.ts",
+          "sha256": "d72d64419ca65ae119163d680a19930fb0b4435ef762836c80760a6381232adb",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/connection-settings.d.ts",
+          "sha256": "08fdd09584af72f3f8ffb403c4b2a0ffdb84eab22173bc09f0757633f17a0b15",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/connections.d.ts",
+          "sha256": "7ff5d1af6d98fd7f670b9156c3a2da09b4d76a552abab14ca46747fab006b90d",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/connector-package.d.ts",
+          "sha256": "e0b7584a8cf8b6da45c10caf45e4fa6c9b53d58c4523f5aff269bc5449bbcd33",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/connector-schedule-schema.d.ts",
+          "sha256": "7c009d69f2dcd63f9e9e4e0eb6249304cd47cd78cae269d6a110e5fb57a8494f",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/connector-schedule.d.ts",
+          "sha256": "114cf219090544a556a6916245c5fbb94e936316a026459c3dd0b70a853aa7c5",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/contracts.d.ts",
+          "sha256": "1a5d389e63d4f1e3cb9ce499ef05753d5c22c86d79edecf8efebb20b31216265",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/deliveries.d.ts",
+          "sha256": "560edf90422c09aef7b1de37e7cba9dec2ba031b4874cf1242dd9d56b4e93ffd",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/delivery-exports.d.ts",
+          "sha256": "fa906a29bfe6cc7022ac245d87f77f07f7a4701f5201a522b574c56932cd9554",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/delivery-plan-schema.d.ts",
+          "sha256": "ec799b719001b89204d0658a6c57dd4cc040113274d13423aa0b47c2ab5de233",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/delivery-plan.d.ts",
+          "sha256": "d0fe91fe39800a92f5d0e16c1152f00020752c8b14e97767a3d11e6f95b9e770",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/development.d.ts",
+          "sha256": "afbbd827556d79a961fcde1902dd7a4ec7dcc9ba39008b51148efb6bff1e0b7e",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/discovery.d.ts",
+          "sha256": "6ddd39d3829c36a2209bfca8082e709eb1c75fe3ba2ab7bd73600a8914eb4a2d",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/ecosystem-authoring.d.ts",
+          "sha256": "736db60dc0e6e37c7c0bd62da0deb2fdc440353b0dfc1eb6b897ddbf065293a3",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/errors.d.ts",
+          "sha256": "dc603717833380e5b0c26842bf18202b840272a9dd8207ff32b4027281bdf24d",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution-acknowledgement.d.ts",
+          "sha256": "8f18aace8221cabdbce18081cce46e4cd9bda62f7bd382dce3ff040e6c997796",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution-outcome.d.ts",
+          "sha256": "56466f0f264ead38a0ecb4c7e6eb9d917dcc9453b3fa8660a5e201ba654a578e",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution-profiles.d.ts",
+          "sha256": "f9628b5927f2f70470a74dbf637bbbfb8773a4575a53e8740043b521fdb13fa9",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution-quality.d.ts",
+          "sha256": "cd6ec65698ec6bd1f7912c3bb8a3346124e2a09c6872832f558bc52768e5146c",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution-resources.d.ts",
+          "sha256": "c38abfc893992c7d2d4d702dca10c3df877b5166d00a67279e5f3fed04bd1460",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/execution.d.ts",
+          "sha256": "5e57d4e81a8792e7f77b6f13999a91ec315a701a373ea1077c19c71cf6f5633f",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/extension-packs.d.ts",
+          "sha256": "b6df94336fc7bd1a2b03ffba3488ed4063116787624269bb4fd74d17ce438f91",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/fingerprint.d.ts",
+          "sha256": "450dfc7c91295d4ba80914be946b12e7b4689f7efc8afb1de77eaa441ca554da",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/generate.d.ts",
+          "sha256": "8bd4fc0bd943810e4e622b9d0c0f41ac1fca9d14690ab842ab3c00ee8cea2ffb",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/plugins/generation.d.ts",
+          "sha256": "23f78a22a6fcf035ff2d060488db6b09499cfae882e915fb140af9995f191919",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/governance.d.ts",
+          "sha256": "6ecf8db79d0981ff31d1c4ae4ab647aeb7c8726a0ed8c018ef84b53ccb433971",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/sdk/index.d.ts",
+          "sha256": "60bcd61da2a15404024b7d7489774e95c5d69ed58c93ce1133cc5d6f6db27c93",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/installation.d.ts",
+          "sha256": "208b38439fead1c4022a35c740ea759f35c2039fbe09eecedd3b340ec1236f89",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/installed-plugins.d.ts",
+          "sha256": "61deba25ffefe04ef0b1acffd91a26a9c7822a96d7fa63be9ebb3c3966f42ef7",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/model-pack-schema.d.ts",
+          "sha256": "b07795c4376bd1a596b43dc43c696fdbe2424064de27634956984d22e8bf81ed",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/model-packs.d.ts",
+          "sha256": "29fd781f9ed7b3870203ea0f5af948afc467f09b31e20fab199b6cf8401dd4d1",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/native-connections.d.ts",
+          "sha256": "042aac7d72719788277cae5faf1a14a9cfe97173558ba0f75374fca6137339b1",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/operations.d.ts",
+          "sha256": "3ef133e3ef7d1dffcd38bc67a2e2c040ac6fb279e3414511e0448b57bc2cdddd",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/package-references.d.ts",
+          "sha256": "67388bc701b88e9f064128030bc81b0903c6d36353bac2622ca68e701ca48f52",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/packages.d.ts",
+          "sha256": "9edf800c44807c19b4bc67ac22d4f55e94613bc2d5540e1741d772f5e63bdd6d",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/planner.d.ts",
+          "sha256": "ce29bbad12a432850675dbe124c8dc179d0b0d9b0392cdafbb3d097031741d3a",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/policy-schema.d.ts",
+          "sha256": "efe6ecfb705b8d3b0b5edef984d8b3d2f892edb9d49e01657755c6e13ea18f6c",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/project-build.d.ts",
+          "sha256": "85ad818077bd8623c7f7ef05d847e8d75d15caa5e01443bbd632bcd407975e4a",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/project-governance.d.ts",
+          "sha256": "f04e17f9ae62eb3140429dbeb7440659e5f1211271a57847ddd1193af14d0198",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/project-packages.d.ts",
+          "sha256": "435bd6e748d4a6f71abf63d3a30b8a0126324917b3e4ff3b61eba6694d4de2e0",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/provider-commands.d.ts",
+          "sha256": "6e1df811d43b7c4599b909ffeb727b2d8b69423719690f9a5d19eba423100ab2",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/provider-configuration.d.ts",
+          "sha256": "d2e1713caf2b1c41649d9e7447fcbf98b22d6761bae5e3fe2a14840b16f374d3",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/plugins/provider-renderer.d.ts",
+          "sha256": "3fd6fccd30e357aa1ba2e897960a0e0f6035f0bb6f82fd8c3cce343c07d18aa1",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/provider-starter.d.ts",
+          "sha256": "5019cf7f14f64383fed0d3806d2ada1b495b376a6cd0dbfd206296cb3158331a",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/plugins/provider-worker.d.ts",
+          "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/quality.d.ts",
+          "sha256": "785a38548aad223a285b740f2f1700df73a35feab98d98dbe4e00d12d029a105",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/report-pack-schema.d.ts",
+          "sha256": "61a31ed933d1b8db0644961fd8a9ce45e6a35e743a0c62a25c25b5bd4f95fe9e",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/schedule-boundaries.d.ts",
+          "sha256": "ed2bcc467366c19f8191c3c14c8e3e64a73ec016d28ed9136dee45402d3d3489",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/schedule-clock-metadata.d.ts",
+          "sha256": "e8fb0c2e43671a8d3d3cc14b051c91cbbb4e855adc11b1086d9b9b6de6ca5ce1",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/schedule-clock.d.ts",
+          "sha256": "d7460d6854ad064e61732cf6c5eb5ea1740f7d0c1ee1edc0cfbdc64927e7bba7",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/schedule-schema.d.ts",
+          "sha256": "a065ff4be93b5057daf4b6af06af2f97444e2524af50834df0aea1849a7d1db3",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler-journal.d.ts",
+          "sha256": "d8bb07a952ec88f307da6178acdb0df104b2e2942cfaad5d45745086659a341b",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler-state.d.ts",
+          "sha256": "f87923015be2796597e11eaa8151d4f82001dcb277ef205fb044e8a56f3a9792",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler-worker-main.d.ts",
+          "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler-worker-state.d.ts",
+          "sha256": "85dfe8401521a4ccb3e19f44fc126c2dbe201fb0c51f765163ac21c584521353",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler-worker.d.ts",
+          "sha256": "570ed21a4e0861622328f9a54ab49fc8a64c5e2dcc818598e1da7469b49fea61",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/scheduler.d.ts",
+          "sha256": "21c8796ebc1fc416e76ed7464998ac0ea3b04fb46852746c35ddf17d8a1571b8",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/schema.d.ts",
+          "sha256": "091ec753b45a385e2d1a2746ce669906de10c950643b34e079675b8c7f66d5fb",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/sdk/schemas.d.ts",
+          "sha256": "ab8c06419636ff407fbc5ec0bf3c3ee0b3fd8f795a65250066d2d88e0639520c",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/source-access.d.ts",
+          "sha256": "5b1749efc43829691364b85c616a32f1f869e74aad905b4f3fc5aa789737e6de",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/source-flow.d.ts",
+          "sha256": "9ac8170e13f942f4325b6b221ea45b97269f33d64e7e5929f6bd99ffac63b883",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/sources.d.ts",
+          "sha256": "c22419a130525d3bde84bdad5f396b3a6161364d631bde27351003062a4e518f",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/version.d.ts",
+          "sha256": "fe4e85347f4b0fd6127459112b4e88e581c07d850e166ed95335e634cff7598d",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "dist/core/workflows.d.ts",
+          "sha256": "08a62d012347e4de429d556506dfaca8affc65c6d4a1e827234dc78a8699d512",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        }
+      ]
+    },
+    {
+      "owner": "cli",
+      "archive": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-batch-runtime-v1/ingestron-0.17.21.tgz",
+      "archiveSha256": "4808a9f6fd6441ef1e389f50484bced448691fc9aa642c1eaaff80dbc2c2a439",
+      "freshParityRequired": false,
+      "filesCompared": 29,
+      "metadataExceptions": [
+        {
+          "file": "package.json",
+          "normalPackagingRemovedFields": [
+            "packageManager",
+            "scripts.prepack",
+            "scripts.prepublishOnly"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "file": "LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "NOTICE",
+          "sha256": "1301a453307311ff7eb47adb5fbfe2fdc768db402955181053e6f193098c4688",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/index.js",
+          "sha256": "0924379938b14188a022babade536a33a3f63541f899334ad4d3f8fb79c43ce3",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/mcp/index.js",
+          "sha256": "1b86fa88cb80a312978920153565020d75e77e46257feddeeb53191c36c061c1",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/mcp/operation-access.js",
+          "sha256": "0320375ad0df6875ac39938d55142a10653fc5f9b6f6cdbd1fd40f214f94174b",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/operation-worker.js",
+          "sha256": "d2fde74103e205c39ea1b2b9f331403e27ce23319cae70248adf23a403a6f4d2",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/output.js",
+          "sha256": "6191e8e03b076ff830876fe84e5a013399aeff3c79c51bf44d501004c5ca5d41",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/plugin-browser.js",
+          "sha256": "bc34f7436985cfea37b8262a9d3100278a39b4dd4dbbb4f9b1795fa447494309",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/plugin-resolution.js",
+          "sha256": "b874897c55c1d1131db4bc2719358cf76df106bb97f91ccfdbfaa996151ef41c",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/presentation.js",
+          "sha256": "a0435f7d6aded8ffd21120330dbfa75241f6f9bfeb4a0ea344adfe3eb85334f6",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/scheduler-commands.js",
+          "sha256": "45a95a536a4537de1b7a1f933e8c7453a4e9d97ca7ff3cf6f5ad733022400f5c",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/version.js",
+          "sha256": "3de406be1559760cbf152b82c287d3df1bbf9b4be9bc17dce7b9697b53400752",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/workflow-commands.js",
+          "sha256": "35a79de7cd927b0b408a26f348ecb5c5bf3d0169048c7615f7833a472657ebfa",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "package.json",
+          "sha256": "31bd9cf7efdf2aec3c87a7c562328188f7c232b845908680bfc5edadea5f80a0",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "CHANGELOG.md",
+          "sha256": "7ecfdb8995a82d9ddf1a60ecdb8c6dbf566b5f9dab193d8abd2c0e06d19399b0",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "README.md",
+          "sha256": "1922add8d6d6c4dfa577f6702a626b7b7898ab3e06b863755ef701af70fcbcd4",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "SECURITY.md",
+          "sha256": "107481692d9aa05044fffca4795106ef478300d3752f4c46c91069ee9ee499cf",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "THIRD_PARTY_NOTICES.md",
+          "sha256": "ed338694d597243f7e43545f78bf032fafd811209be004cdf4693db203f04d2b",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/index.d.ts",
+          "sha256": "43e818adf60173644896298637f47b01d5819b17eda46eaa32d0c7d64724d012",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/mcp/index.d.ts",
+          "sha256": "527251525bf6676e2647a02af2b82927649e1fe58935f9802154ec1badb01cb0",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/mcp/operation-access.d.ts",
+          "sha256": "3c8186e7c70705d27321f4a78386a8ac6a47b14f15e12bf5fbe068b9dae6c392",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/operation-worker.d.ts",
+          "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/output.d.ts",
+          "sha256": "bd99dc0e61cd6a34fe5a773858135a1d18f52ecf15df299ae1dff4bcca1306f7",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/plugin-browser.d.ts",
+          "sha256": "74fb04d9efc90fc8b7b78f41bffd8a8cb17242f8850c1caeefdc2a25d79e5c47",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/plugin-resolution.d.ts",
+          "sha256": "3f5cb48ea440cc5f3a443ffc274a06fe636e58d6f47949c25fb5057a60974870",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/presentation.d.ts",
+          "sha256": "b5c4655a591b3d602a9799c4360345b2c3090b2c88ff1551de07ba0f96d46043",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/scheduler-commands.d.ts",
+          "sha256": "6cbf0403f927b480dd1d8c661c18ebc08251fd0824b61a5ebfb9b076f52ad582",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/version.d.ts",
+          "sha256": "12ca944f9c856678775b3f495683cf5463af6c84dd63afa8436b117cedc7890f",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        },
+        {
+          "file": "build/cli/cli/workflow-commands.d.ts",
+          "sha256": "d587a14558dc49e9ac52b58470758ba30d98f22358a7a75cb84fcf13937a33fd",
+          "archiveInstalledByteEqual": true,
+          "ownerFilesEqual": true
+        }
+      ]
+    }
+  ],
+  "sharedAssets": [
+    {
+      "file": "shared/ui.js",
+      "sha256": "92dd45dd1555ace3a3c17258a593f418a50cc448a73c4ed458a5b3cfa4057d1d",
+      "studioFrozenEditorVsixByteEqual": true
+    },
+    {
+      "file": "shared/ui.css",
+      "sha256": "02ccc5f4b525a76b55956ee78c15861627a5b0b715cae49021603668183658ec",
+      "studioFrozenEditorVsixByteEqual": true
+    },
+    {
+      "file": "shared/THIRD_PARTY_NOTICES.txt",
+      "sha256": "0536a0fd452b27ced3a7e7253efb09a6e8bcc9111e90fe2ae65cdbdb90c1e4f1",
+      "studioFrozenEditorVsixByteEqual": true
+    },
+    {
+      "file": "shared/manifest.json",
+      "sha256": "accdf2981a808c062d30d6bdf34b577d11bc57b6ce4089a72ed5f8d7b18301ec",
+      "studioFrozenEditorVsixByteEqual": true
+    },
+    {
+      "file": "shared/host.cjs",
+      "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf",
+      "studioFrozenEditorVsixByteEqual": true
+    }
+  ],
+  "vsixEntries": 43
+}

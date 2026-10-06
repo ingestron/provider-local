@@ -1,0 +1,101 @@
+{
+  "result": "passed",
+  "sources": [
+    {
+      "id": "azure-blob",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "files",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "gcs",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "github",
+      "changedRuntimeFiles": ["singer_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "hubspot",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "jira",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "mysql",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "onedrive",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "oracle",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "postgresql",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "s3",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "salesforce",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "sftp",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "sharepoint",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "sql-server",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    },
+    {
+      "id": "stripe",
+      "changedRuntimeFiles": ["snapshot_runtime.py", "runtime.lock.json"],
+      "legacyBridgeCodecByteUnchanged": true,
+      "upstreamLocksUnchanged": true
+    }
+  ]
+}

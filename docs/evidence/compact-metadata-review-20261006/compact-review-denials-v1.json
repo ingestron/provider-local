@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "root": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-wide-UMbEbn",
+  "checks": [
+    "Untrusted approval refused before job creation",
+    "Foreign review digest refused before job creation",
+    "Changed multilingual metadata reports outdated preparation and refuses approval before a new job",
+    "Changed generated project lock is refused before job creation or publication",
+    "Exact restored inputs recover the current review with all committed output, source data and package lock bytes preserved"
+  ],
+  "preservedOutputFiles": 21,
+  "scope": "Actual frozen shared host and exact installed Core/CLI; synthetic local project; denial before job creation; no browser/vendor qualification"
+}

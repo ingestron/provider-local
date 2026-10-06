@@ -1,0 +1,47 @@
+{
+  "cli": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/installed-compact-review-v2/node_modules/.pnpm/ingestron@file+..+..+artifacts+review-batch-runtime-v1+ingestron-0.17.21.tgz_zod@4.6.5/node_modules/ingestron",
+  "core": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/installed-compact-review-v2/node_modules/.pnpm/@ingestron+core@file+..+..+artifacts+compact-review-runtime-v2+ingestron-core-0.12.53.tgz/node_modules/@ingestron/core",
+  "archives": [
+    {
+      "owner": "core",
+      "archive": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-runtime-v2/ingestron-core-0.12.53.tgz",
+      "archiveSha256": "28539a55cb7555b2f8691d9bebc2dd97f1c9cab61ad0e2a9e99747e281694389",
+      "freshParityRequired": true,
+      "filesCompared": 156,
+      "metadataExceptions": [
+        {
+          "file": "package.json",
+          "normalPackagingRemovedFields": [
+            "packageManager",
+            "scripts.prepack",
+            "scripts.prepublishOnly"
+          ]
+        }
+      ]
+    },
+    {
+      "owner": "cli",
+      "archive": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-batch-runtime-v1/ingestron-0.17.21.tgz",
+      "archiveSha256": "4808a9f6fd6441ef1e389f50484bced448691fc9aa642c1eaaff80dbc2c2a439",
+      "freshParityRequired": false,
+      "filesCompared": 29,
+      "metadataExceptions": [
+        {
+          "file": "package.json",
+          "normalPackagingRemovedFields": [
+            "packageManager",
+            "scripts.prepack",
+            "scripts.prepublishOnly"
+          ]
+        }
+      ]
+    }
+  ],
+  "sha256": {
+    "shared/ui.js": "92dd45dd1555ace3a3c17258a593f418a50cc448a73c4ed458a5b3cfa4057d1d",
+    "shared/ui.css": "02ccc5f4b525a76b55956ee78c15861627a5b0b715cae49021603668183658ec",
+    "shared/THIRD_PARTY_NOTICES.txt": "0536a0fd452b27ced3a7e7253efb09a6e8bcc9111e90fe2ae65cdbdb90c1e4f1",
+    "shared/manifest.json": "accdf2981a808c062d30d6bdf34b577d11bc57b6ce4089a72ed5f8d7b18301ec",
+    "shared/host.cjs": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "result": "passed",
+  "registryDigest": "af995072a5be91de9ff818c11fc5c82a394a817b368c9b800268de298d425e5b",
+  "configurationDigest": "b941d850e8b4f0c3080a9c74814f6aa643fe1182246df3912ef9291b47c63146",
+  "workspaces": 8,
+  "jobsChecked": 89,
+  "runningJobs": 0,
+  "listener": 73585,
+  "processes": "73552     1 Tue Oct  6 10:54:47 2026     node /Users/sacode/.local/share/fnm/node-versions/v22.23.2/installation/bin/pnpm dev --port 3221 --webpack\n73578 73552 Tue Oct  6 10:54:47 2026     node /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/ingestron-studio/node_modules/.bin/../.pnpm/next@16.3.3_@types+node@26.2.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/next/dist/bin/next dev --hostname 127.0.0.1 --port 3221 --webpack\n73585 73578 Tue Oct  6 10:54:48 2026     next-server (v16.3.3)",
+  "httpWorkbenchStatus": 200,
+  "previewChanged": false,
+  "browserInteraction": false
+}

@@ -1,0 +1,372 @@
+/** Actual immutable shared host; business-field quality failures with valid source IDs. */
+import assert from "node:assert/strict";
+import { readFileSync, writeFileSync, readdirSync } from "node:fs";
+import { resolve, join } from "node:path";
+import { createHash } from "node:crypto";
+import { createRequire } from "node:module";
+import { createHost } from "./checkpoint-upgrade-host-acceptance.mjs";
+
+const { config, source, qualityStage, previous } = JSON.parse(
+  readFileSync(0, "utf8"),
+);
+assert.ok(["github", "jira"].includes(source.id));
+assert.ok(["baseline", "quality", "repair"].includes(qualityStage));
+const cli = resolve(config.cli, "../../../..");
+const installed = createRequire(join(cli, "package.json"));
+const { parse, stringify } = installed("yaml");
+const environment = Object.fromEntries(
+  Object.entries(process.env).filter(([key]) =>
+    /^INGESTRON_MATRIX_[A-Z0-9_]+$/.test(key),
+  ),
+);
+const privateValues = [
+  "MATRIX_PRIVATE_ROW",
+  "MATRIX_UNSELECTED_PRIVATE",
+  "Repeated issue title",
+  "Issue 1",
+  "Issue 2",
+  ...config.records
+    .filter((item) => item.id !== "files")
+    .map((item) => environment[item.secretName]),
+].filter(Boolean);
+const privateReceipt = (value) =>
+  assert.ok(
+    !privateValues.some((secret) => JSON.stringify(value).includes(secret)),
+    "Durable evidence contains source rows or credentials",
+  );
+const hash = (data) => createHash("sha256").update(data).digest("hex");
+const projectFile = join(config.root, "project.yaml");
+const wire = source.source.stream ?? "records";
+const field = source.columns[1],
+  ruleId = "records_" + field + "_distinct";
+const checks = [],
+  record = (message) => checks.push(message);
+let host,
+  stage = "author",
+  result = "failed",
+  failure,
+  continuation;
+function parquets() {
+  const files = {};
+  function visit(folder) {
+    for (const item of readdirSync(folder, { withFileTypes: true })) {
+      const file = join(folder, item.name);
+      if (item.isDirectory()) visit(file);
+      else if (item.isFile() && file.endsWith(".parquet"))
+        files[file] = hash(readFileSync(file));
+    }
+  }
+  visit(join(config.root, "build"));
+  return files;
+}
+function preserves(files) {
+  for (const [file, sha] of Object.entries(files))
+    assert.equal(
+      hash(readFileSync(file)),
+      sha,
+      "Earlier committed output changed",
+    );
+}
+async function start(operation, request, expected = "succeeded") {
+  let job = await host.request("start", {
+    environment: "dev",
+    operation,
+    request,
+  });
+  const deadline = Date.now() + 180000;
+  while (job.status === "running" && Date.now() < deadline) {
+    await new Promise((done) => setTimeout(done, 50));
+    job = (await host.request("jobs")).find((item) => item.id === job.id);
+    assert.ok(job, "Owned job disappeared");
+  }
+  assert.equal(
+    job.status,
+    expected,
+    "Expected job outcome differs: " +
+      operation +
+      "; error=" +
+      (job.error ?? job.status),
+  );
+  privateReceipt(job);
+  return job;
+}
+try {
+  if (qualityStage === "baseline") {
+    const project = parse(readFileSync(projectFile, "utf8"));
+    const flow = project.flows.find((item) => item.id === source.flow);
+    const property = flow.tables.records.contract.schema[0].properties.find(
+      (item) => item.name === field,
+    );
+    assert.ok(
+      property && !property.quality,
+      "Synthetic business field already has quality rules",
+    );
+    property.quality = [
+      {
+        id: ruleId,
+        type: "library",
+        metric: "duplicateValues",
+        mustBe: 0,
+        severity: "error",
+      },
+    ];
+    writeFileSync(projectFile, stringify(project));
+  }
+  const authoredSha256 = hash(readFileSync(projectFile));
+  if (previous)
+    assert.equal(
+      authoredSha256,
+      previous.authoredSha256,
+      "Reviewed specification changed between fixture stages",
+    );
+  stage = "connect";
+  host = await createHost({
+    project: config.root,
+    cli,
+    flow: source.flow,
+    baseline: "unused",
+    record,
+    python: config.python,
+    environment,
+    sourceAdapter: config.provider,
+  });
+  const snapshot = await host.request("snapshot", { environment: "dev" });
+  const dataset = snapshot.datasets.find(
+    (item) => item.flow === source.flow && item.table === "records",
+  );
+  assert.ok(dataset, "Logical dataset is missing");
+  assert.equal(dataset.source.stream ?? "records", wire);
+  const earlier = previous?.committedOutputs ?? parquets();
+  if (qualityStage === "baseline") {
+    stage = "prepare";
+    await start("test_prepare", {
+      flow: source.flow,
+      revision: snapshot.revision,
+      runtimeConsent: true,
+    });
+    record(
+      "A reviewed business-field duplicateValues rule is prepared through the actual packaged host; source IDs remain unique",
+    );
+  }
+  stage = "review";
+  const review = await host.request("discovery", {
+    environment: "dev",
+    flow: source.flow,
+  });
+  assert.match(review.reviewDigest, /^[a-f0-9]{64}$/);
+  if (previous)
+    assert.equal(
+      review.reviewDigest,
+      previous.reviewDigest,
+      "Source content change unexpectedly changed reviewed specifications",
+    );
+  const request = {
+    flow: source.flow,
+    revision: snapshot.revision,
+    reviewDigest: review.reviewDigest,
+  };
+  stage = "run";
+  const job = await start(
+    "test_run",
+    request,
+    qualityStage === "quality" ? "failed" : "succeeded",
+  );
+  const run = job.result?.stages?.find(
+    (item) => item.operation === "run" && item.action === "run",
+  );
+  assert.ok(run, "Guided run stage is missing");
+  if (qualityStage === "quality") {
+    assert.equal(
+      run.status,
+      "failed",
+      "Blocking field rule did not fail the run",
+    );
+    assert.match(
+      run.error ?? job.error ?? "",
+      /QUALITY_FAILED/,
+      "Failure is a source-reader error rather than a measured contract quality failure",
+    );
+    const quality = run.result?.quality ?? run.result?.result?.quality;
+    assert.ok(
+      Array.isArray(quality),
+      "Failed run has no measured quality evidence",
+    );
+    const rule = quality.find(
+      (item) => item.id === ruleId && item.stream === wire,
+    );
+    assert.ok(
+      rule,
+      "Failed quality evidence lost its rule or exact wire stream",
+    );
+    assert.equal(rule.metric, "duplicateValues");
+    assert.equal(
+      rule.value,
+      source.rows - 1,
+      "Duplicate business-field count differs",
+    );
+    assert.ok(!Object.hasOwn(rule, "row") && !Object.hasOwn(rule, "rows"));
+    const files = parquets();
+    assert.ok(
+      Object.keys(files).every((file) => !file.includes(job.id)),
+      "Failed run committed Parquet output",
+    );
+    assert.equal(
+      JSON.stringify(files),
+      JSON.stringify(previous.committedOutputs),
+      "Quality failure added or changed committed output",
+    );
+    stage = "preview-refusal";
+    await assert.rejects(
+      host.request("run.preview", {
+        environment: "dev",
+        flow: source.flow,
+        id: job.id,
+        stream: wire,
+      }),
+      /successful|changed|output|succeeded/i,
+    );
+    await assert.rejects(
+      host.request("run.preview", {
+        environment: "dev",
+        flow: source.flow,
+        id: job.id,
+        stream: wire,
+        historical: true,
+      }),
+      /successful|changed|output|succeeded/i,
+    );
+    await assert.rejects(
+      host.request("run.preview", {
+        environment: "dev",
+        flow: source.flow,
+        id: previous.baselineJob,
+        stream: wire,
+      }),
+      /changed/i,
+    );
+    const preview = await host.request("run.preview", {
+      environment: "dev",
+      flow: source.flow,
+      id: previous.baselineJob,
+      stream: wire,
+      historical: true,
+    });
+    assert.equal(
+      preview.totalRows,
+      source.rows,
+      "Prior successful output is unavailable after quality failure",
+    );
+    assert.equal(
+      preview.historical,
+      true,
+      "Earlier committed output was not explicitly identified",
+    );
+    record(
+      "Actual host reports QUALITY_FAILED with exact business-field rule, wire stream and measured duplicate count; no output is committed and failed-run preview is refused",
+    );
+    record(
+      "All earlier Parquet bytes and the exact prior successful preview remain available after the blocking failure",
+    );
+    continuation = {
+      ...previous,
+      failedJob: job.id,
+      failure: {
+        rule: ruleId,
+        stream: wire,
+        metric: rule.metric,
+        value: rule.value,
+      },
+    };
+  } else {
+    assert.equal(run.status, "succeeded");
+    const flow = run.result.result.flows.find(
+      (item) => item.flow === source.flow,
+    );
+    assert.equal(flow.tables[0].stream, wire);
+    assert.equal(flow.tables[0].rows, source.rows);
+    const rule = flow.quality.find(
+      (item) => item.id === ruleId && item.stream === wire,
+    );
+    assert.ok(
+      rule?.passed,
+      "Successful run did not measure the reviewed business-field rule",
+    );
+    assert.equal(rule.value, 0);
+    const preview = await host.request("run.preview", {
+      environment: "dev",
+      flow: source.flow,
+      id: job.id,
+      stream: wire,
+    });
+    assert.equal(preview.totalRows, source.rows);
+    assert.equal(preview.rows.length, source.rows);
+    assert.ok(
+      new Set(
+        preview.rows.map(
+          (row) => row[preview.columns.indexOf(source.columns[0])],
+        ),
+      ).size === source.rows,
+      "Fixture source IDs are not unique",
+    );
+    assert.ok(
+      new Set(preview.rows.map((row) => row[preview.columns.indexOf(field)]))
+        .size === source.rows,
+      "Baseline/repaired business fields are not unique",
+    );
+    preserves(earlier);
+    record(
+      qualityStage === "baseline"
+        ? "Valid unique source IDs and business fields commit the expected rows and measure zero duplicates; prior output bytes are preserved"
+        : "Correcting only source business values under the same reviewed digest succeeds, measures zero duplicates and preserves prior output bytes",
+    );
+    continuation = {
+      authoredSha256,
+      reviewDigest: review.reviewDigest,
+      baselineJob: previous?.baselineJob ?? job.id,
+      committedOutputs: parquets(),
+      ...(previous?.failedJob
+        ? { failedJob: previous.failedJob, failure: previous.failure }
+        : {}),
+      successfulJob: job.id,
+    };
+  }
+  stage = "privacy";
+  privateReceipt(await host.request("jobs"));
+  preserves(earlier);
+  assert.equal(hash(readFileSync(projectFile)), authoredSha256);
+  privateReceipt(continuation);
+  record(
+    "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage",
+  );
+  result = "passed";
+} catch (error) {
+  failure = String(error.message);
+  if (privateValues.some((secret) => failure.includes(secret)))
+    failure = "Private details withheld";
+} finally {
+  try {
+    await host?.close();
+  } catch {
+    result = "failed";
+    failure = "Acceptance-owned host failed to close";
+  }
+  console.log(
+    JSON.stringify({
+      result,
+      id: source.id,
+      reference: source.reference,
+      qualityStage,
+      stage,
+      ...(failure ? { failure } : {}),
+      checks,
+      ...(continuation ? { continuation } : {}),
+      hostSha256: hash(
+        readFileSync(process.env.INGESTRON_ACCEPTANCE_STUDIO_HOST),
+      ),
+      rowsInProof: false,
+      browserInteraction: false,
+      vendorQualified: false,
+    }),
+  );
+  process.exitCode = result === "passed" ? 0 : 1;
+}

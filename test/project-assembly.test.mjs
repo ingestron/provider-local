@@ -16,6 +16,60 @@ const flow = (id) => ({
     "build-tools.lock.txt": "tools",
   },
 });
+test("indexed assembly returns the original collection location without transporting document bodies", () => {
+  const index = {
+    apiVersion: "ingestron.metadata-documents/v1",
+    kind: "project",
+    documents: {
+      orders: {
+        path: "metadata/project/" + "a".repeat(64) + ".json",
+        sha256: "a".repeat(64),
+        bytes: 100,
+      },
+    },
+    totalBytes: 100,
+  };
+  const connection = flow("a");
+  const config = JSON.parse(connection.artifacts["connector.json"]);
+  config.projectLock.tableDocuments = index;
+  connection.artifacts["connector.json"] = JSON.stringify(config);
+  connection.metadataDocuments = index;
+  const input = {
+    phase: "assemble",
+    project: "demo",
+    environment: "dev",
+    configuration: "local",
+    scope,
+    nativeFiles: {},
+    connections: [connection],
+  };
+  const result = assemble(input);
+  assert.deepEqual(result.metadataDocumentRoots, { a: "flows/a" });
+  assert.equal(
+    result.artifacts["flows/a/connector.json"],
+    connection.artifacts["connector.json"],
+  );
+  assert.ok(
+    !Object.keys(result.artifacts).some((name) =>
+      name.includes("metadata/project/"),
+    ),
+  );
+  for (const change of [
+    () => {
+      connection.metadataDocuments = { ...index, totalBytes: 101 };
+    },
+    () => {
+      connection.metadataDocuments = index;
+      connection.artifacts[index.documents.orders.path] = "document";
+    },
+  ]) {
+    change();
+    assert.throws(
+      () => assemble(input),
+      /original index and external documents/,
+    );
+  }
+});
 test("local project has one dependency environment and selectable isolated flow folders", () => {
   const r = assemble({
     phase: "assemble",

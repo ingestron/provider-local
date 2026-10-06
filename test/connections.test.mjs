@@ -108,7 +108,7 @@ test("ODCS columns derive the runtime projection; unsupported types fail explici
       .contract.id,
     "sales-orders",
   );
-  i.tables.orders.columns[0].type = "DATE";
+  i.tables.orders.columns[0].type = "BINARY";
   assert.throws(() => projectConnectionPrepare(i), /does not support/);
 });
 
@@ -120,6 +120,37 @@ test("runtime capability accepts a source unknown to the engine and rejects anot
     () => projectConnectionPrepare(i),
     /Invalid project connection/,
   );
+});
+
+test("incremental execution requires a policy on every reviewed table", () => {
+  const i = input();
+  i.execution = { mode: "local", ingestion: "incremental" };
+  assert.throws(() => projectConnectionPrepare(i), /reviewed table policies/);
+  delete i.selection;
+  i.tables = {
+    orders: {
+      source: {
+        stream: "orders",
+        incremental: {
+          watermark: "id",
+          initial: 0,
+          consistency: "ordered-committed-append",
+        },
+      },
+      contract: { apiVersion: "v3.1.0", id: "orders" },
+      columns: [{ name: "id", type: "BIGINT", required: true, key: true }],
+    },
+  };
+  assert.equal(
+    JSON.parse(projectConnectionPrepare(i).artifacts["connector.json"])
+      .projectLock.execution.ingestion,
+    "incremental",
+  );
+  i.tables.other = { ...i.tables.orders, source: { stream: "other" } };
+  assert.throws(() => projectConnectionPrepare(i), /every table/);
+  delete i.tables.other;
+  i.execution = { mode: "local" };
+  assert.throws(() => projectConnectionPrepare(i), /only in incremental/);
 });
 
 test("local preparation rejects cloud mode, unsafe identity, timeout and missing source assets", () => {
@@ -138,4 +169,126 @@ test("local preparation rejects cloud mode, unsafe identity, timeout and missing
   assert.equal(result.applied, false);
   assert.equal(result.artifacts["pipeline.arm.json"], undefined);
   assert.equal(JSON.parse(result.artifacts["connector.json"]).azure, undefined);
+});
+
+test("wide multilingual metadata keeps exact contracts within the runtime byte bound", () => {
+  const request = input();
+  delete request.selection;
+  const properties = Array.from({ length: 200 }, (_, n) => ({
+    name: `business_${n}`,
+    physicalName: `column_${n}`,
+    description: "Māori 日本語 😀 — synthetic reviewed field metadata",
+    logicalType: "string",
+    physicalType: "STRING",
+    required: true,
+  }));
+  request.tables = Object.fromEntries(
+    Array.from({ length: 20 }, (_, n) => [
+      `table_${n}`,
+      {
+        source: { stream: `table_${n}` },
+        contract: {
+          apiVersion: "v3.1.0",
+          kind: "DataContract",
+          id: "reviewed",
+          name: "records",
+          version: "1.0.0",
+          status: "draft",
+          schema: [
+            {
+              name: "records",
+              logicalType: "object",
+              physicalType: "table",
+              properties,
+            },
+          ],
+        },
+        columns: properties.map((p) => ({
+          name: p.physicalName,
+          target: p.name,
+          type: "STRING",
+          required: true,
+          key: false,
+        })),
+      },
+    ]),
+  );
+  const result = projectConnectionPrepare(request);
+  const config = JSON.parse(result.artifacts["connector.json"]);
+  const { runtimeAssets, ...reviewed } = request;
+  assert.deepEqual(config.projectLock, reviewed);
+  assert.deepEqual(
+    JSON.parse(result.artifacts["project-connection.lock.json"]),
+    reviewed,
+  );
+  assert.ok(Buffer.byteLength(JSON.stringify(config, null, 2)) > 2_000_000);
+  assert.ok(Buffer.byteLength(result.artifacts["connector.json"]) < 2_000_000);
+  assert.ok(
+    Buffer.byteLength(result.artifacts["project-connection.lock.json"]) <
+      2_000_000,
+  );
+});
+
+test("indexed preparation compiles columns without embedding projection tables or losing document references", () => {
+  const value = input();
+  delete value.selection;
+  const hash = "a".repeat(64);
+  value.tableDocuments = {
+    apiVersion: "ingestron.metadata-documents/v1",
+    kind: "project",
+    documents: {
+      orders: {
+        path: "metadata/project/" + hash + ".json",
+        sha256: hash,
+        bytes: 123,
+      },
+    },
+    totalBytes: 123,
+  };
+  value.projectionTables = {
+    orders: {
+      source: { stream: "orders" },
+      contract: true,
+      columns: [
+        {
+          name: "wire_id",
+          target: "customer_id",
+          type: "BIGINT",
+          required: true,
+        },
+      ],
+    },
+  };
+  const before = JSON.stringify(value),
+    result = projectConnectionPrepare(value),
+    lock = JSON.parse(result.artifacts["project-connection.lock.json"]),
+    config = JSON.parse(result.artifacts["connector.json"]);
+  assert.deepEqual(lock.tableDocuments, value.tableDocuments);
+  assert.equal(Object.hasOwn(lock, "projectionTables"), false);
+  assert.equal(Object.hasOwn(lock, "tables"), false);
+  assert.deepEqual(config.projectLock, lock);
+  assert.deepEqual(JSON.parse(result.artifacts["selection.json"]), {
+    orders: {
+      name: "orders",
+      fields: {
+        wire_id: { type: "integer", nullable: false, target: "customer_id" },
+      },
+    },
+  });
+  assert.equal(JSON.stringify(value), before);
+  for (const mutate of [
+    (v) => (v.tableDocuments.documents.orders.path = "../escape"),
+    (v) => v.tableDocuments.totalBytes++,
+    (v) => (v.projectionTables.extra = v.projectionTables.orders),
+    (v) => (v.projectionTables.orders.contract = {}),
+    (v) => (v.projectionTables.orders.columns = []),
+    (v) => (v.tables = {}),
+    (v) => (v.selection = {}),
+    (v) => delete v.projectionTables,
+    (v) => delete v.tableDocuments,
+  ]) {
+    const bad = structuredClone(value);
+    mutate(bad);
+    assert.throws(() => projectConnectionPrepare(bad));
+  }
 });

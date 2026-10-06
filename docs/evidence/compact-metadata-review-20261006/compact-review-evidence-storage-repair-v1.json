@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-06",
+  "change": "Evidence packaging only; existing acceptance results and source hashes preserved",
+  "originalDerivedPatch": {
+    "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/backups/compact-review-before-v1/connectors/docs/evidence/compiler-project-identity-20261006/scoped-change.patch",
+    "sha256": "318469f4daeb8a0742bc6304184cd353ccc64404b712d6c050609a856ea08f6b",
+    "bytes": 8703423
+  },
+  "compactSourcePatch": {
+    "path": "scoped-source-change.patch",
+    "sha256": "a91a633e42dc0fc2aa0ed7e1fbd07a35ad35c78255364ed522cf812760fb84a1",
+    "bytes": 17705
+  },
+  "generatedRuntimeEvidence": "source-hashes.json and unicode-project-identity-bundle-audit-v1.json"
+}

@@ -1,0 +1,16 @@
+{
+  "result": "passed",
+  "files": [
+    {
+      "file": "dist/core/provider-commands.js",
+      "sha256": "e0f11bf9b79516c8b9529a29e3f4e34e5247fa807ad5ac3c0efdbd8f1118adbb",
+      "archiveV1V2ByteEqual": true
+    },
+    {
+      "file": "dist/core/provider-commands.d.ts",
+      "sha256": "6e1df811d43b7c4599b909ffeb727b2d8b69423719690f9a5d19eba423100ab2",
+      "archiveV1V2ByteEqual": true
+    }
+  ],
+  "scope": "Current installed transport-limit path byte-identical to the hundred-table refusal candidate; no successful hundred-table journey"
+}

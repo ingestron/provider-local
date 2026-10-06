@@ -18,3 +18,20 @@ test("ODCS target names survive provider selection", () => {
     target: "customer_id",
   });
 });
+
+test("temporal ODCS projections retain source and target identities with exact nullable semantics", () => {
+  const selected = selectionFromTables({
+    events: {
+      contract: { apiVersion: "v3.1.0" },
+      source: { stream: "events" },
+      columns: [
+        { name: "day", target: "business_day", type: "DATE", required: true },
+        { name: "event", type: "TIMESTAMP", required: false },
+      ],
+    },
+  });
+  assert.deepEqual(selected.events.fields, {
+    day: { type: "date", nullable: false, target: "business_day" },
+    event: { type: "timestamp", nullable: true },
+  });
+});

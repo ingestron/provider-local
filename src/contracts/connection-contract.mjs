@@ -1,10 +1,20 @@
 import { object, text } from "./shape.mjs";
+import { validateMetadataProjection } from "./metadata-projection.mjs";
 export const runtimeContract = "ingestron.snapshot/python/v1";
 const field = object(
   {
     type: {
       type: "string",
-      enum: ["integer", "string", "boolean", "number", "decimal", "json"],
+      enum: [
+        "integer",
+        "string",
+        "boolean",
+        "number",
+        "decimal",
+        "json",
+        "date",
+        "timestamp",
+      ],
     },
     nullable: { type: "boolean" },
     target: { type: "string", minLength: 1 },
@@ -26,7 +36,12 @@ export const projectConnectionDefinition = {
     "Prepare a project-resolved connection, selected fields and runtime-only secrets",
   inputSchema: { type: "object", additionalProperties: true },
 };
-export function validateProjectConnection(input, descriptor) {
+export function validateProjectConnection(input, descriptor, projectionTables) {
+  if (Object.hasOwn(input, "tableDocuments"))
+    validateMetadataProjection(input, projectionTables);
+  else if (projectionTables !== undefined)
+    throw Error("Projection requires indexed connection metadata");
+  const tables = projectionTables ?? input.tables;
   if (
     input.apiVersion !== "ingestron.connection-request/v1" ||
     !/^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*@\d+\.\d+\.\d+$/.test(input.connector) ||
@@ -49,6 +64,7 @@ export function validateProjectConnection(input, descriptor) {
           "settings",
           "selection",
           "tables",
+          "tableDocuments",
           "execution",
           "timeoutSeconds",
           "sourcePackage",
@@ -56,15 +72,71 @@ export function validateProjectConnection(input, descriptor) {
           "specificationSha256",
           "runtimeAssetSha256",
           "runtimeContract",
+          "schedule",
         ].includes(k),
     )
   )
     throw Error("Unknown project connection setting");
+  if (Object.hasOwn(input, "schedule")) {
+    // Core owns schema, calendar resolution and dispatch. The local adapter
+    // verifies its scope/policies, then preserves the complete host envelope.
+    const schedule = input.schedule;
+    const keys = [
+      "apiVersion",
+      "owner",
+      "clock",
+      "definition",
+      "boundaries",
+      "digest",
+    ];
+    const ownerKeys = ["project", "environment", "flow", "connection"];
+    const object = (value) =>
+      value && typeof value === "object" && !Array.isArray(value);
+    if (
+      !object(schedule) ||
+      Object.keys(schedule).length !== keys.length ||
+      !keys.every((key) => Object.hasOwn(schedule, key)) ||
+      schedule.apiVersion !== descriptor.scheduling?.apiVersion ||
+      schedule.clock !== "portable" ||
+      descriptor.scheduling?.clock !== "portable" ||
+      !object(schedule.owner) ||
+      Object.keys(schedule.owner).length !== ownerKeys.length ||
+      !ownerKeys.every(
+        (key) =>
+          typeof input[key] === "string" &&
+          input[key].length > 0 &&
+          schedule.owner[key] === input[key],
+      ) ||
+      !object(schedule.definition) ||
+      schedule.definition.apiVersion !== "ingestron.schedule/v1" ||
+      !descriptor.scheduling.recurrences.includes(
+        schedule.definition.recurrence?.kind,
+      ) ||
+      !["skip", "queue"].includes(schedule.definition.overlap) ||
+      !["skip", "latest"].includes(schedule.definition.missed) ||
+      !object(schedule.boundaries) ||
+      schedule.boundaries.apiVersion !== "ingestron.schedule-boundaries/v1" ||
+      schedule.boundaries.timeZone !== schedule.definition.timeZone ||
+      !/^[a-f0-9]{64}$/.test(schedule.digest) ||
+      !/^[a-f0-9]{64}$/.test(input.specificationSha256)
+    )
+      throw Error(
+        "Local execution requires a scope-bound reviewed portable schedule",
+      );
+  }
   if (input.tables && input.selection)
     throw Error("Use ODCS tables or legacy selection, never both");
-  const selection = input.tables
-    ? selectionFromTables(input.tables)
-    : input.selection;
+  const incremental = input.execution?.ingestion === "incremental";
+  if (incremental && !tables)
+    throw Error(
+      "Incremental append execution requires reviewed table policies",
+    );
+  for (const table of Object.values(tables ?? {}))
+    if (!!table.source?.incremental !== incremental)
+      throw Error(
+        "Use an incremental policy on every table only in incremental execution",
+      );
+  const selection = tables ? selectionFromTables(tables) : input.selection;
   if (
     !conforms(descriptor.settingsSchema, input.settings) ||
     !conforms(descriptor.selectionSchema, selection) ||
@@ -104,7 +176,7 @@ export function validateProjectConnection(input, descriptor) {
     throw Error("Invalid or duplicate selected table name");
   // Discovery-only builds (every table still without a contract) select nothing yet.
   const discoveryOnly =
-    input.tables && Object.values(input.tables).every((t) => !t.contract);
+    tables && Object.values(tables).every((t) => !t.contract);
   if (!Object.keys(selection).length && !discoveryOnly)
     throw Error("Select at least one source stream");
   for (const [stream, table] of Object.entries(selection)) {
@@ -258,6 +330,8 @@ export function selectionFromTables(tables) {
         DOUBLE: "number",
         FLOAT: "number",
         BOOLEAN: "boolean",
+        DATE: "date",
+        TIMESTAMP: "timestamp",
       }[type];
       const decimal = /^DECIMAL\((\d+),\s*(\d+)\)$/.exec(type);
       if (!mapped && !decimal)

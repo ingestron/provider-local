@@ -21,7 +21,8 @@ export function assemble(input) {
   );
   const artifacts = {},
     flows = {},
-    environments = {};
+    environments = {},
+    metadataDocumentRoots = {};
   for (const c of input.connections) {
     check(
       /^[A-Za-z0-9_][A-Za-z0-9_-]*$/.test(c.flow) && !flows[c.flow],
@@ -30,16 +31,32 @@ export function assemble(input) {
     for (const [name, content] of Object.entries(c.artifacts))
       artifacts[`flows/${c.flow}/${name}`] = content;
     const config = JSON.parse(c.artifacts["connector.json"]);
+    if (c.metadataDocuments) {
+      check(
+        c.metadataDocuments.apiVersion === "ingestron.metadata-documents/v1" &&
+          JSON.stringify(c.metadataDocuments) ===
+            JSON.stringify(config.projectLock.tableDocuments) &&
+          !Object.keys(c.artifacts).some((name) =>
+            name.startsWith("metadata/project/"),
+          ),
+        "Indexed assembly requires the original index and external documents",
+      );
+      metadataDocumentRoots[c.flow] = `flows/${c.flow}`;
+    }
     const runtime = config.projectLock.runtimeAssetSha256;
     environments[runtime] = {
       requirements: `flows/${c.flow}/requirements.lock.txt`,
       buildTools: `flows/${c.flow}/build-tools.lock.txt`,
       source: config.projectLock.sourcePackage,
     };
+    const checkpointMigration = c.artifacts["runtime.lock.json"]
+      ? JSON.parse(c.artifacts["runtime.lock.json"]).checkpointMigration
+      : undefined;
     flows[c.flow] = {
       directory: `flows/${c.flow}`,
       runtime,
       timeout: config.timeoutSeconds * 2 + 300,
+      ...(checkpointMigration ? { checkpointMigration } : {}),
     };
   }
   artifacts["run.py"] = runner;
@@ -61,6 +78,7 @@ export function assemble(input) {
   return {
     apiVersion: "ingestron.project-package/v1",
     artifacts,
+    metadataDocumentRoots,
     details: {
       entryPoint: "run.py",
       flows: Object.keys(flows),

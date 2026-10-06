@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "root": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/review-readiness-unicode-report-rMYGVE",
+  "totalBytes": 1980059,
+  "totalCharacters": 1170059,
+  "pageCount": 5,
+  "sha256": "420cf86789452e590727abe49277d7aa8c58093c59b0e6ae7b613461c93a7dce",
+  "exactFullContent": true,
+  "sourceSha256": {
+    "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/ingestron-studio/packages/studio-host/cli.ts": "ac155063480cbd52794f745e380e8d3cfbdd99699cf895ae890761fa197bab8c",
+    "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/ingestron-studio/packages/studio-host/review-report.ts": "f1e79b41bea7f6036641460b427f7362eebc105a5808dc64a613f71e0a75256c"
+  },
+  "scope": "Actual final owner-built host read-report and process adapter with immutable installed CLI21/core51; synthetic Unicode JSON report only, not provider ingestion or a native/vendor journey",
+  "bundleSha256": "ff1ec7edf7c117ad539b8a583ddce7a2c7727b7f2a164c065d44bbc1e377563c",
+  "provenanceVerifiedByIdenticalNonWritingRebuild": true
+}

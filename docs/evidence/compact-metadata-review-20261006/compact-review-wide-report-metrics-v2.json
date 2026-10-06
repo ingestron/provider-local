@@ -1,0 +1,16 @@
+{
+  "result": "passed",
+  "root": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-wide-G4JsCC",
+  "reportPath": "build/studio/dev/flow_files/flows/flow_files/review.json",
+  "reportBytes": 1609401,
+  "reportSha256": "7b30a277e7fb103686a4ad68e40b0e02dee79897fba4c4c24f14819cc09de6f7",
+  "pageCount": 7,
+  "approvalDigest": "ea59ff03d43bcda2a7f3af6bd7f74e740b964a9e3e226b2e98b7842b94567a41",
+  "sdkCliMcpPagesExact": true,
+  "untrustedHostApprovalDigestExact": true,
+  "actualFrozenReportHelperBytesExact": true,
+  "decodedMultilingualDescriptionsExact": true,
+  "hostMs": 6100.744875,
+  "pagesMs": 4102.666709,
+  "scope": "Single local timing during concurrent synthetic qualification; no browser interaction or latency guarantee"
+}

@@ -1,0 +1,294 @@
+{
+  "status": "passed",
+  "candidate": {
+    "cli": "0.17.21",
+    "core": "0.12.52"
+  },
+  "root": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-wide-UMbEbn",
+  "tables": 20,
+  "columnsPerTable": 200,
+  "staticUi": {
+    "rows": 4000,
+    "pagesPerTable": 8,
+    "totalPages": 160,
+    "allAliasesExact": true,
+    "noEditableControls": true
+  },
+  "resolveBytes": 780146,
+  "discoveryBytes": 707324,
+  "physical": [
+    {
+      "stream": "table_000",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_000.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_001",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_001.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_002",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_002.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_003",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_003.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_004",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_004.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_005",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_005.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_006",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_006.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_007",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_007.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_008",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_008.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_009",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_009.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_010",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_010.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_011",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_011.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_012",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_012.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_013",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_013.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_014",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_014.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_015",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_015.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_016",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_016.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_017",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_017.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_018",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_018.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    },
+    {
+      "stream": "table_019",
+      "path": "build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/0c4982c3-355c-40ef-a7bd-ee449f9ceaff/table_019.parquet",
+      "sha256": "a9cc0e24bf5d2f4eae13a010d6bf2cb8ef7f93c2c91b68397863a50db4456c14",
+      "columns": 200,
+      "rows": 3
+    }
+  ],
+  "previews": [
+    {
+      "stream": "table_000",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_001",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_002",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_003",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_004",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_005",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_006",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_007",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_008",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_009",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_010",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_011",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_012",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_013",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_014",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_015",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_016",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_017",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_018",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    },
+    {
+      "stream": "table_019",
+      "totalRows": 3,
+      "totalColumns": 200,
+      "displayedColumns": 50
+    }
+  ],
+  "checks": [
+    "All twenty table contracts resolve to the exact reviewed two-hundred-column model",
+    "Four thousand exact source-to-business aliases agree across compiler/host/defaults and 160 static pages of actual mapping rows",
+    "Exact approval produces twenty real committed outputs, sixty measured rows and two hundred renamed columns in every bounded preview",
+    "Twenty physical Parquet hashes and full two-hundred-column schemas contain sixty measured rows",
+    "Current SDK evidence and twenty accurate bounded previews report fifty of two hundred columns"
+  ],
+  "limitations": [
+    "Output previews intentionally show the first fifty columns and report totalColumns",
+    "Static mapping views do not establish mounted, keyboard or narrow-layout usability"
+  ]
+}

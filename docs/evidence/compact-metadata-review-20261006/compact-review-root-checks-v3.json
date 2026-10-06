@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "format-scoped",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "name": "programme",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "name": "test",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "name": "secrets",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "name": "ledger",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "name": "diff",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "name": "format-full-known-exception",
+      "status": "passed",
+      "exit": 0
+    }
+  ],
+  "fullRootValidatePassed": false,
+  "knownUnrelatedFormatException": "docs/solution/data-contract-documentation-mockups.md"
+}

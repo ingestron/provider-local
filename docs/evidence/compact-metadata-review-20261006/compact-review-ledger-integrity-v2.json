@@ -1,0 +1,9 @@
+{
+  "result": "passed",
+  "ledgerRows": 16,
+  "allImplementing": true,
+  "complete": false,
+  "existingEvidencePaths": 879,
+  "newCanonicalHashes": 56,
+  "canonicalBytes": 1053555
+}

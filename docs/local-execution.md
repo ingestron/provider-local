@@ -1,5 +1,29 @@
 # Run a reviewed local flow
 
+The private local0.4.10 candidate adds reviewed portable schedule handovers. See
+[portable scheduled ingestion](portable-schedules.md) for the verified boundary
+and remaining continuous-worker/source qualifications. The published baseline
+below retains its own behaviour and versions.
+
+## Private quality candidate — 2026-10-03
+
+The local 0.4.7 candidate, with core 0.12.15 and CLI 0.17.9 candidates,
+retains bounded quality-failure evidence in failed run receipts. Compatible
+source packages report rule IDs, stream IDs, supported metrics and non-negative
+counts. The provider strips other fields and withholds upstream error text.
+A failed quality check commits no new snapshot; earlier committed output is
+preserved. The Studio installed-package acceptance verified three passing
+synthetic rows, followed by one rejected duplicate. This is private candidate
+evidence; the published baseline and instructions below remain separate.
+
+The repository acceptance script on its installed CLI 0.17.8/core 0.12.14
+baseline cannot install this private provider manifest: its new `sourceAccess`
+field requires the candidate core schema. That run does not establish published
+baseline execution acceptance. The
+candidate boundary passes through an installed immutable provider snapshot.
+
+## Published baseline
+
 Use CLI 0.15.1/core 0.12.4, provider 0.4.1, Node 22 and Python 3.12 on macOS/Linux.
 Install a source package implementing `ingestron.snapshot/python/v1` separately.
 The provider supplies compute and orchestration; the source supplies discovery,
@@ -77,3 +101,9 @@ Do not edit generated files or add packages to `.ingestron/runtimes` manually.
 For standalone scheduling, generated `run.py` uses its active interpreter. Launch
 it in the prepared environment and select `--flow NAME` or `--all`. CLI receipts
 are only produced by CLI execution.
+
+### Indexed project tables
+
+The local adapter accepts an explicit hash-bound project-table index with separate compilation projections. Core supplies those columns from validated contracts; the provider derives its existing typed selection without embedding the projection into the project lock. Complete contracts remain in generated metadata documents verified by the source runtime before review or execution. Source and provider must both opt in; ordinary inline requests keep their existing form. The adapter rejects ambiguous tables/selection, mismatched document/projection names, paths and byte/count bounds. This declaration requires the `connection-metadata-documents` host feature. It does not grant source or execution permissions.
+
+Indexed assembly receives the original collection index and the connection assets without document bodies. It returns the exact flow directory for Core to attach its original documents. Core checks that assembly preserved the runner and references. Ordinary inline assembly remains supported. This encoding capability is distinct from installed review, approval and runtime qualification.

@@ -1,0 +1,307 @@
+/** Studio-owned adapter for the source-owned, frozen synthetic runtime matrix. */
+import assert from "node:assert/strict";
+import { readFileSync, readdirSync } from "node:fs";
+import { resolve } from "node:path";
+import { createHash } from "node:crypto";
+import { createHost } from "./checkpoint-upgrade-host-acceptance.mjs";
+
+const { config, source } = JSON.parse(readFileSync(0, "utf8"));
+assert.ok(
+  ["0.17.18/0.12.43", "0.17.20/0.12.47", "0.17.21/0.12.51", "0.17.21/0.12.53"].includes(
+    config.candidate.cli + "/" + config.candidate.core,
+  ),
+);
+const environment = Object.fromEntries(
+  Object.entries(process.env).filter(([key]) =>
+    /^INGESTRON_MATRIX_[A-Z0-9_]+$/.test(key),
+  ),
+);
+const privateValues = [
+  "MATRIX_PRIVATE_ROW",
+  "MATRIX_UNSELECTED_PRIVATE",
+  ...config.records
+    .filter((item) => item.id !== "files")
+    .map((item) => environment[item.secretName]),
+].filter(Boolean);
+const privateReceipt = (value) =>
+  assert.ok(
+    !privateValues.some((secret) => JSON.stringify(value).includes(secret)),
+    "Rows or credentials appeared in a durable result",
+  );
+const checks = [],
+  record = (check) => checks.push(check);
+const options = {
+  project: config.root,
+  cli: resolve(config.cli, "../../../../"),
+  flow: source.flow,
+  baseline: "unused",
+  python: config.python,
+  environment,
+  sourceAdapter: config.provider,
+  record,
+};
+let host,
+  untrusted,
+  stage = "connect",
+  result = "failed",
+  failure;
+async function start(operation, request) {
+  let job = await host.request("start", {
+    environment: "dev",
+    operation,
+    request,
+  });
+  const deadline = Date.now() + 180000;
+  while (job.status === "running" && Date.now() < deadline) {
+    await new Promise((done) => setTimeout(done, 50));
+    job = (await host.request("jobs")).find((item) => item.id === job.id);
+    assert.ok(job, "Started job disappeared");
+  }
+  assert.equal(
+    job.status,
+    "succeeded",
+    "Installed host operation failed: " +
+      operation +
+      ": " +
+      (job.error ?? job.status),
+  );
+  privateReceipt(job);
+  return job;
+}
+try {
+  host = await createHost(options);
+  stage = "selection";
+  const snapshot = await host.request("snapshot", { environment: "dev" });
+  const dataset = snapshot.datasets.find(
+    (item) => item.flow === source.flow && item.table === "records",
+  );
+  assert.ok(dataset, "Logical dataset missing from the installed snapshot");
+  assert.deepEqual(
+    dataset.source,
+    source.source,
+    "Host changed the authored source selection",
+  );
+  const selection = {
+    environment: "dev",
+    dataset: dataset.id,
+    revision: snapshot.revision,
+  };
+  const jobs = await host.request("jobs");
+  const status = await host.request("table.sample.status", selection);
+  assert.equal(status.available, true, "Exact source sample is unavailable");
+  assert.deepEqual(
+    await host.request("jobs"),
+    jobs,
+    "Checking availability created jobs",
+  );
+  for (const limit of [0, 51, "1"])
+    await assert.rejects(
+      host.request("table.sample", { ...selection, limit }),
+      /row limit/,
+    );
+  await assert.rejects(
+    host.request("table.sample", { ...selection, revision: "stale" }),
+    /STALE/,
+  );
+  await assert.rejects(
+    host.request("table.sample", { ...selection, dataset: "missing" }),
+    /Unknown table/,
+  );
+  record(
+    "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+  );
+  stage = "source-access";
+  await start("connection_test", {
+    connection: source.id,
+    revision: snapshot.revision,
+    source: source.source,
+  });
+  const metadata = await start("connection_metadata", {
+    connection: source.id,
+    revision: snapshot.revision,
+    tables: [source.source],
+  });
+  const columns = metadata.result.tables[0].columns.map(
+    (column) => column.name,
+  );
+  assert.ok(
+    source.columns.every((column) => columns.includes(column)),
+    "Selected source metadata differs from the reviewed fields",
+  );
+  record(
+    "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+  );
+  stage = "source-sample";
+  const sample = await host.request("table.sample", {
+    ...selection,
+    limit: 1,
+    source: { path: ".env", stream: "foreign" },
+    path: ".env",
+    envFile: "foreign.env",
+  });
+  assert.equal(sample.rows.length, 1, "Bounded sample row count differs");
+  assert.equal(
+    sample.truncated,
+    true,
+    "Bounded source sample did not report truncation",
+  );
+  assert.ok(
+    source.columns.every((column) => sample.columns.includes(column)),
+    "Sample fields do not match selected metadata",
+  );
+  assert.ok(
+    sample.rows.every((row) => row.length === sample.columns.length),
+    "Sample grid shape differs from its columns",
+  );
+  record(
+    "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+  );
+  stage = "trust";
+  untrusted = await createHost({ ...options, trusted: false });
+  assert.equal(
+    (await untrusted.request("table.sample.status", selection)).reason,
+    "source-access-disabled",
+  );
+  await assert.rejects(
+    untrusted.request("table.sample", selection),
+    /disabled/,
+  );
+  await assert.rejects(
+    untrusted.request("start", {
+      environment: "dev",
+      operation: "connection_test",
+      request: { connection: source.id, revision: snapshot.revision },
+    }),
+    /read-only|unavailable|disabled/,
+  );
+  await untrusted.close();
+  untrusted = undefined;
+  record(
+    "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+  );
+  stage = "prepare";
+  await start("test_prepare", {
+    flow: source.flow,
+    revision: snapshot.revision,
+    runtimeConsent: true,
+  });
+  stage = "review";
+  const review = await host.request("discovery", {
+    environment: "dev",
+    flow: source.flow,
+  });
+  assert.equal(
+    review.tables[0].id,
+    "records",
+    "Discovery lost the logical output name",
+  );
+  assert.equal(
+    review.tables[0].stream,
+    source.source.stream ?? "records",
+    "Discovery lost the wire stream",
+  );
+  assert.match(review.reviewDigest, /^[a-f0-9]{64}$/);
+  await assert.rejects(
+    host.request("start", {
+      environment: "dev",
+      operation: "test_run",
+      request: {
+        flow: source.flow,
+        revision: snapshot.revision,
+        reviewDigest: "0".repeat(64),
+      },
+    }),
+    /STALE/,
+  );
+  stage = "run";
+  const job = await start("test_run", {
+    flow: source.flow,
+    revision: snapshot.revision,
+    reviewDigest: review.reviewDigest,
+  });
+  const run = job.result.stages.find(
+    (item) => item.operation === "run" && item.action === "run",
+  );
+  assert.ok(run && run.status === "succeeded", "Reviewed run did not complete");
+  const tables = run.result.result.flows[0].tables;
+  assert.equal(tables.length, 1, "Reviewed run wrote unexpected outputs");
+  assert.equal(
+    tables[0].stream,
+    source.source.stream ?? "records",
+    "Run output lost the wire stream",
+  );
+  assert.equal(tables[0].rows, source.rows, "Run output row count differs");
+  record(
+    "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+  );
+  stage = "output-preview";
+  const outputSelection = {
+    environment: "dev",
+    flow: source.flow,
+    id: job.id,
+    stream: tables[0].stream,
+  };
+  const preview = await host.request("run.preview", outputSelection);
+  assert.equal(
+    preview.totalRows,
+    source.rows,
+    "Committed preview count differs",
+  );
+  assert.equal(
+    preview.rows.length,
+    source.rows,
+    "Committed output preview is incomplete",
+  );
+  assert.deepEqual(
+    [...preview.columns].sort(),
+    [...source.columns].sort(),
+    "Committed output projection differs",
+  );
+  await assert.rejects(
+    host.request("run.preview", { ...outputSelection, stream: "missing" }),
+    /Run results changed/,
+  );
+  record(
+    "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+  );
+  stage = "privacy";
+  privateReceipt(await host.request("jobs"));
+  for (const directory of ["source-access", "studio-jobs"]) {
+    const folder = resolve(config.root, ".ingestron", directory);
+    for (const name of readdirSync(folder).filter((name) =>
+      name.endsWith(".json"),
+    ))
+      privateReceipt(JSON.parse(readFileSync(resolve(folder, name), "utf8")));
+  }
+  record(
+    "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+  );
+  result = "passed";
+} catch (error) {
+  failure = String(error.message);
+  if (privateValues.some((secret) => failure.includes(secret)))
+    failure = "Private details withheld";
+  process.exitCode = 1;
+} finally {
+  await untrusted?.close();
+  await host?.close();
+  console.log(
+    JSON.stringify({
+      result,
+      id: source.id,
+      reference: source.reference,
+      stage,
+      failure,
+      rows: source.rows,
+      checks,
+      host: {
+        path: process.env.INGESTRON_ACCEPTANCE_STUDIO_HOST,
+        sha256: createHash("sha256")
+          .update(readFileSync(process.env.INGESTRON_ACCEPTANCE_STUDIO_HOST))
+          .digest("hex"),
+      },
+      scope:
+        "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution",
+    }),
+  );
+}
