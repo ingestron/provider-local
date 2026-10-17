@@ -59,7 +59,7 @@ formatted JSON copies retain the same content.
 [canonical hashes](canonical-hashes.json) bind the final formatted evidence.
 Executed harnesses are retained under `harness/`.
 
-[The preceding compiler identity repair](../../../../connectors/docs/evidence/compiler-project-identity-20261006/README.md)
+[The preceding compiler identity repair](https://github.com/ingestron/connectors/blob/main/docs/evidence/compiler-project-identity-20261006/README.md)
 records the multilingual codec correction and original twenty-table failures.
 Its oversized generated-code diff was preserved in private working evidence and
 replaced by a source diff plus hashes to respect the existing text-package bounds.
