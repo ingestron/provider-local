@@ -6,9 +6,10 @@ import {
   readFileSync,
   writeFileSync,
   rmSync,
+  realpathSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { resolve } from "node:path";
+import { resolve, dirname } from "node:path";
 import { execFileSync, spawnSync } from "node:child_process";
 import { parse, stringify } from "yaml";
 import assert from "node:assert/strict";
@@ -20,17 +21,38 @@ const project = resolve(
 );
 rmSync(project, { recursive: true, force: true });
 mkdirSync(project, { recursive: true });
-const cli = resolve(".cli-host/node_modules/ingestron/build/cli/cli/index.js");
-const host = JSON.parse(
-  readFileSync(".cli-host/node_modules/ingestron/package.json"),
-);
-const baseline = JSON.parse(readFileSync("scripts/cli-baseline.json"));
-assert.equal(host.version, baseline.cli);
-assert.equal(host.dependencies["@ingestron/core"], baseline.core);
+const runtime = resolve(process.env.INGESTRON_TEST_RUNTIME ?? ".cli-host");
+const cli = resolve(runtime, "node_modules/ingestron/build/cli/cli/index.js");
+const packageFile = resolve(runtime, "node_modules/ingestron/package.json");
+const host = JSON.parse(readFileSync(packageFile));
 const core = JSON.parse(
-  readFileSync(".cli-host/node_modules/@ingestron/core/package.json"),
+  readFileSync(
+    resolve(
+      dirname(realpathSync(packageFile)),
+      "../@ingestron/core/package.json",
+    ),
+  ),
 );
-assert.equal(core.version, baseline.core);
+if (!process.env.INGESTRON_TEST_RUNTIME) {
+  const baseline = JSON.parse(readFileSync("scripts/cli-baseline.json"));
+  assert.equal(host.version, baseline.cli);
+  assert.equal(host.dependencies["@ingestron/core"], baseline.core);
+  assert.equal(core.version, baseline.core);
+} else {
+  // An explicit locally installed candidate may use a newer core without changing
+  // public dependency pins. Source imports and undeclared compiler copies are forbidden.
+  const manifest = JSON.parse(readFileSync(resolve(runtime, "package.json")));
+  for (const ref of [
+    manifest.dependencies?.ingestron,
+    manifest.pnpm?.overrides?.["@ingestron/core"],
+  ])
+    assert.match(
+      ref ?? "",
+      /^file:[a-z]+-[a-f0-9]{64}\.tgz$/,
+      "Use content-addressed installed candidates",
+    );
+  console.log(`Installed candidate CLI ${host.version} / core ${core.version}`);
+}
 const { syntheticSource } = await import("./synthetic-source.mjs");
 const sourceDirectory = process.env.INGESTRON_TEST_SOURCE_DIRECTORY;
 const sourceVersion = sourceDirectory
@@ -191,7 +213,9 @@ try {
     "--provider",
     "local",
   );
-  assert.match(JSON.stringify(missing), /runtime prepare/);
+  if (process.env.INGESTRON_TEST_RUNTIME)
+    assert.equal(missing.diagnostics[0].code, "RUNTIME");
+  else assert.match(JSON.stringify(missing), /runtime prepare/);
   call(true, "runtime", "prepare", "--provider", "local");
   const second = call(true, "runtime", "prepare", "--provider", "local");
   assert.ok(second.result.result.flows.every((f) => f.reused));

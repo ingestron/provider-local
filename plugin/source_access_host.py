@@ -27,7 +27,7 @@ def execute(request):
         require(isinstance(expected, str) and re.fullmatch(r'[a-f0-9]{64}', expected), 'Invalid runtime file digest')
         require(hashlib.sha256(inside(root, name).read_bytes()).hexdigest() == expected, 'Source runtime file digest differs')
     action = spec.get('action')
-    require(action in ('prepare', 'test', 'inventory', 'metadata', 'sample'), 'Unsupported source action')
+    require(action in ('prepare', 'test', 'databases', 'inventory', 'metadata', 'sample'), 'Unsupported source action')
     python, key, reused = environment(root, {'requirements': 'requirements.lock.txt', 'buildTools': 'build-tools.lock.txt'},
                                       cache, request, action == 'prepare')
     if action == 'prepare':
