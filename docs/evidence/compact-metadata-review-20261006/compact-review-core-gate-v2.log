@@ -1,0 +1,1673 @@
+
+> @ingestron/core@0.12.53 validate /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/core
+> pnpm format:check && pnpm build && pnpm test && pnpm secrets:check && pnpm release:check && pnpm package:check
+
+
+> @ingestron/core@0.12.53 format:check /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/core
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> @ingestron/core@0.12.53 build /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/core
+> node scripts/build-assets.mjs && tsc && node scripts/compiler-fingerprint.mjs
+
+
+> @ingestron/core@0.12.53 test /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/core
+> tsx --test --test-concurrency=1 test/unit/*.test.ts test/providers/*.test.ts test/integration/*.test.ts
+
+TAP version 13
+# Subtest: locked connector browsing returns its authoring schema without connection values
+ok 1 - locked connector browsing returns its authoring schema without connection values
+  ---
+  duration_ms: 405.674875
+  type: 'test'
+  ...
+# Subtest: a declared source stream survives a different output table name
+ok 2 - a declared source stream survives a different output table name
+  ---
+  duration_ms: 599.487
+  type: 'test'
+  ...
+# Subtest: connection and workflow authoring use reviewable project proposals
+ok 3 - connection and workflow authoring use reviewable project proposals
+  ---
+  duration_ms: 1157.148167
+  type: 'test'
+  ...
+# Subtest: one connection selects multiple physical tables with contract-derived columns and short package refs
+ok 4 - one connection selects multiple physical tables with contract-derived columns and short package refs
+  ---
+  duration_ms: 818.677042
+  type: 'test'
+  ...
+# Subtest: connector registration writes a short package name in a top-level package map
+ok 5 - connector registration writes a short package name in a top-level package map
+  ---
+  duration_ms: 476.888417
+  type: 'test'
+  ...
+# Subtest: project connection resolves bindings through locked schema and offline operation
+ok 6 - project connection resolves bindings through locked schema and offline operation
+  ---
+  duration_ms: 781.65025
+  type: 'test'
+  ...
+# Subtest: connection preparation reuses a selected model contract
+ok 7 - connection preparation reuses a selected model contract
+  ---
+  duration_ms: 553.1905
+  type: 'test'
+  ...
+# Subtest: typed installation rejects the wrong package before changing its lock
+ok 8 - typed installation rejects the wrong package before changing its lock
+  ---
+  duration_ms: 388.818417
+  type: 'test'
+  ...
+# Subtest: rejects plain credentials, $env interpolation, unknown settings and modes
+ok 9 - rejects plain credentials, $env interpolation, unknown settings and modes
+  ---
+  duration_ms: 316.191167
+  type: 'test'
+  ...
+# Subtest: rejects missing references and unsupported exact connectors
+ok 10 - rejects missing references and unsupported exact connectors
+  ---
+  duration_ms: 863.765291
+  type: 'test'
+  ...
+# Subtest: ODCS table references are resolved, validated and preserved without a second selection
+ok 11 - ODCS table references are resolved, validated and preserved without a second selection
+  ---
+  duration_ms: 495.756458
+  type: 'test'
+  ...
+# Subtest: data-only source packages preserve connection semantics and reject unresolved licences
+ok 12 - data-only source packages preserve connection semantics and reject unresolved licences
+  ---
+  duration_ms: 1687.365167
+  type: 'test'
+  ...
+# Subtest: retired selection and provider-owned connector formats are rejected
+ok 13 - retired selection and provider-owned connector formats are rejected
+  ---
+  duration_ms: 346.743458
+  type: 'test'
+  ...
+# Subtest: whole-project check validates mixed connector and native flows without a partial native selection
+ok 14 - whole-project check validates mixed connector and native flows without a partial native selection
+  ---
+  duration_ms: 1162.928167
+  type: 'test'
+  ...
+# Subtest: connection flows use the connector's pre-commit quality checks for coverage
+ok 15 - connection flows use the connector's pre-commit quality checks for coverage
+  ---
+  duration_ms: 757.087583
+  type: 'test'
+  ...
+# Subtest: check lists source routes with reference records and blocks missing capabilities
+ok 16 - check lists source routes with reference records and blocks missing capabilities
+  ---
+  duration_ms: 3459.656333
+  type: 'test'
+  ...
+# Subtest: portable named profiles reach connection assembly without selecting excluded native flows
+ok 17 - portable named profiles reach connection assembly without selecting excluded native flows
+  ---
+  duration_ms: 304.853709
+  type: 'test'
+  ...
+# Subtest: connection authoring validates effective installed settings before a proposal
+ok 18 - connection authoring validates effective installed settings before a proposal
+  ---
+  duration_ms: 390.686
+  type: 'test'
+  ...
+# Subtest: connection configuration preserves installed ownership, bindings, siblings and comments
+ok 19 - connection configuration preserves installed ownership, bindings, siblings and comments
+  ---
+  duration_ms: 649.453
+  type: 'test'
+  ...
+# Subtest: connection authoring resolves selected values and binds newly referenced inputs to approval
+ok 20 - connection authoring resolves selected values and binds newly referenced inputs to approval
+  ---
+  duration_ms: 644.917458
+  type: 'test'
+  ...
+# Subtest: connection authoring rejects unsafe referenced settings and missing bindings without writes
+ok 21 - connection authoring rejects unsafe referenced settings and missing bindings without writes
+  ---
+  duration_ms: 389.618125
+  type: 'test'
+  ...
+# Subtest: one reviewed source setup validates an installed package and preserves external provider ownership
+ok 22 - one reviewed source setup validates an installed package and preserves external provider ownership
+  ---
+  duration_ms: 414.189041
+  type: 'test'
+  ...
+# Subtest: portable edits reject schema violations while native settings retain platform ownership
+ok 23 - portable edits reject schema violations while native settings retain platform ownership
+  ---
+  duration_ms: 382.642833
+  type: 'test'
+  ...
+# Subtest: portable preparation cannot silently omit a scheduled flow when its provider has no schedule capability
+ok 24 - portable preparation cannot silently omit a scheduled flow when its provider has no schedule capability
+  ---
+  duration_ms: 328.29225
+  type: 'test'
+  ...
+# Subtest: native calendar capabilities cannot authorise dropping a connector schedule
+ok 25 - native calendar capabilities cannot authorise dropping a connector schedule
+  ---
+  duration_ms: 337.048833
+  type: 'test'
+  ...
+# Subtest: an explicitly declared connector adapter receives complete digest-bound scheduling intent
+ok 26 - an explicitly declared connector adapter receives complete digest-bound scheduling intent
+  ---
+  duration_ms: 1054.423417
+  type: 'test'
+  ...
+# Subtest: scheduled connector validation refuses a clock mismatch or unsupported recurrence before provider dispatch
+ok 27 - scheduled connector validation refuses a clock mismatch or unsupported recurrence before provider dispatch
+  ---
+  duration_ms: 663.822917
+  type: 'test'
+  ...
+# Subtest: contract locations follow inline and fragment references through the authoritative fences
+ok 28 - contract locations follow inline and fragment references through the authoritative fences
+  ---
+  duration_ms: 171.542875
+  type: 'test'
+  ...
+# Subtest: bounded authoring batches include deduplicated contract fragments and refuse private contract documents
+ok 29 - bounded authoring batches include deduplicated contract fragments and refuse private contract documents
+  ---
+  duration_ms: 202.852667
+  type: 'test'
+  ...
+# Subtest: ingestion configuration previews one atomic change across inline and referenced table definitions
+ok 30 - ingestion configuration previews one atomic change across inline and referenced table definitions
+  ---
+  duration_ms: 107.475625
+  type: 'test'
+  ...
+# Subtest: foreign tables and conflicting shared definitions produce no proposal or writes
+ok 31 - foreign tables and conflicting shared definitions produce no proposal or writes
+  ---
+  duration_ms: 102.700375
+  type: 'test'
+  ...
+# Subtest: referenced flow configuration retains sibling files and rejects a stale multi-file proposal
+ok 32 - referenced flow configuration retains sibling files and rejects a stale multi-file proposal
+  ---
+  duration_ms: 108.837041
+  type: 'test'
+  ...
+# Subtest: field mappings edit the bound inline or fragment contract and retain neighbouring definitions
+ok 33 - field mappings edit the bound inline or fragment contract and retain neighbouring definitions
+  ---
+  duration_ms: 117.448709
+  type: 'test'
+  ...
+# Subtest: authoring previews are read-only, stale proposals fail, and init protects existing files
+ok 34 - authoring previews are read-only, stale proposals fail, and init protects existing files
+  ---
+  duration_ms: 423.36875
+  type: 'test'
+  ...
+# Subtest: Git @v1 freezes an immutable source inventory and detects tampering
+ok 35 - Git @v1 freezes an immutable source inventory and detects tampering
+  ---
+  duration_ms: 263.905917
+  type: 'test'
+  ...
+# Subtest: regeneration removes obsolete owned files while preserving unowned notes
+ok 36 - regeneration removes obsolete owned files while preserving unowned notes
+  ---
+  duration_ms: 1106.526584
+  type: 'test'
+  ...
+# Subtest: managed and team exports protect engineer edits
+ok 37 - managed and team exports protect engineer edits
+  ---
+  duration_ms: 876.341208
+  type: 'test'
+  ...
+# Subtest: explicit repository shorthand shares canonical locks and integrity checks
+ok 38 - explicit repository shorthand shares canonical locks and integrity checks
+  ---
+  duration_ms: 230.430667
+  type: 'test'
+  ...
+# Subtest: installed nested provider manifests survive project and flow authoring with exact locked paths
+ok 39 - installed nested provider manifests survive project and flow authoring with exact locked paths
+  ---
+  duration_ms: 428.89275
+  type: 'test'
+  ...
+# Subtest: namespace discovery is data-only and target selection reuses provider semantics
+ok 40 - namespace discovery is data-only and target selection reuses provider semantics
+  ---
+  duration_ms: 1498.686708
+  type: 'test'
+  ...
+# Subtest: namespace cannot shadow a core command
+ok 41 - namespace cannot shadow a core command
+  ---
+  duration_ms: 246.966292
+  type: 'test'
+  ...
+# Subtest: different locked packages cannot claim one namespace
+ok 42 - different locked packages cannot claim one namespace
+  ---
+  duration_ms: 249.070167
+  type: 'test'
+  ...
+# Subtest: report pack and common model resolve from immutable installed inventories
+ok 43 - report pack and common model resolve from immutable installed inventories
+  ---
+  duration_ms: 875.538667
+  type: 'test'
+  ...
+# Subtest: nested native assets export create-only and reject traversal
+ok 44 - nested native assets export create-only and reject traversal
+  ---
+  duration_ms: 238.146042
+  type: 'test'
+  ...
+# Subtest: component tag prefixes keep co-located packs independently versioned
+ok 45 - component tag prefixes keep co-located packs independently versioned
+  ---
+  duration_ms: 0.119208
+  type: 'test'
+  ...
+# Subtest: explicit adapter selection keeps two tables and their contracts in one reviewed flow
+ok 46 - explicit adapter selection keeps two tables and their contracts in one reviewed flow
+  ---
+  duration_ms: 683.513709
+  type: 'test'
+  ...
+# Subtest: source access works with no provider configuration, flow or contract and fails closed for legacy/native routes
+ok 47 - source access works with no provider configuration, flow or contract and fails closed for legacy/native routes
+  ---
+  duration_ms: 823.154917
+  type: 'test'
+  ...
+# Subtest: explicit testing passes only named secrets, stores a receipt and never writes source values
+ok 48 - explicit testing passes only named secrets, stores a receipt and never writes source values
+  ---
+  duration_ms: 653.843833
+  type: 'test'
+  ...
+# Subtest: metadata writes isolated review drafts, reports unsupported fields and rejects stale receipts
+ok 49 - metadata writes isolated review drafts, reports unsupported fields and rejects stale receipts
+  ---
+  duration_ms: 412.495666
+  type: 'test'
+  ...
+# Subtest: failed authentication is a failing operation with a sanitised receipt
+ok 50 - failed authentication is a failing operation with a sanitised receipt
+  ---
+  duration_ms: 354.900208
+  type: 'test'
+  ...
+# Subtest: reviewed source flow uses receipt mappings and rejects changed drafts before apply
+ok 51 - reviewed source flow uses receipt mappings and rejects changed drafts before apply
+  ---
+  duration_ms: 433.985541
+  type: 'test'
+  ...
+# Subtest: one reviewed source flow keeps target delivery and local testing on identical tables and contracts
+ok 52 - one reviewed source flow keeps target delivery and local testing on identical tables and contracts
+  ---
+  duration_ms: 1348.812209
+  type: 'test'
+  ...
+# Subtest: samples need explicit execution and keep business rows out of receipts
+ok 53 - samples need explicit execution and keep business rows out of receipts
+  ---
+  duration_ms: 406.753834
+  type: 'test'
+  ...
+# Subtest: sample validation rejects connector overflow, mismatched action and invalid limits
+ok 54 - sample validation rejects connector overflow, mismatched action and invalid limits
+  ---
+  duration_ms: 1191.242875
+  type: 'test'
+  ...
+# Subtest: 500-object estate discovers bounded schemas and applies five deterministic flows atomically
+ok 55 - 500-object estate discovers bounded schemas and applies five deterministic flows atomically
+  ---
+  duration_ms: 2450.372666
+  type: 'test'
+  ...
+# Subtest: inventory scope comes from the locked source schema and reaches the source adapter only after validation
+ok 56 - inventory scope comes from the locked source schema and reaches the source adapter only after validation
+  ---
+  duration_ms: 665.8155
+  type: 'test'
+  ...
+# Subtest: unscoped connectors reject caller-supplied inventory scope instead of silently ignoring it
+ok 57 - unscoped connectors reject caller-supplied inventory scope instead of silently ignoring it
+  ---
+  duration_ms: 314.444791
+  type: 'test'
+  ...
+# Subtest: source-owned metadata options are validated before execution and propagated through every draft batch
+ok 58 - source-owned metadata options are validated before execution and propagated through every draft batch
+  ---
+  duration_ms: 530.86775
+  type: 'test'
+  ...
+# Subtest: undeclared metadata options and record payloads in metadata are refused
+ok 59 - undeclared metadata options and record payloads in metadata are refused
+  ---
+  duration_ms: 519.48725
+  type: 'test'
+  ...
+# Subtest: missing credentials fail before launch and retain a private failed receipt
+ok 60 - missing credentials fail before launch and retain a private failed receipt
+  ---
+  duration_ms: 465.916042
+  type: 'test'
+  ...
+# Subtest: unacknowledged read-only provider failure is a repeatable failed source receipt
+ok 61 - unacknowledged read-only provider failure is a repeatable failed source receipt
+  ---
+  duration_ms: 1047.390875
+  type: 'test'
+  ...
+# Subtest: explicit source cancellation remains interrupted and cleans private task files
+ok 62 - explicit source cancellation remains interrupted and cleans private task files
+  ---
+  duration_ms: 356.864708
+  type: 'test'
+  ...
+# Subtest: provider starter is runnable, refuses replacement and works through shared operations
+ok 63 - provider starter is runnable, refuses replacement and works through shared operations
+  ---
+  duration_ms: 689.750209
+  type: 'test'
+  ...
+# Subtest: flow group and input editing retain reviewed proposals and reject stale changes
+ok 64 - flow group and input editing retain reviewed proposals and reject stale changes
+  ---
+  duration_ms: 115.848917
+  type: 'test'
+  ...
+# Subtest: an independent provider module can own new activities without a CLI renderer change
+ok 65 - an independent provider module can own new activities without a CLI renderer change
+  ---
+  duration_ms: 323.60375
+  type: 'test'
+  ...
+# Subtest: one model reaches distinct providers unchanged and is fingerprinted
+ok 66 - one model reaches distinct providers unchanged and is fingerprinted
+  ---
+  duration_ms: 625.334125
+  type: 'test'
+  ...
+# Subtest: model packs reject hooks, directives, invalid ODCS and invalid relationships
+ok 67 - model packs reject hooks, directives, invalid ODCS and invalid relationships
+  ---
+  duration_ms: 108.111708
+  type: 'test'
+  ...
+# Subtest: unknown models, selector mismatches and inline overrides fail closed
+ok 68 - unknown models, selector mismatches and inline overrides fail closed
+  ---
+  duration_ms: 116.895
+  type: 'test'
+  ...
+# Subtest: installed model packs lock, configure without a provider and reject cache tampering
+ok 69 - installed model packs lock, configure without a provider and reject cache tampering
+  ---
+  duration_ms: 356.733166
+  type: 'test'
+  ...
+# Subtest: a bridge expands into landing, publication and ingestion legs
+ok 70 - a bridge expands into landing, publication and ingestion legs
+  ---
+  duration_ms: 3.862041
+  type: 'test'
+  ...
+# Subtest: other flows pass through unchanged
+ok 71 - other flows pass through unchanged
+  ---
+  duration_ms: 0.227167
+  type: 'test'
+  ...
+# Subtest: bridges fail closed on ambiguous or unsupported flows
+ok 72 - bridges fail closed on ambiguous or unsupported flows
+  ---
+  duration_ms: 1.167041
+  type: 'test'
+  ...
+# Subtest: the schema requires a kind and a bridge block exactly for bridge routes
+ok 73 - the schema requires a kind and a bridge block exactly for bridge routes
+  ---
+  duration_ms: 1.358625
+  type: 'test'
+  ...
+# Subtest: build and overlapping execution refuse active ownership; independent flows share read access
+ok 74 - build and overlapping execution refuse active ownership; independent flows share read access
+  ---
+  duration_ms: 7.0575
+  type: 'test'
+  ...
+# Subtest: live process group keeps uncertain ownership; exact recovery transfers token without letting an old owner release it
+ok 75 - live process group keeps uncertain ownership; exact recovery transfers token without letting an old owner release it
+  ---
+  duration_ms: 6.279333
+  type: 'test'
+  ...
+# Subtest: real competing process cannot preflight under generation guard; validation is inside the same critical section
+ok 76 - real competing process cannot preflight under generation guard; validation is inside the same critical section
+  ---
+  duration_ms: 217.63375
+  type: 'test'
+  ...
+# Subtest: only original-run recovery releases a dead execution preflight; generation crash state remains fenced
+ok 77 - only original-run recovery releases a dead execution preflight; generation crash state remains fenced
+  ---
+  duration_ms: 23.441166
+  type: 'test'
+  ...
+# Subtest: malformed or changed claim metadata is refused without private payload or unsafe release
+ok 78 - malformed or changed claim metadata is refused without private payload or unsafe release
+  ---
+  duration_ms: 1.620709
+  type: 'test'
+  ...
+# Subtest: sync and async retention preserve historical managed build, opaque reviews and binary output with a bounded private receipt
+ok 79 - sync and async retention preserve historical managed build, opaque reviews and binary output with a bounded private receipt
+  ---
+  duration_ms: 28.545333
+  type: 'test'
+  ...
+# Subtest: retention requires write authority and rejects unknown credential or execution options before mutation
+ok 80 - retention requires write authority and rejects unknown credential or execution options before mutation
+  ---
+  duration_ms: 2.924125
+  type: 'test'
+  ...
+# Subtest: retention rejects active and uncertain ownership while retaining exact execution state
+ok 81 - retention rejects active and uncertain ownership while retaining exact execution state
+  ---
+  duration_ms: 5.4885
+  type: 'test'
+  ...
+# Subtest: retention refuses changed project, lock, profile and generated ownership
+ok 82 - retention refuses changed project, lock, profile and generated ownership
+  ---
+  duration_ms: 18.793292
+  type: 'test'
+  ...
+# Subtest: retention rejects nested/traversing/existing destinations and source or destination symlinks
+ok 83 - retention rejects nested/traversing/existing destinations and source or destination symlinks
+  ---
+  duration_ms: 7.412
+  type: 'test'
+  ...
+# Subtest: retention bounds large binary output before copying and validates receipt integrity
+ok 84 - retention bounds large binary output before copying and validates receipt integrity
+  ---
+  duration_ms: 7.435208
+  type: 'test'
+  ...
+# Subtest: sealed baseline inspection is read-only and survives later project and package changes
+ok 85 - sealed baseline inspection is read-only and survives later project and package changes
+  ---
+  duration_ms: 10.8075
+  type: 'test'
+  ...
+# Subtest: retained inspection rejects non-baselines, traversal, extra options and changed opaque output
+ok 86 - retained inspection rejects non-baselines, traversal, extra options and changed opaque output
+  ---
+  duration_ms: 5.879792
+  type: 'test'
+  ...
+# Subtest: checkpoint maintenance requires execution and write authority before touching project/build state
+ok 87 - checkpoint maintenance requires execution and write authority before touching project/build state
+  ---
+  duration_ms: 2.778542
+  type: 'test'
+  ...
+# Subtest: bounded checkpoint evidence retains exact int64 cursors and rejects malformed acknowledged output as uncertain
+ok 88 - bounded checkpoint evidence retains exact int64 cursors and rejects malformed acknowledged output as uncertain
+  ---
+  duration_ms: 1.863792
+  type: 'test'
+  ...
+# Subtest: preview acknowledges an already committed upgrade without claiming a new apply
+ok 89 - preview acknowledges an already committed upgrade without claiming a new apply
+  ---
+  duration_ms: 0.16675
+  type: 'test'
+  ...
+# Subtest: checkpoint transport requires explicit host support and durable original-operation acknowledgement
+ok 90 - checkpoint transport requires explicit host support and durable original-operation acknowledgement
+  ---
+  duration_ms: 0.636917
+  type: 'test'
+  ...
+# Subtest: checkpoint failure acknowledgement preserves only defined codes and rejects contradictory success
+ok 91 - checkpoint failure acknowledgement preserves only defined codes and rejects contradictory success
+  ---
+  duration_ms: 0.203417
+  type: 'test'
+  ...
+# Subtest: compiler identity validates the installed compiler independently of project/execution permissions
+ok 92 - compiler identity validates the installed compiler independently of project/execution permissions
+  ---
+  duration_ms: 25.774375
+  type: 'test'
+  ...
+# Subtest: connector handovers keep complete intent, exact scope and clock resolution across all recurrences
+ok 93 - connector handovers keep complete intent, exact scope and clock resolution across all recurrences
+  ---
+  duration_ms: 16.914083
+  type: 'test'
+  ...
+# Subtest: native calendars, paused intent and partial recurrence support never imply connector capability
+ok 94 - native calendars, paused intent and partial recurrence support never imply connector capability
+  ---
+  duration_ms: 1.011417
+  type: 'test'
+  ...
+# Subtest: altered or self-rehashed boundaries, removed fields and changed host clock data are refused
+ok 95 - altered or self-rehashed boundaries, removed fields and changed host clock data are refused
+  ---
+  duration_ms: 3.442042
+  type: 'test'
+  ...
+# Subtest: connector scheduling opts into its own host feature without requiring unrelated native rendering
+ok 96 - connector scheduling opts into its own host feature without requiring unrelated native rendering
+  ---
+  duration_ms: 1.087667
+  type: 'test'
+  ...
+# Subtest: draft environment values stay pending and strict planning explains missing value
+ok 97 - draft environment values stay pending and strict planning explains missing value
+  ---
+  duration_ms: 828.695584
+  type: 'test'
+  ...
+# Subtest: value resolution preserves types, detects cycles and does not rewrite SQL
+ok 98 - value resolution preserves types, detects cycles and does not rewrite SQL
+  ---
+  duration_ms: 103.020416
+  type: 'test'
+  ...
+# Subtest: bad references, cycles, reference siblings and duplicate keys fail
+ok 99 - bad references, cycles, reference siblings and duplicate keys fail
+  ---
+  duration_ms: 93.896083
+  type: 'test'
+  ...
+# Subtest: only the current project schema is accepted
+ok 100 - only the current project schema is accepted
+  ---
+  duration_ms: 90.7875
+  type: 'test'
+  ...
+# Subtest: mismatched environment and unknown flow settings fail
+ok 101 - mismatched environment and unknown flow settings fail
+  ---
+  duration_ms: 95.845584
+  type: 'test'
+  ...
+# Subtest: physical-name collisions and invalid major activity selectors fail
+ok 102 - physical-name collisions and invalid major activity selectors fail
+  ---
+  duration_ms: 283.677292
+  type: 'test'
+  ...
+# Subtest: table placeholders resolve in source paths and embedded missing inputs remain draft
+ok 103 - table placeholders resolve in source paths and embedded missing inputs remain draft
+  ---
+  duration_ms: 681.372459
+  type: 'test'
+  ...
+# Subtest: removed orchestration and platform options fail explicitly
+ok 104 - removed orchestration and platform options fail explicitly
+  ---
+  duration_ms: 2.17225
+  type: 'test'
+  ...
+# Subtest: delivery intent is strict, linked and acyclic and never accepts a completion claim
+ok 105 - delivery intent is strict, linked and acyclic and never accepts a completion claim
+  ---
+  duration_ms: 3.618167
+  type: 'test'
+  ...
+# Subtest: baseline differences use stable identity, propagate dependency impact and flag unchanged revision
+ok 106 - baseline differences use stable identity, propagate dependency impact and flag unchanged revision
+  ---
+  duration_ms: 0.747292
+  type: 'test'
+  ...
+# Subtest: a changed upstream package impacts dependent work without claiming evidence freshness
+ok 107 - a changed upstream package impacts dependent work without claiming evidence freshness
+  ---
+  duration_ms: 0.117625
+  type: 'test'
+  ...
+# Subtest: checking is offline, fenced, read-only and separates assignment from acceptance evidence
+ok 108 - checking is offline, fenced, read-only and separates assignment from acceptance evidence
+  ---
+  duration_ms: 10.193875
+  type: 'test'
+  ...
+# Subtest: editor validation and generated JSON schema expose the same delivery contract
+ok 109 - editor validation and generated JSON schema expose the same delivery contract
+  ---
+  duration_ms: 2.860209
+  type: 'test'
+  ...
+# Subtest: plan and baseline proposals require explicit application and reject foreign intent
+ok 110 - plan and baseline proposals require explicit application and reject foreign intent
+  ---
+  duration_ms: 8.557917
+  type: 'test'
+  ...
+# Subtest: drafts are valid contracts; keys only when accepted; unusable fields are listed
+ok 111 - drafts are valid contracts; keys only when accepted; unusable fields are listed
+  ---
+  duration_ms: 3.782666
+  type: 'test'
+  ...
+# Subtest: exported metadata rows from ADF and Databricks become catalogue columns
+ok 112 - exported metadata rows from ADF and Databricks become catalogue columns
+  ---
+  duration_ms: 0.32525
+  type: 'test'
+  ...
+# Subtest: source-owned date and timezone-less timestamp metadata drafts compile to executable physical types without guessing string contents
+ok 113 - source-owned date and timezone-less timestamp metadata drafts compile to executable physical types without guessing string contents
+  ---
+  duration_ms: 0.217708
+  type: 'test'
+  ...
+# Subtest: unsaved document validation accepts content without filesystem resolution
+ok 114 - unsaved document validation accepts content without filesystem resolution
+  ---
+  duration_ms: 3.174125
+  type: 'test'
+  ...
+# Subtest: schema diagnostics locate an invalid value in the supplied buffer
+ok 115 - schema diagnostics locate an invalid value in the supplied buffer
+  ---
+  duration_ms: 0.786333
+  type: 'test'
+  ...
+# Subtest: syntax errors and missing fields return structured diagnostics
+ok 116 - syntax errors and missing fields return structured diagnostics
+  ---
+  duration_ms: 1.393125
+  type: 'test'
+  ...
+# Subtest: unknown document kind and alias expansion errors do not escape the API
+ok 117 - unknown document kind and alias expansion errors do not escape the API
+  ---
+  duration_ms: 0.44675
+  type: 'test'
+  ...
+# Subtest: environment proposals preserve unresolved references, comments and source files
+ok 118 - environment proposals preserve unresolved references, comments and source files
+  ---
+  duration_ms: 107.454292
+  type: 'test'
+  ...
+# Subtest: environment authoring rejects overwrites, unsafe names and stale reviewed sources
+ok 119 - environment authoring rejects overwrites, unsafe names and stale reviewed sources
+  ---
+  duration_ms: 139.791
+  type: 'test'
+  ...
+# Subtest: inline environment copying preserves comments and project-relative references without moving the source
+ok 120 - inline environment copying preserves comments and project-relative references without moving the source
+  ---
+  duration_ms: 112.803083
+  type: 'test'
+  ...
+# Subtest: copied inline anchors are unique while internal and external aliases retain their intended values
+ok 121 - copied inline anchors are unique while internal and external aliases retain their intended values
+  ---
+  duration_ms: 109.163625
+  type: 'test'
+  ...
+# Subtest: inline copies reject changed shared inputs before modifying the project
+ok 122 - inline copies reject changed shared inputs before modifying the project
+  ---
+  duration_ms: 89.761584
+  type: 'test'
+  ...
+# Subtest: durable metadata failure accepts only its code on a confirmed failure
+ok 123 - durable metadata failure accepts only its code on a confirmed failure
+  ---
+  duration_ms: 37.920708
+  type: 'test'
+  ...
+# Subtest: setup acknowledgement accepts original success and confirmed failure without replay arguments
+ok 124 - setup acknowledgement accepts original success and confirmed failure without replay arguments
+  ---
+  duration_ms: 0.693084
+  type: 'test'
+  ...
+# Subtest: missing, active, foreign and contradictory acknowledgement never prove original completion
+ok 125 - missing, active, foreign and contradictory acknowledgement never prove original completion
+  ---
+  duration_ms: 0.640459
+  type: 'test'
+  ...
+# Subtest: durable acknowledgement capability requires its explicit host feature
+ok 126 - durable acknowledgement capability requires its explicit host feature
+  ---
+  duration_ms: 0.221917
+  type: 'test'
+  ...
+# Subtest: execution features are read-only host support even without valid project definitions
+ok 127 - execution features are read-only host support even without valid project definitions
+  ---
+  duration_ms: 3.304916
+  type: 'test'
+  ...
+# Subtest: unexpected EOF retains source uncertainty and permits same live caller recovery only after finalisation
+ok 128 - unexpected EOF retains source uncertainty and permits same live caller recovery only after finalisation
+  ---
+  duration_ms: 23.527875
+  type: 'test'
+  ...
+# Subtest: invalid JSON retains source uncertainty and permits same live caller recovery only after finalisation
+ok 129 - invalid JSON retains source uncertainty and permits same live caller recovery only after finalisation
+  ---
+  duration_ms: 16.314959
+  type: 'test'
+  ...
+# Subtest: foreign protocol retains source uncertainty and permits same live caller recovery only after finalisation
+ok 130 - foreign protocol retains source uncertainty and permits same live caller recovery only after finalisation
+  ---
+  duration_ms: 16.378417
+  type: 'test'
+  ...
+# Subtest: success with failed exit retains source uncertainty and permits same live caller recovery only after finalisation
+ok 131 - success with failed exit retains source uncertainty and permits same live caller recovery only after finalisation
+  ---
+  duration_ms: 16.093542
+  type: 'test'
+  ...
+# Subtest: failure with successful exit retains source uncertainty and permits same live caller recovery only after finalisation
+ok 132 - failure with successful exit retains source uncertainty and permits same live caller recovery only after finalisation
+  ---
+  duration_ms: 16.890125
+  type: 'test'
+  ...
+# Subtest: interrupted acknowledgement retains source uncertainty and permits same live caller recovery only after finalisation
+ok 133 - interrupted acknowledgement retains source uncertainty and permits same live caller recovery only after finalisation
+  ---
+  duration_ms: 16.703833
+  type: 'test'
+  ...
+# Subtest: process killed without acknowledgement retains source uncertainty and permits same live caller recovery only after finalisation
+ok 134 - process killed without acknowledgement retains source uncertainty and permits same live caller recovery only after finalisation
+  ---
+  duration_ms: 15.007292
+  type: 'test'
+  ...
+# Subtest: acknowledged failure and failure before dispatch remain repairable
+ok 135 - acknowledged failure and failure before dispatch remain repairable
+  ---
+  duration_ms: 16.271084
+  type: 'test'
+  ...
+# Subtest: a named execution profile shares datasets and contracts and stays independent of environment
+ok 136 - a named execution profile shares datasets and contracts and stays independent of environment
+  ---
+  duration_ms: 1161.922416
+  type: 'test'
+  ...
+# Subtest: profile selection fails closed and cannot override shared table identity
+ok 137 - profile selection fails closed and cannot override shared table identity
+  ---
+  duration_ms: 112.031916
+  type: 'test'
+  ...
+# Subtest: profile binding replaces runtime source defaults while preserving explicit dataset fields
+ok 138 - profile binding replaces runtime source defaults while preserving explicit dataset fields
+  ---
+  duration_ms: 86.760833
+  type: 'test'
+  ...
+# Subtest: quality failure summaries retain only bounded rule identities and finite counts
+ok 139 - quality failure summaries retain only bounded rule identities and finite counts
+  ---
+  duration_ms: 0.600625
+  type: 'test'
+  ...
+# Subtest: the execution launcher maps a metadata limit to safe actionable guidance
+ok 140 - the execution launcher maps a metadata limit to safe actionable guidance
+  ---
+  duration_ms: 19.224584
+  type: 'test'
+  ...
+# Subtest: the explicit execution launcher preserves sanitised quality failure evidence
+ok 141 - the explicit execution launcher preserves sanitised quality failure evidence
+  ---
+  duration_ms: 16.540167
+  type: 'test'
+  ...
+# Subtest: physical identities remain stable across flows and selections; raw target values stay private
+ok 142 - physical identities remain stable across flows and selections; raw target values stay private
+  ---
+  duration_ms: 10.423458
+  type: 'test'
+  ...
+# Subtest: malformed, missing, foreign, duplicate and oversized declarations fail without echoing identities
+ok 143 - malformed, missing, foreign, duplicate and oversized declarations fail without echoing identities
+  ---
+  duration_ms: 7.356834
+  type: 'test'
+  ...
+# Subtest: different flows sharing a declared target are refused before execution; independent target remains available
+ok 144 - different flows sharing a declared target are refused before execution; independent target remains available
+  ---
+  duration_ms: 10.697583
+  type: 'test'
+  ...
+# Subtest: a maximum resource selection persists bounded ownership and refuses changed recovery
+ok 145 - a maximum resource selection persists bounded ownership and refuses changed recovery
+  ---
+  duration_ms: 17.162459
+  type: 'test'
+  ...
+# Subtest: ODCS physicalName maps source to unique target
+ok 146 - ODCS physicalName maps source to unique target
+  ---
+  duration_ms: 2.169375
+  type: 'test'
+  ...
+# Subtest: ownership comes from current ODCS team members by role
+ok 147 - ownership comes from current ODCS team members by role
+  ---
+  duration_ms: 1.4105
+  type: 'test'
+  ...
+# Subtest: the deprecated ODCS v2 team array is still read
+ok 148 - the deprecated ODCS v2 team array is still read
+  ---
+  duration_ms: 0.068042
+  type: 'test'
+  ...
+# Subtest: an active contract must name an owner; drafts need not
+ok 149 - an active contract must name an owner; drafts need not
+  ---
+  duration_ms: 3.644416
+  type: 'test'
+  ...
+# Subtest: data products are listed once per contract with their flows
+ok 150 - data products are listed once per contract with their flows
+  ---
+  duration_ms: 0.201166
+  type: 'test'
+  ...
+# Subtest: future appointments do not establish current ownership and published outputs are inventoried
+ok 151 - future appointments do not establish current ownership and published outputs are inventoried
+  ---
+  duration_ms: 0.123416
+  type: 'test'
+  ...
+# Subtest: blank team identities cannot satisfy current ownership or stewardship
+ok 152 - blank team identities cannot satisfy current ownership or stewardship
+  ---
+  duration_ms: 1.531166
+  type: 'test'
+  ...
+# Subtest: discovery reports only locked installed plugins, never a bundled marketplace
+ok 153 - discovery reports only locked installed plugins, never a bundled marketplace
+  ---
+  duration_ms: 116.856417
+  type: 'test'
+  ...
+# Subtest: unimplemented roadmap operations and AI arguments are not advertised
+ok 154 - unimplemented roadmap operations and AI arguments are not advertised
+  ---
+  duration_ms: 0.807709
+  type: 'test'
+  ...
+# Subtest: provider metadata is extensible without claiming unimplemented source transports
+ok 155 - provider metadata is extensible without claiming unimplemented source transports
+  ---
+  duration_ms: 4.181458
+  type: 'test'
+  ...
+# Subtest: bundled projects get a migration error and an explicit reviewable source change
+ok 156 - bundled projects get a migration error and an explicit reviewable source change
+  ---
+  duration_ms: 366.371125
+  type: 'test'
+  ...
+# Subtest: provider migration preserves the top-level short package layout
+ok 157 - provider migration preserves the top-level short package layout
+  ---
+  duration_ms: 463.125916
+  type: 'test'
+  ...
+# Subtest: provider migration refuses a changed reviewed package source without replacing the project
+ok 158 - provider migration refuses a changed reviewed package source without replacing the project
+  ---
+  duration_ms: 220.047417
+  type: 'test'
+  ...
+# Subtest: provider migration refuses package inventory additions, deletions and symlinks after review
+    # Subtest: addition
+    ok 1 - addition
+      ---
+      duration_ms: 202.954291
+      type: 'test'
+      ...
+    # Subtest: deletion
+    ok 2 - deletion
+      ---
+      duration_ms: 138.32675
+      type: 'test'
+      ...
+    # Subtest: symlink
+    ok 3 - symlink
+      ---
+      duration_ms: 104.863625
+      type: 'test'
+      ...
+    1..3
+ok 159 - provider migration refuses package inventory additions, deletions and symlinks after review
+  ---
+  duration_ms: 446.765167
+  type: 'test'
+  ...
+# Subtest: a native connection flow becomes the provider's standard with its source
+ok 160 - a native connection flow becomes the provider's standard with its source
+  ---
+  duration_ms: 8.876541
+  type: 'test'
+  ...
+# Subtest: native routes reject missing routes, wrong standards, bindings and capabilities
+ok 161 - native routes reject missing routes, wrong standards, bindings and capabilities
+  ---
+  duration_ms: 6.786291
+  type: 'test'
+  ...
+# Subtest: connections choose routes; native ones need a kind and portable ones a package
+ok 162 - connections choose routes; native ones need a kind and portable ones a package
+  ---
+  duration_ms: 2.027542
+  type: 'test'
+  ...
+# Subtest: bounded read pages preserve Unicode, exact content and ordinary read shape
+ok 163 - bounded read pages preserve Unicode, exact content and ordinary read shape
+  ---
+  duration_ms: 34.826458
+  type: 'test'
+  ...
+# Subtest: paged read refuses changed content, invalid pages and unsafe paths without write authority
+ok 164 - paged read refuses changed content, invalid pages and unsafe paths without write authority
+  ---
+  duration_ms: 2.62675
+  type: 'test'
+  ...
+# Subtest: empty and end-of-file pages finish without a continuation
+ok 165 - empty and end-of-file pages finish without a continuation
+  ---
+  duration_ms: 0.526083
+  type: 'test'
+  ...
+# Subtest: paging retains the existing ten-MiB source-file limit before returning a page
+ok 166 - paging retains the existing ten-MiB source-file limit before returning a page
+  ---
+  duration_ms: 5.221666
+  type: 'test'
+  ...
+# (node:18841) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: governance is read-only, reports definition gaps and never implies approval or runtime enforcement
+ok 167 - governance is read-only, reports definition gaps and never implies approval or runtime enforcement
+  ---
+  duration_ms: 110.227625
+  type: 'test'
+  ...
+# Subtest: saved policy blocks strict inspection before provider planning and does not block correction
+ok 168 - saved policy blocks strict inspection before provider planning and does not block correction
+  ---
+  duration_ms: 104.704167
+  type: 'test'
+  ...
+# Subtest: delivery rules validate real target definitions, assignments and current baseline with input hashes
+ok 169 - delivery rules validate real target definitions, assignments and current baseline with input hashes
+  ---
+  duration_ms: 95.099417
+  type: 'test'
+  ...
+# Subtest: published transformation contracts appear and conflicting identities cannot meet policy
+ok 170 - published transformation contracts appear and conflicting identities cannot meet policy
+  ---
+  duration_ms: 87.717584
+  type: 'test'
+  ...
+# Subtest: policy authoring is atomic, stale and read-only fenced and preserves inline or referenced ownership
+ok 171 - policy authoring is atomic, stale and read-only fenced and preserves inline or referenced ownership
+  ---
+  duration_ms: 189.014292
+  type: 'test'
+  ...
+# Subtest: policy schemas reject unknown controls and expose editor-safe diagnostics
+ok 172 - policy schemas reject unknown controls and expose editor-safe diagnostics
+  ---
+  duration_ms: 2.445334
+  type: 'test'
+  ...
+# Subtest: portable preparation applies policy before loading source or execution packages
+ok 173 - portable preparation applies policy before loading source or execution packages
+  ---
+  duration_ms: 90.336292
+  type: 'test'
+  ...
+# Subtest: an expired owner invalidates generation even when reviewed source hashes are unchanged
+ok 174 - an expired owner invalidates generation even when reviewed source hashes are unchanged
+  ---
+  duration_ms: 321.654792
+  type: 'test'
+  ...
+# Subtest: empty project setup is a reviewed five-file change with separate development, test and production definitions
+ok 175 - empty project setup is a reviewed five-file change with separate development, test and production definitions
+  ---
+  duration_ms: 9.836417
+  type: 'test'
+  ...
+# Subtest: project setup rejects reserved and unsafe identifiers before creating any documents
+ok 176 - project setup rejects reserved and unsafe identifiers before creating any documents
+  ---
+  duration_ms: 1.141291
+  type: 'test'
+  ...
+# Subtest: project setup preserves existing user files and rejects a changed review target atomically
+ok 177 - project setup preserves existing user files and rejects a changed review target atomically
+  ---
+  duration_ms: 1.724542
+  type: 'test'
+  ...
+# Subtest: exact provider activity inspection reads templates and generator text without executing code or saving files
+ok 178 - exact provider activity inspection reads templates and generator text without executing code or saving files
+  ---
+  duration_ms: 206.271167
+  type: 'test'
+  ...
+# Subtest: inspection never follows a generator source outside the selected installed package
+ok 179 - inspection never follows a generator source outside the selected installed package
+  ---
+  duration_ms: 375.842666
+  type: 'test'
+  ...
+# Subtest: inspection refuses changed cached sources before returning any content
+ok 180 - inspection refuses changed cached sources before returning any content
+  ---
+  duration_ms: 402.09025
+  type: 'test'
+  ...
+# Subtest: inspection reports provider-owned schema and every default/profile user without execution or writes
+ok 181 - inspection reports provider-owned schema and every default/profile user without execution or writes
+  ---
+  duration_ms: 139.412875
+  type: 'test'
+  ...
+# Subtest: options proposal preserves neighbour maps/comments, authoritative fragment layout and write permission
+ok 182 - options proposal preserves neighbour maps/comments, authoritative fragment layout and write permission
+  ---
+  duration_ms: 125.93225
+  type: 'test'
+  ...
+# Subtest: bad fields, unsupported source kind, unsafe identifiers and stale inspected options are refused before a proposal
+ok 183 - bad fields, unsupported source kind, unsafe identifiers and stale inspected options are refused before a proposal
+  ---
+  duration_ms: 143.2035
+  type: 'test'
+  ...
+# Subtest: provider schema changes invalidate both inspection digest and an already reviewed proposal
+ok 184 - provider schema changes invalidate both inspection digest and an already reviewed proposal
+  ---
+  duration_ms: 120.291
+  type: 'test'
+  ...
+# Subtest: environment placeholders are never resolved during inspection and invalid options can be reviewed for repair
+ok 185 - environment placeholders are never resolved during inspection and invalid options can be reviewed for repair
+  ---
+  duration_ms: 117.591541
+  type: 'test'
+  ...
+# Subtest: shared YAML option aliases are refused rather than changing another configuration
+ok 186 - shared YAML option aliases are refused rather than changing another configuration
+  ---
+  duration_ms: 88.035167
+  type: 'test'
+  ...
+# Subtest: provider option review uses existing runtime-secret guards and never returns inline credentials
+ok 187 - provider option review uses existing runtime-secret guards and never returns inline credentials
+  ---
+  duration_ms: 118.076209
+  type: 'test'
+  ...
+# Subtest: nested local option references retain their owner, relative paths and neighbouring comments
+ok 188 - nested local option references retain their owner, relative paths and neighbouring comments
+  ---
+  duration_ms: 112.165208
+  type: 'test'
+  ...
+# Subtest: provider artifact export is a reviewed proposal and protects destinations
+ok 189 - provider artifact export is a reviewed proposal and protects destinations
+  ---
+  duration_ms: 99.551083
+  type: 'test'
+  ...
+# Subtest: provider ES module runs with deterministic JSON assets only
+ok 190 - provider ES module runs with deterministic JSON assets only
+  ---
+  duration_ms: 80.332666
+  type: 'test'
+  ...
+# Subtest: provider process denies host APIs, nondeterminism, imports and unsafe paths
+ok 191 - provider process denies host APIs, nondeterminism, imports and unsafe paths
+  ---
+  duration_ms: 227.416375
+  type: 'test'
+  ...
+# Subtest: provider rejects async output, malformed envelopes and runaway execution
+ok 192 - provider rejects async output, malformed envelopes and runaway execution
+  ---
+  duration_ms: 2180.019167
+  type: 'test'
+  ...
+# Subtest: provider loader respects aliased ES module exports
+ok 193 - provider loader respects aliased ES module exports
+  ---
+  duration_ms: 39.339584
+  type: 'test'
+  ...
+# Subtest: provider planning is isolated, synchronous and structurally bounded
+ok 194 - provider planning is isolated, synchronous and structurally bounded
+  ---
+  duration_ms: 228.486458
+  type: 'test'
+  ...
+# Subtest: provider generation receives exact planned Python text with published typed output, without executing source
+ok 195 - provider generation receives exact planned Python text with published typed output, without executing source
+  ---
+  duration_ms: 187.605625
+  type: 'test'
+  ...
+# Subtest: Python capability declarations require an explicit compatible host feature
+ok 196 - Python capability declarations require an explicit compatible host feature
+  ---
+  duration_ms: 0.436708
+  type: 'test'
+  ...
+# Subtest: published Python rules report after-load enforcement and block explicit required rules when unsupported
+ok 197 - published Python rules report after-load enforcement and block explicit required rules when unsupported
+  ---
+  duration_ms: 3.0665
+  type: 'test'
+  ...
+# Subtest: library rules are parsed with outcome from severity; keys imply rules
+ok 198 - library rules are parsed with outcome from severity; keys imply rules
+  ---
+  duration_ms: 1.890042
+  type: 'test'
+  ...
+# Subtest: an explicit rule replaces the implied key rule
+ok 199 - an explicit rule replaces the implied key rule
+  ---
+  duration_ms: 0.178333
+  type: 'test'
+  ...
+# Subtest: malformed rules are rejected when the contract loads
+ok 200 - malformed rules are rejected when the contract loads
+  ---
+  duration_ms: 6.166458
+  type: 'test'
+  ...
+# Subtest: coverage maps rules to provider modes and blocks unenforceable errors
+ok 201 - coverage maps rules to provider modes and blocks unenforceable errors
+  ---
+  duration_ms: 0.383042
+  type: 'test'
+  ...
+# Subtest: implied key rules are reported but never block
+ok 202 - implied key rules are reported but never block
+  ---
+  duration_ms: 0.071083
+  type: 'test'
+  ...
+# Subtest: providers declaring quality must require the host feature
+ok 203 - providers declaring quality must require the host feature
+  ---
+  duration_ms: 0.189166
+  type: 'test'
+  ...
+# Subtest: connector runtime checks combine with the target, earliest mode first
+ok 204 - connector runtime checks combine with the target, earliest mode first
+  ---
+  duration_ms: 0.263667
+  type: 'test'
+  ...
+# Subtest: connector manifests may declare runtime quality support
+ok 205 - connector manifests may declare runtime quality support
+  ---
+  duration_ms: 2.734167
+  type: 'test'
+  ...
+# Subtest: a provider may declare quality per ingestion standard
+ok 206 - a provider may declare quality per ingestion standard
+  ---
+  duration_ms: 0.493917
+  type: 'test'
+  ...
+# Subtest: engine rules use the declared mode per engine; others are not enforced
+ok 207 - engine rules use the declared mode per engine; others are not enforced
+  ---
+  duration_ms: 0.475209
+  type: 'test'
+  ...
+# Subtest: sql rules accept ODCS table and column placeholders only where they apply
+ok 208 - sql rules accept ODCS table and column placeholders only where they apply
+  ---
+  duration_ms: 4.476917
+  type: 'test'
+  ...
+# Subtest: failed recovery cannot release inherited source uncertainty; successful original acknowledgement releases exact ownership
+ok 209 - failed recovery cannot release inherited source uncertainty; successful original acknowledgement releases exact ownership
+  ---
+  duration_ms: 7.2905
+  type: 'test'
+  ...
+# Subtest: an initial known failure without inherited uncertainty still permits reviewed repair
+ok 210 - an initial known failure without inherited uncertainty still permits reviewed repair
+  ---
+  duration_ms: 1.477208
+  type: 'test'
+  ...
+# Subtest: UTC and non-UTC bounds preserve seconds, independent end offsets and reviewed identity
+ok 211 - UTC and non-UTC bounds preserve seconds, independent end offsets and reviewed identity
+  ---
+  duration_ms: 10.826083
+  type: 'test'
+  ...
+# Subtest: both New York fold instants retain their own offset and the complete ambiguity
+ok 212 - both New York fold instants retain their own offset and the complete ambiguity
+  ---
+  duration_ms: 3.290334
+  type: 'test'
+  ...
+# Subtest: half-hour folds, quarter-hour offsets and skipped dates are resolved from exact instants
+ok 213 - half-hour folds, quarter-hour offsets and skipped dates are resolved from exact instants
+  ---
+  duration_ms: 1.336042
+  type: 'test'
+  ...
+# Subtest: an ambiguous end preserves forward UTC order when local time goes backwards
+ok 214 - an ambiguous end preserves forward UTC order when local time goes backwards
+  ---
+  duration_ms: 0.53625
+  type: 'test'
+  ...
+# Subtest: malformed bounds are refused rather than repaired or silently dropped
+ok 215 - malformed bounds are refused rather than repaired or silently dropped
+  ---
+  duration_ms: 0.569916
+  type: 'test'
+  ...
+# Subtest: selected scheduled flows have digest-bound metadata; manual plans retain their original shape
+ok 216 - selected scheduled flows have digest-bound metadata; manual plans retain their original shape
+  ---
+  duration_ms: 1319.876584
+  type: 'test'
+  ...
+# Subtest: delivery partitions retain only their own boundaries and hash the filtered values
+ok 217 - delivery partitions retain only their own boundaries and hash the filtered values
+  ---
+  duration_ms: 413.723
+  type: 'test'
+  ...
+# Subtest: providers receive the reviewed metadata through the sandbox without a time-zone runtime
+ok 218 - providers receive the reviewed metadata through the sandbox without a time-zone runtime
+  ---
+  duration_ms: 420.977917
+  type: 'test'
+  ...
+# Subtest: saved plan generation refuses changed clock data, shifted or missing boundaries and foreign flow entries even with a new digest
+ok 219 - saved plan generation refuses changed clock data, shifted or missing boundaries and foreign flow entries even with a new digest
+  ---
+  duration_ms: 836.859416
+  type: 'test'
+  ...
+# Subtest: intervals retain their exact start-second phase and exclusive end; paused intent does not execute
+ok 220 - intervals retain their exact start-second phase and exclusive end; paused intent does not execute
+  ---
+  duration_ms: 7.887458
+  type: 'test'
+  ...
+# Subtest: calendar slots stay paired, ordered and bounded instead of producing a Cartesian product
+ok 221 - calendar slots stay paired, ordered and bounded instead of producing a Cartesian product
+  ---
+  duration_ms: 7.529209
+  type: 'test'
+  ...
+# Subtest: weekly selections use the local weekday with quarter-hour offsets
+ok 222 - weekly selections use the local weekday with quarter-hour offsets
+  ---
+  duration_ms: 3.408167
+  type: 'test'
+  ...
+# Subtest: monthly dates skip missing days and include leap day without rolling into another month
+ok 223 - monthly dates skip missing days and include leap day without rolling into another month
+  ---
+  duration_ms: 4.180667
+  type: 'test'
+  ...
+# Subtest: spring gaps require review and support skip or exact forward shift
+ok 224 - spring gaps require review and support skip or exact forward shift
+  ---
+  duration_ms: 12.546666
+  type: 'test'
+  ...
+# Subtest: repeated wall times resolve to earlier, later or both exact instants including half-hour folds
+ok 225 - repeated wall times resolve to earlier, later or both exact instants including half-hour folds
+  ---
+  duration_ms: 8.047875
+  type: 'test'
+  ...
+# Subtest: a skipped whole calendar date shifts once and merges colliding slots into one occurrence
+ok 226 - a skipped whole calendar date shifts once and merges colliding slots into one occurrence
+  ---
+  duration_ms: 1.053875
+  type: 'test'
+  ...
+# Subtest: boundary filtering cannot replace the reviewed fold with the other fold
+ok 227 - boundary filtering cannot replace the reviewed fold with the other fold
+  ---
+  duration_ms: 1.641125
+  type: 'test'
+  ...
+# Subtest: occurrence IDs are deterministic and change with a schedule edit; pagination signals more results
+ok 228 - occurrence IDs are deterministic and change with a schedule edit; pagination signals more results
+  ---
+  duration_ms: 2.400334
+  type: 'test'
+  ...
+# Subtest: preview operations remain read-only and reject native clock promises and unbounded requests
+ok 229 - preview operations remain read-only and reject native clock promises and unbounded requests
+  ---
+  duration_ms: 2.420125
+  type: 'test'
+  ...
+# Subtest: model context keeps all100 reviewed slots and the full flow roster; inventory stays bounded
+ok 230 - model context keeps all100 reviewed slots and the full flow roster; inventory stays bounded
+  ---
+  duration_ms: 594.322458
+  type: 'test'
+  ...
+# Subtest: oversized model inventories remain rejected and manual context has no invented schedule
+ok 231 - oversized model inventories remain rejected and manual context has no invented schedule
+  ---
+  duration_ms: 255.956417
+  type: 'test'
+  ...
+# (node:21317) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: worker inspection is read-only, mutation needs both permissions, and callers cannot supply executors or clock
+ok 232 - worker inspection is read-only, mutation needs both permissions, and callers cannot supply executors or clock
+  ---
+  duration_ms: 6.078708
+  type: 'test'
+  ...
+# Subtest: old journals can be observed without schema migration, changing bytes or creating tables
+ok 233 - old journals can be observed without schema migration, changing bytes or creating tables
+  ---
+  duration_ms: 7.679125
+  type: 'test'
+  ...
+# Subtest: driver reservation is atomic across flows and reopens with the exact private identity
+ok 234 - driver reservation is atomic across flows and reopens with the exact private identity
+  ---
+  duration_ms: 3.869042
+  type: 'test'
+  ...
+# Subtest: explicit dead worker cleanup retains uncertain business occurrence claims and enforces environment scope
+ok 235 - explicit dead worker cleanup retains uncertain business occurrence claims and enforces environment scope
+  ---
+  duration_ms: 6.001667
+  type: 'test'
+  ...
+# Subtest: stop uses private authenticated control, persists its request and never publishes credentials
+ok 236 - stop uses private authenticated control, persists its request and never publishes credentials
+  ---
+  duration_ms: 9.610833
+  type: 'test'
+  ...
+# Subtest: read-only schedule observation waits for a real concurrent commit without abandoning its state
+ok 237 - read-only schedule observation waits for a real concurrent commit without abandoning its state
+  ---
+  duration_ms: 391.747583
+  type: 'test'
+  ...
+# Subtest: a reader-blocked commit is reported as contention and rolls back every driver reservation
+ok 238 - a reader-blocked commit is reported as contention and rolls back every driver reservation
+  ---
+  duration_ms: 3.367125
+  type: 'test'
+  ...
+# (node:21342) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: read-only status and denied mutation create no journal; public schemas cannot spoof the clock or executor
+ok 239 - read-only status and denied mutation create no journal; public schemas cannot spoof the clock or executor
+  ---
+  duration_ms: 4.320833
+  type: 'test'
+  ...
+# Subtest: committed work survives reopen and repeat ticks preserve the same occurrence without rerunning it
+ok 240 - committed work survives reopen and repeat ticks preserve the same occurrence without rerunning it
+  ---
+  duration_ms: 15.086625
+  type: 'test'
+  ...
+# Subtest: SQLite transactions isolate workers, roll back all claims and never await source execution
+ok 241 - SQLite transactions isolate workers, roll back all claims and never await source execution
+  ---
+  duration_ms: 3.078292
+  type: 'test'
+  ...
+# Subtest: queue overlaps persist while another worker runs, then execute once after its claim is released
+ok 242 - queue overlaps persist while another worker runs, then execute once after its claim is released
+  ---
+  duration_ms: 11.076208
+  type: 'test'
+  ...
+# Subtest: skip overlaps and latest missed runs are distinct durable decisions
+ok 243 - skip overlaps and latest missed runs are distinct durable decisions
+  ---
+  duration_ms: 11.627083
+  type: 'test'
+  ...
+# Subtest: failed and interrupted work keeps its claim and explicit retry reuses the same business identity
+ok 244 - failed and interrupted work keeps its claim and explicit retry reuses the same business identity
+  ---
+  duration_ms: 10.142041
+  type: 'test'
+  ...
+# Subtest: an active worker cannot be stolen; queued cancellation and pause still work with a broken current build
+ok 245 - an active worker cannot be stolen; queued cancellation and pause still work with a broken current build
+  ---
+  duration_ms: 8.384375
+  type: 'test'
+  ...
+# Subtest: changed bindings, future work and excessive missed history stop before execution or cursor advancement
+ok 246 - changed bindings, future work and excessive missed history stop before execution or cursor advancement
+  ---
+  duration_ms: 40.266875
+  type: 'test'
+  ...
+# Subtest: a changed registration retains history and cannot silently discard queued occurrences
+ok 247 - a changed registration retains history and cannot silently discard queued occurrences
+  ---
+  duration_ms: 7.343
+  type: 'test'
+  ...
+# Subtest: the journal stays private and refuses symbolic-link escapes before writing state
+ok 248 - the journal stays private and refuses symbolic-link escapes before writing state
+  ---
+  duration_ms: 3.149083
+  type: 'test'
+  ...
+# Subtest: post-execution commit contention retries only exact-token finalisation, preserving source success or failure
+ok 249 - post-execution commit contention retries only exact-token finalisation, preserving source success or failure
+  ---
+  duration_ms: 573.155125
+  type: 'test'
+  ...
+# Subtest: complete paged history includes archived registrations, strict flow ownership and public-only fields
+ok 250 - complete paged history includes archived registrations, strict flow ownership and public-only fields
+  ---
+  duration_ms: 32.566208
+  type: 'test'
+  ...
+# Subtest: schedules validate real UTC boundaries and explicit calendar selections
+ok 251 - schedules validate real UTC boundaries and explicit calendar selections
+  ---
+  duration_ms: 4.653917
+  type: 'test'
+  ...
+# Subtest: reviewed schedule edits preserve comments and persist after reopening; stale or read-only apply is denied
+ok 252 - reviewed schedule edits preserve comments and persist after reopening; stale or read-only apply is denied
+  ---
+  duration_ms: 193.70525
+  type: 'test'
+  ...
+# Subtest: schedule authoring supports inline flow locations without rewriting unrelated project fields
+ok 253 - schedule authoring supports inline flow locations without rewriting unrelated project fields
+  ---
+  duration_ms: 91.731541
+  type: 'test'
+  ...
+# Subtest: providers without schedule capability fail closed for scheduled generation even when paused
+ok 254 - providers without schedule capability fail closed for scheduled generation even when paused
+  ---
+  duration_ms: 93.220292
+  type: 'test'
+  ...
+# Subtest: schedule-capable providers declare the host ABI and older hosts reject unknown features
+ok 255 - schedule-capable providers declare the host ABI and older hosts reject unknown features
+  ---
+  duration_ms: 0.272291
+  type: 'test'
+  ...
+# Subtest: native scheduling policies are explicit and never replace portable defaults
+ok 256 - native scheduling policies are explicit and never replace portable defaults
+  ---
+  duration_ms: 0.68275
+  type: 'test'
+  ...
+# Subtest: source and provider schemas accept bounded descriptive annotations without schema code or complex defaults
+ok 257 - source and provider schemas accept bounded descriptive annotations without schema code or complex defaults
+  ---
+  duration_ms: 0.620541
+  type: 'test'
+  ...
+# Subtest: reference records and source declarations are validated
+ok 258 - reference records and source declarations are validated
+  ---
+  duration_ms: 2.948375
+  type: 'test'
+  ...
+# Subtest: routes list natives, never propose separately billed ones, and flag missing capabilities
+ok 259 - routes list natives, never propose separately billed ones, and flag missing capabilities
+  ---
+  duration_ms: 0.468583
+  type: 'test'
+  ...
+# Subtest: stale reference records are reported after 180 days
+ok 260 - stale reference records are reported after 180 days
+  ---
+  duration_ms: 0.090458
+  type: 'test'
+  ...
+# Subtest: providers declaring sources must require the host feature
+ok 261 - providers declaring sources must require the host feature
+  ---
+  duration_ms: 1.294833
+  type: 'test'
+  ...
+# Subtest: provider generation receives exact planned SQL text with published typed output, without executing source
+ok 262 - provider generation receives exact planned SQL text with published typed output, without executing source
+  ---
+  duration_ms: 225.231791
+  type: 'test'
+  ...
+# Subtest: SQL capability declarations require an explicit compatible host feature
+ok 263 - SQL capability declarations require an explicit compatible host feature
+  ---
+  duration_ms: 0.163792
+  type: 'test'
+  ...
+# Subtest: published SQL rules report after-load enforcement and block explicit required rules when unsupported
+ok 264 - published SQL rules report after-load enforcement and block explicit required rules when unsupported
+  ---
+  duration_ms: 5.443542
+  type: 'test'
+  ...
+# Subtest: selected transformation output contracts are copied into a no-write proposal and hash-fenced through apply
+ok 265 - selected transformation output contracts are copied into a no-write proposal and hash-fenced through apply
+  ---
+  duration_ms: 292.596125
+  type: 'test'
+  ...
+# Subtest: provider-declared settings, ingestion misuse and orphan authored files are refused before any write
+ok 266 - provider-declared settings, ingestion misuse and orphan authored files are refused before any write
+  ---
+  duration_ms: 233.317416
+  type: 'test'
+  ...
+# Subtest: transformation authoring declarations require the shared host feature
+ok 267 - transformation authoring declarations require the shared host feature
+  ---
+  duration_ms: 0.215916
+  type: 'test'
+  ...
+1..267
+# tests 270
+# suites 0
+# pass 270
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 79368.628166
+
+> @ingestron/core@0.12.53 secrets:check /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/core
+> node scripts/secrets.mjs
+
+Secret-pattern scan passed (not a comprehensive secret detector).
+
+> @ingestron/core@0.12.53 release:check /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/core
+> node scripts/release-check.mjs
+
+21 production dependency notices verified
+@ingestron/core@0.12.53: public Apache release metadata and dependency notices checked
+
+> @ingestron/core@0.12.53 package:check /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/core
+> tsx scripts/package-check.ts
+
+Installed core exports and permission boundary passed
+Proposal, write protection, project validation and editor validation passed.
+Installed editor export loads without Node runtime dependencies

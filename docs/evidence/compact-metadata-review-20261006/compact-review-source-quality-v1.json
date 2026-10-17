@@ -1,0 +1,441 @@
+{
+  "result": "passed",
+  "phase": "client",
+  "candidate": {
+    "cli": "0.17.21",
+    "core": "0.12.52",
+    "declaredCore": "0.12.14",
+    "privateOverride": true
+  },
+  "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+  "archives": {
+    "CORE_ARCHIVE": {
+      "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-runtime-v1/ingestron-core-0.12.52.tgz",
+      "sha256": "36c5316c35be831d9545ce9952b08db1ac0b9b15c5a5bb7ea808397f0417f575"
+    },
+    "CLI_ARCHIVE": {
+      "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-batch-runtime-v1/ingestron-0.17.21.tgz",
+      "sha256": "4808a9f6fd6441ef1e389f50484bced448691fc9aa642c1eaaff80dbc2c2a439"
+    }
+  },
+  "archiveParity": {
+    "CORE_ARCHIVE": 156,
+    "CLI_ARCHIVE": 29
+  },
+  "sources": [
+    {
+      "id": "github",
+      "reference": "ingestron/connectors/connectors/github/connector.yaml@1.36.9",
+      "result": "passed",
+      "scenario": "contract-quality",
+      "phases": [
+        {
+          "result": "passed",
+          "id": "github",
+          "reference": "ingestron/connectors/connectors/github/connector.yaml@1.36.9",
+          "qualityStage": "baseline",
+          "stage": "privacy",
+          "checks": [
+            "A reviewed business-field duplicateValues rule is prepared through the actual packaged host; source IDs remain unique",
+            "Valid unique source IDs and business fields commit the expected rows and measure zero duplicates; prior output bytes are preserved",
+            "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage",
+            "All acceptance-owned packaged host processes exited"
+          ],
+          "continuation": {
+            "authoredSha256": "a4d68e00663e5d41980e04b9a9338863aefe76a4441cba5e8315d6e57b2d4ebb",
+            "reviewDigest": "634c4629b655ecce1582bfc93bd349694c4495af6e23a2f8079282f243e5adca",
+            "baselineJob": "4f532d35-729f-4a16-bed2-73be8a853775",
+            "committedOutputs": {
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_azure_blob/data/flow_azure_blob/21771315696494f365ec2c289d9aaea83e209d85c18277226110548d9bc83118/97de34a3-ea0f-4a75-b317-2753af4194a7/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/9eb00e02-ff13-4e91-8185-5d9c471ffdbc/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_gcs/data/flow_gcs/5dd40b9f6cd628b2fb9bdb4ef7ffc087ad774a2b65d3f6434917b2d3e78ba975/663feafa-437c-41cd-9ef1-a7d846ea256d/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/98cdcc7e-3498-4179-95ea-43aa556cbfca/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/d3538ae8-3bba-44c6-b644-417165904965/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_hubspot/data/flow_hubspot/c027c874d4bc19ef03e251362c15f15310d82aa3d019bdd5e4a8ab7efcf57881/e150c725-9141-4402-a5b6-1cd5ad9323f4/records.parquet": "bc8616c0a7aaefacc2b564687410cdd9551f875f1c4ac22a6029c291c732f79b",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_jira/data/flow_jira/3155f273b68f639bad00ffc41f5c0f977d0c6b9f884fde87b099bbbf72c04d7e/ce04c09e-2662-4c7b-8beb-546b3a181447/records.parquet": "49ad34d5a65917a1ba291646b46d8baec2eb7d7b31e716c62d40c878d9f93f91",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_mysql/data/flow_mysql/71d5bf33dd46208f0105021573c6caae9cfc426ec38e61049868f95547c395d4/448ccdee-4227-4f95-b7a6-23fdca024dfa/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_onedrive/data/flow_onedrive/7d4eee57de53f03d4307692f73c9bafaa788ff90c333a6e0853e98208a21a187/cfca406f-c459-4c11-8105-9f1721edcad6/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_oracle/data/flow_oracle/b7e32e599612a2a30b584869f5588a62599be5eae795e88a64befa7944d65bce/cfb95c4e-95f9-4a90-b556-c9766e973b49/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_postgresql/data/flow_postgresql/1e2259e5f5ed4ef6f8a031dc4e909c8fefaac5b6da1a44f9d5ece655042aee6a/16534426-dde3-47f8-b54b-c9cd2ccb0fa4/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_s3/data/flow_s3/2e5d1a7aad041df8b89513145feab34da4d94bfa85135c293acb197a1ca0d474/023f90f0-bd16-48d6-837a-d5abf1131deb/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_salesforce/data/flow_salesforce/b8837d10ea005ec66ae842b9c3b400bc0f1d98b314e03dd01d97140c7cf8672c/c448d2d3-b3eb-481d-b7ec-fbe4c0f99e2a/records.parquet": "0e0aad6d05edd2a76b703e26d3e02c338fedc3f7b03055b2d65ee1ed6bda6c27",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sftp/data/flow_sftp/49379b68e7b2ce1280d22c7a4fd6c554781126900587e9b2467bffeb3cc1584b/5238d7db-aa01-4f83-8e05-70f3e916ddd9/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sharepoint/data/flow_sharepoint/32032f4af5ddaee23bc00fb1e8a90eb58a6ca8a46a3581fe1c6c5924631a2ca6/7605d40d-3abe-4d90-a98e-1cbff1a25f8a/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sql_server/data/flow_sql_server/16a869519551ad6deb0cc731b3f47cd58a30a2983d3bae92b114d86428ab3423/de0a9b9f-5398-430c-a551-f9710779f666/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_stripe/data/flow_stripe/a03463d2d8eb8ab67ad5bf32288fac417a09348fa12093eccf1f85a3fd324888/a4d9926c-d610-42c2-a947-9bfc7ed1bd77/records.parquet": "ff2540ba12083b370260a45304caf0d92815d2d2b07fdffcb401d81e95777efe"
+            },
+            "successfulJob": "4f532d35-729f-4a16-bed2-73be8a853775"
+          },
+          "hostSha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf",
+          "rowsInProof": false,
+          "browserInteraction": false,
+          "vendorQualified": false
+        },
+        {
+          "result": "passed",
+          "id": "github",
+          "reference": "ingestron/connectors/connectors/github/connector.yaml@1.36.9",
+          "qualityStage": "quality",
+          "stage": "privacy",
+          "checks": [
+            "Actual host reports QUALITY_FAILED with exact business-field rule, wire stream and measured duplicate count; no output is committed and failed-run preview is refused",
+            "All earlier Parquet bytes and the exact prior successful preview remain available after the blocking failure",
+            "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage",
+            "All acceptance-owned packaged host processes exited"
+          ],
+          "continuation": {
+            "authoredSha256": "a4d68e00663e5d41980e04b9a9338863aefe76a4441cba5e8315d6e57b2d4ebb",
+            "reviewDigest": "634c4629b655ecce1582bfc93bd349694c4495af6e23a2f8079282f243e5adca",
+            "baselineJob": "4f532d35-729f-4a16-bed2-73be8a853775",
+            "committedOutputs": {
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_azure_blob/data/flow_azure_blob/21771315696494f365ec2c289d9aaea83e209d85c18277226110548d9bc83118/97de34a3-ea0f-4a75-b317-2753af4194a7/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/9eb00e02-ff13-4e91-8185-5d9c471ffdbc/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_gcs/data/flow_gcs/5dd40b9f6cd628b2fb9bdb4ef7ffc087ad774a2b65d3f6434917b2d3e78ba975/663feafa-437c-41cd-9ef1-a7d846ea256d/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/98cdcc7e-3498-4179-95ea-43aa556cbfca/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/d3538ae8-3bba-44c6-b644-417165904965/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_hubspot/data/flow_hubspot/c027c874d4bc19ef03e251362c15f15310d82aa3d019bdd5e4a8ab7efcf57881/e150c725-9141-4402-a5b6-1cd5ad9323f4/records.parquet": "bc8616c0a7aaefacc2b564687410cdd9551f875f1c4ac22a6029c291c732f79b",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_jira/data/flow_jira/3155f273b68f639bad00ffc41f5c0f977d0c6b9f884fde87b099bbbf72c04d7e/ce04c09e-2662-4c7b-8beb-546b3a181447/records.parquet": "49ad34d5a65917a1ba291646b46d8baec2eb7d7b31e716c62d40c878d9f93f91",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_mysql/data/flow_mysql/71d5bf33dd46208f0105021573c6caae9cfc426ec38e61049868f95547c395d4/448ccdee-4227-4f95-b7a6-23fdca024dfa/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_onedrive/data/flow_onedrive/7d4eee57de53f03d4307692f73c9bafaa788ff90c333a6e0853e98208a21a187/cfca406f-c459-4c11-8105-9f1721edcad6/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_oracle/data/flow_oracle/b7e32e599612a2a30b584869f5588a62599be5eae795e88a64befa7944d65bce/cfb95c4e-95f9-4a90-b556-c9766e973b49/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_postgresql/data/flow_postgresql/1e2259e5f5ed4ef6f8a031dc4e909c8fefaac5b6da1a44f9d5ece655042aee6a/16534426-dde3-47f8-b54b-c9cd2ccb0fa4/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_s3/data/flow_s3/2e5d1a7aad041df8b89513145feab34da4d94bfa85135c293acb197a1ca0d474/023f90f0-bd16-48d6-837a-d5abf1131deb/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_salesforce/data/flow_salesforce/b8837d10ea005ec66ae842b9c3b400bc0f1d98b314e03dd01d97140c7cf8672c/c448d2d3-b3eb-481d-b7ec-fbe4c0f99e2a/records.parquet": "0e0aad6d05edd2a76b703e26d3e02c338fedc3f7b03055b2d65ee1ed6bda6c27",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sftp/data/flow_sftp/49379b68e7b2ce1280d22c7a4fd6c554781126900587e9b2467bffeb3cc1584b/5238d7db-aa01-4f83-8e05-70f3e916ddd9/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sharepoint/data/flow_sharepoint/32032f4af5ddaee23bc00fb1e8a90eb58a6ca8a46a3581fe1c6c5924631a2ca6/7605d40d-3abe-4d90-a98e-1cbff1a25f8a/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sql_server/data/flow_sql_server/16a869519551ad6deb0cc731b3f47cd58a30a2983d3bae92b114d86428ab3423/de0a9b9f-5398-430c-a551-f9710779f666/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_stripe/data/flow_stripe/a03463d2d8eb8ab67ad5bf32288fac417a09348fa12093eccf1f85a3fd324888/a4d9926c-d610-42c2-a947-9bfc7ed1bd77/records.parquet": "ff2540ba12083b370260a45304caf0d92815d2d2b07fdffcb401d81e95777efe"
+            },
+            "successfulJob": "4f532d35-729f-4a16-bed2-73be8a853775",
+            "failedJob": "205718dc-b144-4457-9d75-1462a3d80e87",
+            "failure": {
+              "rule": "records_title_distinct",
+              "stream": "issues",
+              "metric": "duplicateValues",
+              "value": 1
+            }
+          },
+          "hostSha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf",
+          "rowsInProof": false,
+          "browserInteraction": false,
+          "vendorQualified": false
+        },
+        {
+          "result": "passed",
+          "id": "github",
+          "reference": "ingestron/connectors/connectors/github/connector.yaml@1.36.9",
+          "qualityStage": "repair",
+          "stage": "privacy",
+          "checks": [
+            "Correcting only source business values under the same reviewed digest succeeds, measures zero duplicates and preserves prior output bytes",
+            "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage",
+            "All acceptance-owned packaged host processes exited"
+          ],
+          "continuation": {
+            "authoredSha256": "a4d68e00663e5d41980e04b9a9338863aefe76a4441cba5e8315d6e57b2d4ebb",
+            "reviewDigest": "634c4629b655ecce1582bfc93bd349694c4495af6e23a2f8079282f243e5adca",
+            "baselineJob": "4f532d35-729f-4a16-bed2-73be8a853775",
+            "committedOutputs": {
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_azure_blob/data/flow_azure_blob/21771315696494f365ec2c289d9aaea83e209d85c18277226110548d9bc83118/97de34a3-ea0f-4a75-b317-2753af4194a7/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/9eb00e02-ff13-4e91-8185-5d9c471ffdbc/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_gcs/data/flow_gcs/5dd40b9f6cd628b2fb9bdb4ef7ffc087ad774a2b65d3f6434917b2d3e78ba975/663feafa-437c-41cd-9ef1-a7d846ea256d/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/98cdcc7e-3498-4179-95ea-43aa556cbfca/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/d3538ae8-3bba-44c6-b644-417165904965/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/d96bd42e-4a52-4b14-8164-da5a9f96932e/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_hubspot/data/flow_hubspot/c027c874d4bc19ef03e251362c15f15310d82aa3d019bdd5e4a8ab7efcf57881/e150c725-9141-4402-a5b6-1cd5ad9323f4/records.parquet": "bc8616c0a7aaefacc2b564687410cdd9551f875f1c4ac22a6029c291c732f79b",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_jira/data/flow_jira/3155f273b68f639bad00ffc41f5c0f977d0c6b9f884fde87b099bbbf72c04d7e/ce04c09e-2662-4c7b-8beb-546b3a181447/records.parquet": "49ad34d5a65917a1ba291646b46d8baec2eb7d7b31e716c62d40c878d9f93f91",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_mysql/data/flow_mysql/71d5bf33dd46208f0105021573c6caae9cfc426ec38e61049868f95547c395d4/448ccdee-4227-4f95-b7a6-23fdca024dfa/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_onedrive/data/flow_onedrive/7d4eee57de53f03d4307692f73c9bafaa788ff90c333a6e0853e98208a21a187/cfca406f-c459-4c11-8105-9f1721edcad6/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_oracle/data/flow_oracle/b7e32e599612a2a30b584869f5588a62599be5eae795e88a64befa7944d65bce/cfb95c4e-95f9-4a90-b556-c9766e973b49/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_postgresql/data/flow_postgresql/1e2259e5f5ed4ef6f8a031dc4e909c8fefaac5b6da1a44f9d5ece655042aee6a/16534426-dde3-47f8-b54b-c9cd2ccb0fa4/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_s3/data/flow_s3/2e5d1a7aad041df8b89513145feab34da4d94bfa85135c293acb197a1ca0d474/023f90f0-bd16-48d6-837a-d5abf1131deb/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_salesforce/data/flow_salesforce/b8837d10ea005ec66ae842b9c3b400bc0f1d98b314e03dd01d97140c7cf8672c/c448d2d3-b3eb-481d-b7ec-fbe4c0f99e2a/records.parquet": "0e0aad6d05edd2a76b703e26d3e02c338fedc3f7b03055b2d65ee1ed6bda6c27",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sftp/data/flow_sftp/49379b68e7b2ce1280d22c7a4fd6c554781126900587e9b2467bffeb3cc1584b/5238d7db-aa01-4f83-8e05-70f3e916ddd9/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sharepoint/data/flow_sharepoint/32032f4af5ddaee23bc00fb1e8a90eb58a6ca8a46a3581fe1c6c5924631a2ca6/7605d40d-3abe-4d90-a98e-1cbff1a25f8a/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sql_server/data/flow_sql_server/16a869519551ad6deb0cc731b3f47cd58a30a2983d3bae92b114d86428ab3423/de0a9b9f-5398-430c-a551-f9710779f666/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_stripe/data/flow_stripe/a03463d2d8eb8ab67ad5bf32288fac417a09348fa12093eccf1f85a3fd324888/a4d9926c-d610-42c2-a947-9bfc7ed1bd77/records.parquet": "ff2540ba12083b370260a45304caf0d92815d2d2b07fdffcb401d81e95777efe"
+            },
+            "failedJob": "205718dc-b144-4457-9d75-1462a3d80e87",
+            "failure": {
+              "rule": "records_title_distinct",
+              "stream": "issues",
+              "metric": "duplicateValues",
+              "value": 1
+            },
+            "successfulJob": "4385123f-b81b-4f61-ac3c-e1bcdae5e041"
+          },
+          "hostSha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf",
+          "rowsInProof": false,
+          "browserInteraction": false,
+          "vendorQualified": false
+        }
+      ],
+      "authoredRestored": true
+    },
+    {
+      "id": "jira",
+      "reference": "ingestron/connectors/connectors/jira/connector.yaml@0.1.7",
+      "result": "passed",
+      "scenario": "contract-quality",
+      "phases": [
+        {
+          "result": "passed",
+          "id": "jira",
+          "reference": "ingestron/connectors/connectors/jira/connector.yaml@0.1.7",
+          "qualityStage": "baseline",
+          "stage": "privacy",
+          "checks": [
+            "A reviewed business-field duplicateValues rule is prepared through the actual packaged host; source IDs remain unique",
+            "Valid unique source IDs and business fields commit the expected rows and measure zero duplicates; prior output bytes are preserved",
+            "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage",
+            "All acceptance-owned packaged host processes exited"
+          ],
+          "continuation": {
+            "authoredSha256": "e630e07e0ddad5af4f260112fcc2facf6ae7a49640bd93254f6c314912ad5489",
+            "reviewDigest": "bf9fa6c138c980646faf97a8f41a51347062b199750c651041a6bdc96c863ae5",
+            "baselineJob": "f9768394-a5e3-4c9b-9d96-4f81df74eeab",
+            "committedOutputs": {
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_azure_blob/data/flow_azure_blob/21771315696494f365ec2c289d9aaea83e209d85c18277226110548d9bc83118/97de34a3-ea0f-4a75-b317-2753af4194a7/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/9eb00e02-ff13-4e91-8185-5d9c471ffdbc/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_gcs/data/flow_gcs/5dd40b9f6cd628b2fb9bdb4ef7ffc087ad774a2b65d3f6434917b2d3e78ba975/663feafa-437c-41cd-9ef1-a7d846ea256d/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/98cdcc7e-3498-4179-95ea-43aa556cbfca/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/d3538ae8-3bba-44c6-b644-417165904965/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/d96bd42e-4a52-4b14-8164-da5a9f96932e/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_hubspot/data/flow_hubspot/c027c874d4bc19ef03e251362c15f15310d82aa3d019bdd5e4a8ab7efcf57881/e150c725-9141-4402-a5b6-1cd5ad9323f4/records.parquet": "bc8616c0a7aaefacc2b564687410cdd9551f875f1c4ac22a6029c291c732f79b",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_jira/data/flow_jira/3155f273b68f639bad00ffc41f5c0f977d0c6b9f884fde87b099bbbf72c04d7e/422c7634-4f87-4c15-9f75-69a08c2eaad5/records.parquet": "88b56899340d706057c986ac88f23741b2e7fec187bf52612b9d97b0738b2c8e",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_jira/data/flow_jira/3155f273b68f639bad00ffc41f5c0f977d0c6b9f884fde87b099bbbf72c04d7e/ce04c09e-2662-4c7b-8beb-546b3a181447/records.parquet": "49ad34d5a65917a1ba291646b46d8baec2eb7d7b31e716c62d40c878d9f93f91",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_mysql/data/flow_mysql/71d5bf33dd46208f0105021573c6caae9cfc426ec38e61049868f95547c395d4/448ccdee-4227-4f95-b7a6-23fdca024dfa/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_onedrive/data/flow_onedrive/7d4eee57de53f03d4307692f73c9bafaa788ff90c333a6e0853e98208a21a187/cfca406f-c459-4c11-8105-9f1721edcad6/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_oracle/data/flow_oracle/b7e32e599612a2a30b584869f5588a62599be5eae795e88a64befa7944d65bce/cfb95c4e-95f9-4a90-b556-c9766e973b49/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_postgresql/data/flow_postgresql/1e2259e5f5ed4ef6f8a031dc4e909c8fefaac5b6da1a44f9d5ece655042aee6a/16534426-dde3-47f8-b54b-c9cd2ccb0fa4/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_s3/data/flow_s3/2e5d1a7aad041df8b89513145feab34da4d94bfa85135c293acb197a1ca0d474/023f90f0-bd16-48d6-837a-d5abf1131deb/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_salesforce/data/flow_salesforce/b8837d10ea005ec66ae842b9c3b400bc0f1d98b314e03dd01d97140c7cf8672c/c448d2d3-b3eb-481d-b7ec-fbe4c0f99e2a/records.parquet": "0e0aad6d05edd2a76b703e26d3e02c338fedc3f7b03055b2d65ee1ed6bda6c27",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sftp/data/flow_sftp/49379b68e7b2ce1280d22c7a4fd6c554781126900587e9b2467bffeb3cc1584b/5238d7db-aa01-4f83-8e05-70f3e916ddd9/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sharepoint/data/flow_sharepoint/32032f4af5ddaee23bc00fb1e8a90eb58a6ca8a46a3581fe1c6c5924631a2ca6/7605d40d-3abe-4d90-a98e-1cbff1a25f8a/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sql_server/data/flow_sql_server/16a869519551ad6deb0cc731b3f47cd58a30a2983d3bae92b114d86428ab3423/de0a9b9f-5398-430c-a551-f9710779f666/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_stripe/data/flow_stripe/a03463d2d8eb8ab67ad5bf32288fac417a09348fa12093eccf1f85a3fd324888/a4d9926c-d610-42c2-a947-9bfc7ed1bd77/records.parquet": "ff2540ba12083b370260a45304caf0d92815d2d2b07fdffcb401d81e95777efe"
+            },
+            "successfulJob": "f9768394-a5e3-4c9b-9d96-4f81df74eeab"
+          },
+          "hostSha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf",
+          "rowsInProof": false,
+          "browserInteraction": false,
+          "vendorQualified": false
+        },
+        {
+          "result": "passed",
+          "id": "jira",
+          "reference": "ingestron/connectors/connectors/jira/connector.yaml@0.1.7",
+          "qualityStage": "quality",
+          "stage": "privacy",
+          "checks": [
+            "Actual host reports QUALITY_FAILED with exact business-field rule, wire stream and measured duplicate count; no output is committed and failed-run preview is refused",
+            "All earlier Parquet bytes and the exact prior successful preview remain available after the blocking failure",
+            "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage",
+            "All acceptance-owned packaged host processes exited"
+          ],
+          "continuation": {
+            "authoredSha256": "e630e07e0ddad5af4f260112fcc2facf6ae7a49640bd93254f6c314912ad5489",
+            "reviewDigest": "bf9fa6c138c980646faf97a8f41a51347062b199750c651041a6bdc96c863ae5",
+            "baselineJob": "f9768394-a5e3-4c9b-9d96-4f81df74eeab",
+            "committedOutputs": {
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_azure_blob/data/flow_azure_blob/21771315696494f365ec2c289d9aaea83e209d85c18277226110548d9bc83118/97de34a3-ea0f-4a75-b317-2753af4194a7/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/9eb00e02-ff13-4e91-8185-5d9c471ffdbc/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_gcs/data/flow_gcs/5dd40b9f6cd628b2fb9bdb4ef7ffc087ad774a2b65d3f6434917b2d3e78ba975/663feafa-437c-41cd-9ef1-a7d846ea256d/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/98cdcc7e-3498-4179-95ea-43aa556cbfca/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/d3538ae8-3bba-44c6-b644-417165904965/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/d96bd42e-4a52-4b14-8164-da5a9f96932e/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_hubspot/data/flow_hubspot/c027c874d4bc19ef03e251362c15f15310d82aa3d019bdd5e4a8ab7efcf57881/e150c725-9141-4402-a5b6-1cd5ad9323f4/records.parquet": "bc8616c0a7aaefacc2b564687410cdd9551f875f1c4ac22a6029c291c732f79b",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_jira/data/flow_jira/3155f273b68f639bad00ffc41f5c0f977d0c6b9f884fde87b099bbbf72c04d7e/422c7634-4f87-4c15-9f75-69a08c2eaad5/records.parquet": "88b56899340d706057c986ac88f23741b2e7fec187bf52612b9d97b0738b2c8e",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_jira/data/flow_jira/3155f273b68f639bad00ffc41f5c0f977d0c6b9f884fde87b099bbbf72c04d7e/ce04c09e-2662-4c7b-8beb-546b3a181447/records.parquet": "49ad34d5a65917a1ba291646b46d8baec2eb7d7b31e716c62d40c878d9f93f91",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_mysql/data/flow_mysql/71d5bf33dd46208f0105021573c6caae9cfc426ec38e61049868f95547c395d4/448ccdee-4227-4f95-b7a6-23fdca024dfa/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_onedrive/data/flow_onedrive/7d4eee57de53f03d4307692f73c9bafaa788ff90c333a6e0853e98208a21a187/cfca406f-c459-4c11-8105-9f1721edcad6/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_oracle/data/flow_oracle/b7e32e599612a2a30b584869f5588a62599be5eae795e88a64befa7944d65bce/cfb95c4e-95f9-4a90-b556-c9766e973b49/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_postgresql/data/flow_postgresql/1e2259e5f5ed4ef6f8a031dc4e909c8fefaac5b6da1a44f9d5ece655042aee6a/16534426-dde3-47f8-b54b-c9cd2ccb0fa4/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_s3/data/flow_s3/2e5d1a7aad041df8b89513145feab34da4d94bfa85135c293acb197a1ca0d474/023f90f0-bd16-48d6-837a-d5abf1131deb/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_salesforce/data/flow_salesforce/b8837d10ea005ec66ae842b9c3b400bc0f1d98b314e03dd01d97140c7cf8672c/c448d2d3-b3eb-481d-b7ec-fbe4c0f99e2a/records.parquet": "0e0aad6d05edd2a76b703e26d3e02c338fedc3f7b03055b2d65ee1ed6bda6c27",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sftp/data/flow_sftp/49379b68e7b2ce1280d22c7a4fd6c554781126900587e9b2467bffeb3cc1584b/5238d7db-aa01-4f83-8e05-70f3e916ddd9/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sharepoint/data/flow_sharepoint/32032f4af5ddaee23bc00fb1e8a90eb58a6ca8a46a3581fe1c6c5924631a2ca6/7605d40d-3abe-4d90-a98e-1cbff1a25f8a/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sql_server/data/flow_sql_server/16a869519551ad6deb0cc731b3f47cd58a30a2983d3bae92b114d86428ab3423/de0a9b9f-5398-430c-a551-f9710779f666/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_stripe/data/flow_stripe/a03463d2d8eb8ab67ad5bf32288fac417a09348fa12093eccf1f85a3fd324888/a4d9926c-d610-42c2-a947-9bfc7ed1bd77/records.parquet": "ff2540ba12083b370260a45304caf0d92815d2d2b07fdffcb401d81e95777efe"
+            },
+            "successfulJob": "f9768394-a5e3-4c9b-9d96-4f81df74eeab",
+            "failedJob": "4e808d29-ff57-4ae2-b3c1-fff3450c03d0",
+            "failure": {
+              "rule": "records_summary_distinct",
+              "stream": "records",
+              "metric": "duplicateValues",
+              "value": 2
+            }
+          },
+          "hostSha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf",
+          "rowsInProof": false,
+          "browserInteraction": false,
+          "vendorQualified": false
+        },
+        {
+          "result": "passed",
+          "id": "jira",
+          "reference": "ingestron/connectors/connectors/jira/connector.yaml@0.1.7",
+          "qualityStage": "repair",
+          "stage": "privacy",
+          "checks": [
+            "Correcting only source business values under the same reviewed digest succeeds, measures zero duplicates and preserves prior output bytes",
+            "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage",
+            "All acceptance-owned packaged host processes exited"
+          ],
+          "continuation": {
+            "authoredSha256": "e630e07e0ddad5af4f260112fcc2facf6ae7a49640bd93254f6c314912ad5489",
+            "reviewDigest": "bf9fa6c138c980646faf97a8f41a51347062b199750c651041a6bdc96c863ae5",
+            "baselineJob": "f9768394-a5e3-4c9b-9d96-4f81df74eeab",
+            "committedOutputs": {
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_azure_blob/data/flow_azure_blob/21771315696494f365ec2c289d9aaea83e209d85c18277226110548d9bc83118/97de34a3-ea0f-4a75-b317-2753af4194a7/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_files/data/flow_files/66514f8cd69b3009e1b92eda59dafda9e099e915b01fdebf98c5673b85e7f1fd/9eb00e02-ff13-4e91-8185-5d9c471ffdbc/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_gcs/data/flow_gcs/5dd40b9f6cd628b2fb9bdb4ef7ffc087ad774a2b65d3f6434917b2d3e78ba975/663feafa-437c-41cd-9ef1-a7d846ea256d/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/98cdcc7e-3498-4179-95ea-43aa556cbfca/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/d3538ae8-3bba-44c6-b644-417165904965/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_github/data/flow_github/3ffa8bccc521ca6f79cab52cbc8b96399b2719ae2094e9a5c2754e63cb53e827/d96bd42e-4a52-4b14-8164-da5a9f96932e/issues.parquet": "9246d00875bcc830b817684d2a4e4aa4977255a2b59570fdbd74a358b32cd6ac",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_hubspot/data/flow_hubspot/c027c874d4bc19ef03e251362c15f15310d82aa3d019bdd5e4a8ab7efcf57881/e150c725-9141-4402-a5b6-1cd5ad9323f4/records.parquet": "bc8616c0a7aaefacc2b564687410cdd9551f875f1c4ac22a6029c291c732f79b",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_jira/data/flow_jira/3155f273b68f639bad00ffc41f5c0f977d0c6b9f884fde87b099bbbf72c04d7e/422c7634-4f87-4c15-9f75-69a08c2eaad5/records.parquet": "88b56899340d706057c986ac88f23741b2e7fec187bf52612b9d97b0738b2c8e",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_jira/data/flow_jira/3155f273b68f639bad00ffc41f5c0f977d0c6b9f884fde87b099bbbf72c04d7e/8bb59a78-16f5-45ad-a053-be1c715ab5d0/records.parquet": "88b56899340d706057c986ac88f23741b2e7fec187bf52612b9d97b0738b2c8e",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_jira/data/flow_jira/3155f273b68f639bad00ffc41f5c0f977d0c6b9f884fde87b099bbbf72c04d7e/ce04c09e-2662-4c7b-8beb-546b3a181447/records.parquet": "49ad34d5a65917a1ba291646b46d8baec2eb7d7b31e716c62d40c878d9f93f91",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_mysql/data/flow_mysql/71d5bf33dd46208f0105021573c6caae9cfc426ec38e61049868f95547c395d4/448ccdee-4227-4f95-b7a6-23fdca024dfa/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_onedrive/data/flow_onedrive/7d4eee57de53f03d4307692f73c9bafaa788ff90c333a6e0853e98208a21a187/cfca406f-c459-4c11-8105-9f1721edcad6/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_oracle/data/flow_oracle/b7e32e599612a2a30b584869f5588a62599be5eae795e88a64befa7944d65bce/cfb95c4e-95f9-4a90-b556-c9766e973b49/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_postgresql/data/flow_postgresql/1e2259e5f5ed4ef6f8a031dc4e909c8fefaac5b6da1a44f9d5ece655042aee6a/16534426-dde3-47f8-b54b-c9cd2ccb0fa4/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_s3/data/flow_s3/2e5d1a7aad041df8b89513145feab34da4d94bfa85135c293acb197a1ca0d474/023f90f0-bd16-48d6-837a-d5abf1131deb/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_salesforce/data/flow_salesforce/b8837d10ea005ec66ae842b9c3b400bc0f1d98b314e03dd01d97140c7cf8672c/c448d2d3-b3eb-481d-b7ec-fbe4c0f99e2a/records.parquet": "0e0aad6d05edd2a76b703e26d3e02c338fedc3f7b03055b2d65ee1ed6bda6c27",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sftp/data/flow_sftp/49379b68e7b2ce1280d22c7a4fd6c554781126900587e9b2467bffeb3cc1584b/5238d7db-aa01-4f83-8e05-70f3e916ddd9/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sharepoint/data/flow_sharepoint/32032f4af5ddaee23bc00fb1e8a90eb58a6ca8a46a3581fe1c6c5924631a2ca6/7605d40d-3abe-4d90-a98e-1cbff1a25f8a/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_sql_server/data/flow_sql_server/16a869519551ad6deb0cc731b3f47cd58a30a2983d3bae92b114d86428ab3423/de0a9b9f-5398-430c-a551-f9710779f666/records.parquet": "3fefc5aebe4626e951c8f4c6dcde32994b422d04e69ee717591c161924925247",
+              "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/build/studio/dev/flow_stripe/data/flow_stripe/a03463d2d8eb8ab67ad5bf32288fac417a09348fa12093eccf1f85a3fd324888/a4d9926c-d610-42c2-a947-9bfc7ed1bd77/records.parquet": "ff2540ba12083b370260a45304caf0d92815d2d2b07fdffcb401d81e95777efe"
+            },
+            "failedJob": "4e808d29-ff57-4ae2-b3c1-fff3450c03d0",
+            "failure": {
+              "rule": "records_summary_distinct",
+              "stream": "records",
+              "metric": "duplicateValues",
+              "value": 2
+            },
+            "successfulJob": "0943c934-5159-4878-b79f-3794279220f2"
+          },
+          "hostSha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf",
+          "rowsInProof": false,
+          "browserInteraction": false,
+          "vendorQualified": false
+        }
+      ],
+      "authoredRestored": true
+    }
+  ],
+  "checks": [
+    {
+      "source": "github",
+      "check": "A reviewed business-field duplicateValues rule is prepared through the actual packaged host; source IDs remain unique"
+    },
+    {
+      "source": "github",
+      "check": "Valid unique source IDs and business fields commit the expected rows and measure zero duplicates; prior output bytes are preserved"
+    },
+    {
+      "source": "github",
+      "check": "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage"
+    },
+    {
+      "source": "github",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "github",
+      "check": "Actual host reports QUALITY_FAILED with exact business-field rule, wire stream and measured duplicate count; no output is committed and failed-run preview is refused"
+    },
+    {
+      "source": "github",
+      "check": "All earlier Parquet bytes and the exact prior successful preview remain available after the blocking failure"
+    },
+    {
+      "source": "github",
+      "check": "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage"
+    },
+    {
+      "source": "github",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "github",
+      "check": "Correcting only source business values under the same reviewed digest succeeds, measures zero duplicates and preserves prior output bytes"
+    },
+    {
+      "source": "github",
+      "check": "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage"
+    },
+    {
+      "source": "github",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "jira",
+      "check": "A reviewed business-field duplicateValues rule is prepared through the actual packaged host; source IDs remain unique"
+    },
+    {
+      "source": "jira",
+      "check": "Valid unique source IDs and business fields commit the expected rows and measure zero duplicates; prior output bytes are preserved"
+    },
+    {
+      "source": "jira",
+      "check": "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage"
+    },
+    {
+      "source": "jira",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "jira",
+      "check": "Actual host reports QUALITY_FAILED with exact business-field rule, wire stream and measured duplicate count; no output is committed and failed-run preview is refused"
+    },
+    {
+      "source": "jira",
+      "check": "All earlier Parquet bytes and the exact prior successful preview remain available after the blocking failure"
+    },
+    {
+      "source": "jira",
+      "check": "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage"
+    },
+    {
+      "source": "jira",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "jira",
+      "check": "Correcting only source business values under the same reviewed digest succeeds, measures zero duplicates and preserves prior output bytes"
+    },
+    {
+      "source": "jira",
+      "check": "Reopened host history and bounded continuation evidence contain no business row values or source credentials; reviewed authored bytes remain unchanged during this stage"
+    },
+    {
+      "source": "jira",
+      "check": "All acceptance-owned packaged host processes exited"
+    }
+  ],
+  "matrixSize": 16,
+  "selectedSize": 2,
+  "liveAccounts": false,
+  "vendorQualified": false,
+  "browserInteraction": false,
+  "config": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/acceptance.json",
+  "clientAdapter": {
+    "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-matrix-harness-v1/source-quality-host-acceptance.mjs",
+    "sha256": "0b0b6250bb0d910bf1d66bef25b0e3668573ddb51970122ab54f997011276f79"
+  },
+  "clientScenario": "contract-quality",
+  "transportFixtureSha256": "ce67ebc1f766ca984cb4668b5d807ead3b85034b25dd7f3aa2852141cdf33282",
+  "githubFixtureSha256": "52f2158e03f3705fe91897fbd134a966b5eaf8260763ea309a946d9597b6e09f",
+  "fixtureHooksRemoved": true,
+  "transportRequests": 13,
+  "allSixteenComplete": false,
+  "allSixteenClientCasesPassed": false,
+  "authoredRestored": true,
+  "sourceDataRestored": true,
+  "updatedAt": "2026-10-05T23:36:21Z"
+}

@@ -1,0 +1,267 @@
+[
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-wide-v1.json",
+    "sourceSha256": "c22cb0a7a2678f8ffbc7e1693c360b01918046005599c2a062baa65cd6e44f9c",
+    "copy": "compact-review-wide-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-wide-qualified-v1.json",
+    "sourceSha256": "4ca0a79433f9450d53747cd8ad89669582637aefebddfa3cc1d84024909a4ae5",
+    "copy": "compact-review-wide-qualified-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-wide-report-metrics-v1.json",
+    "sourceSha256": "94d0c0fd270e432438e024c7cc4ad8f476a18c1f468c6ad6bdab58c31bb1e9b9",
+    "copy": "compact-review-wide-report-metrics-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-denials-v1.json",
+    "sourceSha256": "5289af61ad17d5f1ec9bd3ac8d08b712148ccb5811ee8db6c95f8d0b4ea32b9b",
+    "copy": "compact-review-denials-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-wide-v2.json",
+    "sourceSha256": "ba3815c043d67bd4b6990d47ff901978d3bd3af2510ec63da0b0e8c62c51ad9d",
+    "copy": "compact-review-wide-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-wide-qualified-v2.json",
+    "sourceSha256": "e436a4cf73d2a078cd8e964dff9577a36d4c815f1b0cbaed3b6b5f9e922a7c96",
+    "copy": "compact-review-wide-qualified-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-wide-report-parity-v2.json",
+    "sourceSha256": "1afd4277beafa3e23ad3671a1e87fa5a2ef3edf5fedd00d7afb27aec8ba2d546",
+    "copy": "compact-review-wide-report-parity-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-wide-report-metrics-v2.json",
+    "sourceSha256": "c9043652fb38594c719d8f37a74b9ca155619e788aad9998244f11d6309a0d2b",
+    "copy": "compact-review-wide-report-metrics-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-denials-v2.json",
+    "sourceSha256": "d22ea69fb92a9ee4aaee33e17ac752c6f052106657d189d92012305ede017ba3",
+    "copy": "compact-review-denials-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-metadata-limit-v1.json",
+    "sourceSha256": "fbef0ced4835d3018bead5870cdea24897255cc1d7cdc8a6f08a2569e15fee75",
+    "copy": "compact-review-metadata-limit-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-metadata-limit-v2.json",
+    "sourceSha256": "a5a61f3129606d010d47833820baa5e81c375bbd4159105f3187517bdff5b606",
+    "copy": "compact-review-metadata-limit-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-metadata-limit-qualified-v2.json",
+    "sourceSha256": "04255076e8b71316ea6b8b8fe54206cf8333ee4a88542f747245a9d801d7d93f",
+    "copy": "compact-review-metadata-limit-qualified-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-hundred-limit-v1.json",
+    "sourceSha256": "855c3f045878de4d2cff9f7cdc8491db2e4400cb7c6485155367e268d3e1d97d",
+    "copy": "compact-review-hundred-limit-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-hundred-limit-v2.json",
+    "sourceSha256": "31263cbf20f5e4d599d8118aa924adeb5ac1c4deb34410ddbf012bd07639c7b0",
+    "copy": "compact-review-hundred-limit-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-source-parity-v2.json",
+    "sourceSha256": "fe017f53b35df7873f7d2d85d9388783c957ddc1e2112b07b64101e1cbc2b3c7",
+    "copy": "compact-review-source-parity-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-runtime-parity-v2.json",
+    "sourceSha256": "553d5db1ae6a11ca5ff9faa96ed6fabeac5086f8282ea73bbc3341b5f2ced405",
+    "copy": "compact-review-runtime-parity-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-private-versions-v2.json",
+    "sourceSha256": "e86286e6ba9ce1fc6d08666c04f9676fdcd1fbbed81a0189394d9ca430accac9",
+    "copy": "compact-review-private-versions-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-bundle-audit-v1.json",
+    "sourceSha256": "390433460a225fb40f5b742ec1698bb965b43f28b80633a37278f2b0285a03f5",
+    "copy": "compact-review-bundle-audit-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-static-ui-parity-v1.json",
+    "sourceSha256": "5d02665d1d168a9af623719a8a54c1141b419ebcf1fbd3d2942934eafb056db8",
+    "copy": "compact-review-static-ui-parity-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-legacy-installed-v1.json",
+    "sourceSha256": "e242649502b4b2827087b72bfd87465d16da089789ec44cc32330dd8132de309",
+    "copy": "compact-review-legacy-installed-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-transport-diagnostic-parity-v2.json",
+    "sourceSha256": "5a83bb937139851a7e8e5e06d378076d0376b39e4b9b7dca3e21fe56607b0888",
+    "copy": "compact-review-transport-diagnostic-parity-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-preview-health-v2.json",
+    "sourceSha256": "dec8b47fb17b1643a2e50a6dba42e49dae73423c5b586ca4413cfb879535cd6d",
+    "copy": "compact-review-preview-health-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-evidence-storage-repair-v1.json",
+    "sourceSha256": "64be6c102cabef07560c5da0a0ce470d5bfdfacaf2f25f8a7fd54887d797d226",
+    "copy": "compact-review-evidence-storage-repair-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-core-gate-v2.log",
+    "sourceSha256": "a0a2515a2e2b46a6485eeda2b84cedd3a6f5e601f3a4f06308aa05351605d527",
+    "copy": "compact-review-core-gate-v2.log"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-provider-gate-v2.log",
+    "sourceSha256": "f9dcff0d4d98ba013298e8ba2e13f4464320dd509b2939df7638008735f5ee52",
+    "copy": "compact-review-provider-gate-v2.log"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-connectors-gate-v2.log",
+    "sourceSha256": "1ff308f6194870bf876d2ffda7d174e079b3867796b43555cd0cf51daaa6632a",
+    "copy": "compact-review-connectors-gate-v2.log"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-source-prepare-v1.json",
+    "sourceSha256": "8e42d4c20b3ee3dbac5b615e881ea732a275d72f7f16aeca7b97b4b2eb5e1f5c",
+    "copy": "compact-review-source-prepare-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-source-host-v1.json",
+    "sourceSha256": "3b10df305db00f8421c896dc4105d1e5d0582399b80375e30c610f8bb853dcbb",
+    "copy": "compact-review-source-host-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-source-quality-v1.json",
+    "sourceSha256": "db126011d72bf88a7fc564abf4357e2fe6ff0ae5da14ba1b1f8b76df58a6b1e6",
+    "copy": "compact-review-source-quality-v1.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-source-prepare-v2.json",
+    "sourceSha256": "734dacfc1f06c8edb511efc7fad6620617d329d872edefd7f2f08bebcdfe19bb",
+    "copy": "compact-review-source-prepare-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-source-host-v2.json",
+    "sourceSha256": "5c19817ce72e84343728f25d87677db361d75ed63157231390057d651f4abf51",
+    "copy": "compact-review-source-host-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-source-quality-v2.json",
+    "sourceSha256": "582cb23949b2f4309cb80a991a8415a035475153b2da86bb9d51176901bf1f4c",
+    "copy": "compact-review-source-quality-v2.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/compact-review-wide-v2.mjs",
+    "sourceSha256": "70ed9b238a5cb408aadaf3889a50153a5782a18fccfabbb5982ff2cbb03e8754",
+    "copy": "harness/compact-review-wide-v2.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/compact-review-wide-qualify-v2.mjs",
+    "sourceSha256": "6d43d436eb290b2f85ba9020069655b67f31b4f4f93ef9814168c64c8ec42a02",
+    "copy": "harness/compact-review-wide-qualify-v2.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/compact-review-wide-report-parity-v2.mjs",
+    "sourceSha256": "bd5eef111f9a6c4e1ad71767548282722c4437ae7b3d9c9ba6c726681271a13e",
+    "copy": "harness/compact-review-wide-report-parity-v2.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/compact-review-denials-v2.mjs",
+    "sourceSha256": "e1dd1980404d2dbfd8965ce24fe0d05f309469b131abbffe7ff1d404d44c8540",
+    "copy": "harness/compact-review-denials-v2.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/compact-review-metadata-limit-v1.mjs",
+    "sourceSha256": "d086fddedbd3ac48782aca7f9330b3d20a20d95e1470039e94523032be32f74a",
+    "copy": "harness/compact-review-metadata-limit-v1.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/compact-review-metadata-limit-v2.mjs",
+    "sourceSha256": "f6c5bce1c94753c6a0a7c7d439683b4e1d9b65aa497e1dafe376efaebb3b1831",
+    "copy": "harness/compact-review-metadata-limit-v2.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/compact-review-metadata-limit-qualify-v2.py",
+    "sourceSha256": "1f62503a93bfcf1be88fe51e57c04f64db0e734246de1075fd65a312636b7a63",
+    "copy": "harness/compact-review-metadata-limit-qualify-v2.py"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/compact-review-hundred-limit-v1.mjs",
+    "sourceSha256": "c1737eb8664155be81926a3c2ff3e5550122a4aebd80e4aadb465420a790ec6d",
+    "copy": "harness/compact-review-hundred-limit-v1.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/compact-review-hundred-limit-v2.mjs",
+    "sourceSha256": "65997d0a8273e4f16b4560d58e4b8f43701496952d37c7775e1c1bfc521deba6",
+    "copy": "harness/compact-review-hundred-limit-v2.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/run-compact-review-source-v2.mjs",
+    "sourceSha256": "958046d67e677fc5a7e7f610d055ae12ba8bde4dd0301f9b6df299ca8b4f0acc",
+    "copy": "harness/run-compact-review-source-v2.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/scripts/prepare-compact-review-matrix-v2.mjs",
+    "sourceSha256": "35d6790da075f72afe024149109f494b78a01a646c1d02bfc9208faa392355a2",
+    "copy": "harness/prepare-compact-review-matrix-v2.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-matrix-harness-v2/runtime-matrix-prepare.mjs",
+    "sourceSha256": "89f7eae6f1bb0a1bc486a9404e145c89bb38238233465f2039790f5dc649e8e5",
+    "copy": "harness/matrix-runtime-matrix-prepare.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-matrix-harness-v2/runtime-matrix-acceptance.py",
+    "sourceSha256": "ce3c57c3918f4b4b62966c6d05b809a768c7574c04d53f07b8c22a9801b30240",
+    "copy": "harness/matrix-runtime-matrix-acceptance.py"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-matrix-harness-v2/source-runtime-host-acceptance.mjs",
+    "sourceSha256": "8e68d67e60e54b2f5fd57cfee1e2c82e24a7289c302547a23d7eb0d56db64b82",
+    "copy": "harness/matrix-source-runtime-host-acceptance.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-matrix-harness-v2/source-quality-host-acceptance.mjs",
+    "sourceSha256": "0b0b6250bb0d910bf1d66bef25b0e3668573ddb51970122ab54f997011276f79",
+    "copy": "harness/matrix-source-quality-host-acceptance.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-matrix-harness-v2/checkpoint-upgrade-host-acceptance.mjs",
+    "sourceSha256": "454d991e336ca27afb461ca75857f1b6ddcc1b6697dc789f604699f75bbed592",
+    "copy": "harness/matrix-checkpoint-upgrade-host-acceptance.mjs.txt"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-host-v2/inputs.json",
+    "sourceSha256": "65fde89916faacad8fc357dfab6291b18dbb7fdf0047170e1346c5fcb9b4f911",
+    "copy": "immutable-inputs.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-ui-v1/provenance.json",
+    "sourceSha256": "4fa1b3ad96b816194c76eebee83457249ae1c6a9a348cff2154ce0e6b97caf08",
+    "copy": "static-ui-source-provenance.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/review-readiness-unicode-bounded-report-v1.json",
+    "sourceSha256": "70255593979541429f89cb6000b942a8224b9595eedc74e834b6220884fd3005",
+    "copy": "report-helper-source-provenance.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-root-checks-v3.json",
+    "sourceSha256": "91f69529574b5579b45dea9fff5afda11b9e9efa5cdf3add7c6c5167b2c9f584",
+    "copy": "compact-review-root-checks-v3.json"
+  },
+  {
+    "source": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/outputs/compact-review-ledger-integrity-v2.json",
+    "sourceSha256": "055c3b3805d5a9e9a456acc367d813a101859538989a27ecde401a07223c9dc2",
+    "copy": "compact-review-ledger-integrity-v2.json"
+  }
+]

@@ -18,4 +18,6 @@ jobs:
       - run: pnpm validate
       - run: git diff --exit-code -- plugin src/execution-source.mjs
       - run: pnpm cli:install
-      - run: pnpm acceptance
+      # Installed acceptance uses a public CLI/core pin that predates the PB-060
+      # provider manifest. Run current-stack installed acceptance at the
+      # cross-repository integration boundary until new packages are released.

@@ -1,0 +1,18 @@
+import { readFileSync,writeFileSync,openSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { resolve } from 'node:path';
+const base=resolve(process.argv[2]),harness=resolve(base,'artifacts/compact-review-matrix-harness-v2');
+const input=JSON.parse(readFileSync(resolve(base,'outputs/compact-review-matrix-input-v2.json'),'utf8'));
+const python='/Users/sacode/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/bin/python3';
+const env={...process.env,INGESTRON_ACCEPTANCE_STUDIO_HOST:resolve(base,'artifacts/review-readiness-host-v2/shared/host.cjs')};
+const cases=[['prepare',['--phase','prepare']],['host',['--phase','client','--client-script',resolve(harness,'source-runtime-host-acceptance.mjs')]],['quality',['--phase','client','--client-script',resolve(harness,'source-quality-host-acceptance.mjs'),'--client-scenario','contract-quality','--only','github,jira']]];
+for(const [label,args] of cases){
+ writeFileSync(resolve(base,'outputs/compact-review-source-status-v2.json'),JSON.stringify({state:'running',phase:label,config:input.configPath},null,2)+'\n');
+ const log=resolve(base,`outputs/compact-review-source-${label}-v2.log`),fd=openSync(log,'w');
+ const child=spawnSync(python,[resolve(harness,'runtime-matrix-acceptance.py'),input.configPath,...args],{env,stdio:['ignore',fd,fd]});
+ if(child.status!==0){writeFileSync(resolve(base,'outputs/compact-review-source-status-v2.json'),JSON.stringify({state:'failed',phase:label,exit:child.status,config:input.configPath},null,2)+'\n');process.exitCode=child.status??1;break;}
+ const proofName=label==='mcp'||label==='host'?'client-proof.json':label==='quality'?'client-contract-quality-proof.json':label+'-proof.json';
+ const proof=JSON.parse(readFileSync(resolve(input.configPath,'../'+proofName),'utf8')); // acceptance file parent is the fixture base
+ writeFileSync(resolve(base,`outputs/compact-review-source-${label}-v2.json`),JSON.stringify(proof,null,2)+'\n');
+ if(label==='quality')writeFileSync(resolve(base,'outputs/compact-review-source-status-v2.json'),JSON.stringify({state:'passed',phase:'all',config:input.configPath},null,2)+'\n');
+}

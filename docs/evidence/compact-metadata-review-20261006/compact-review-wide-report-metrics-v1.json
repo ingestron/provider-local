@@ -1,0 +1,16 @@
+{
+  "result": "passed",
+  "root": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-wide-UMbEbn",
+  "reportPath": "build/studio/dev/flow_files/flows/flow_files/review.json",
+  "reportBytes": 1609401,
+  "reportSha256": "6830f2c664fedb128b505d52a67c155de124abde82d35a2250f2dbcbe5d086e4",
+  "pageCount": 7,
+  "approvalDigest": "b9becc0a63f633dba953a1b6405a7477337113252a3b6ef2a6c436457a6434ef",
+  "sdkCliMcpPagesExact": true,
+  "untrustedHostApprovalDigestExact": true,
+  "actualFrozenReportHelperBytesExact": true,
+  "decodedMultilingualDescriptionsExact": true,
+  "hostMs": 6957.348167,
+  "pagesMs": 3890.4579589999994,
+  "scope": "Single local timing during concurrent synthetic qualification; no browser interaction or latency guarantee"
+}

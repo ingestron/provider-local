@@ -1,0 +1,214 @@
+{
+  "scope": "Frozen actual UI models and static actual views; no mounted/browser/keyboard interaction.",
+  "bundleSha256": "80e38f744bd4add9a2c30dd175e9f802032f2f6ba5b39e85c6f684e116cd13ef",
+  "sources": [
+    {
+      "path": "packages/studio-ui/source-inventory-model.ts",
+      "sha256": "86bec49a6b5b4cb62f14516e73fd552fcd810db8e8c0ff4368ef1dcf96fed344"
+    },
+    {
+      "path": "packages/studio-ui/source-object-browser.tsx",
+      "sha256": "74287d0636d9ed29c5227e2747843cf3f1e97d2fb1a48ab927fffe759df0f789"
+    },
+    {
+      "path": "packages/studio-ui/source-contract-model.ts",
+      "sha256": "562d1556c4b8c6284922bb2cb35c9af15f9e79c5b558674e0be5e03d17408f6b"
+    },
+    {
+      "path": "packages/studio-ui/change-diff.ts",
+      "sha256": "47e629aec6dc0321f6e076401eabc74851432d663830fd81df0aa6c4e14df6aa"
+    },
+    {
+      "path": "packages/studio-ui/page-jump.tsx",
+      "sha256": "d0ae071e8ae45ff20a8488ebcb91c78d36a7271cebc47550bdff26eeebbbf834"
+    },
+    {
+      "path": "packages/studio-ui/change-review.tsx",
+      "sha256": "c81e59b1811a7fdb4940c99d5dce0d98d0ebea84555b5c8007dacc318fd1bc54"
+    },
+    {
+      "path": "packages/studio-ui/item-model.ts",
+      "sha256": "e9eda85abfa965a9f2d5c1cc696068ba316a92c3ab9b914ea59fd1de21bf15a2"
+    },
+    {
+      "path": "packages/studio-ui/contract-model.ts",
+      "sha256": "66790545a07ee6c50c2cff43ce4e05d1d71c231f8409b65df599cae31cd1080e"
+    },
+    {
+      "path": "packages/studio-ui/table-contract-model.ts",
+      "sha256": "ab195992fe2e82672304fbfb6ace427e9621ab636c5b0b8b8f5383abf2e5539b"
+    },
+    {
+      "path": "packages/studio-ui/contract-field-type-model.ts",
+      "sha256": "e7e116c77157bb3c07b096f14c6a19da32d215ec1c129bfc19140ba4c515ca96"
+    },
+    {
+      "path": "packages/studio-ui/native-fabric-model.ts",
+      "sha256": "43afbc34643f87c9ca07495cd03134613cc5da4fa0a13ed623c44d00fbe3500a"
+    },
+    {
+      "path": "packages/studio-ui/native-watermark-model.ts",
+      "sha256": "0e085b2ec57164f5081a517f17596b869cea309f09f3a6bac46c2abc2341d658"
+    },
+    {
+      "path": "packages/studio-ui/table-sample-model.ts",
+      "sha256": "9884f0353d67857bfa20860feb05801dc80bd1905e3390ee2a988fa27efd635b"
+    },
+    {
+      "path": "packages/studio-ui/table-sample-panel.tsx",
+      "sha256": "f1a41a8f24cf66449d5d5d618d73326960cde234fb171e47ccbcefbd431ae453"
+    },
+    {
+      "path": "packages/studio-ui/native-fabric-fields.tsx",
+      "sha256": "52165719f8c934f1298a6f3bf695f65202fc7a612eca32c4a2ca8191feec083e"
+    },
+    {
+      "path": "packages/studio-ui/native-watermark-fields.tsx",
+      "sha256": "62953331659b616ab63e3ed9cbc28f7aece77a1b46b65b7fa49fe00c6169edfa"
+    },
+    {
+      "path": "packages/studio-ui/form-fields.tsx",
+      "sha256": "6a5b78934035e5975c4535912535df04668e85b3143c49a0a511486f7ecdc25b"
+    },
+    {
+      "path": "packages/studio-ui/table-source-settings.tsx",
+      "sha256": "1876d760e2dfe0ab642aff0bc1170a6f0ab57207868697cfc421bc80c35d09b8"
+    },
+    {
+      "path": "packages/studio-ui/contract-team-model.ts",
+      "sha256": "349768407a29e4406894c3a2ebcd119bf7832cd60ebc4034009eec8818a2da70"
+    },
+    {
+      "path": "packages/studio-ui/contract-team-editor.tsx",
+      "sha256": "db23b42490fb34c59b6ab4cad8ce2a1d0367ad00c41dc3dd1524bdcce88e68e0"
+    },
+    {
+      "path": "packages/studio-ui/output-rows.tsx",
+      "sha256": "6d41a62268af611ad3aa3091e20bfc58955cb3236712315f88413348be4f0406"
+    },
+    {
+      "path": "packages/studio-ui/run-recovery.ts",
+      "sha256": "1fff171aab89aa7e332025390d0435d00270a09eb4a0e920489cb607ebdc5fda"
+    },
+    {
+      "path": "packages/studio-ui/test-evidence.ts",
+      "sha256": "890c49ab8edbf2b0aef0a8e58ca2bac9a642f48cf9c30288bdc1b79476ea6440"
+    },
+    {
+      "path": "packages/studio-ui/workflow-context.ts",
+      "sha256": "f24feb8a115e67ef2741700d417438d164ab84a010323f5d52cc32200bea33a1"
+    },
+    {
+      "path": "packages/studio-ui/workspace.ts",
+      "sha256": "53df66f3182f26fff84048ff3eca8e9f6e8f2f3bd4c0764594f922639b64d84f"
+    },
+    {
+      "path": "packages/studio-ui/delivery-model.ts",
+      "sha256": "82c36ce0fc9cfa9019100d33599860ee5e273a01b96dec4d184a157b738e40c2"
+    },
+    {
+      "path": "packages/studio-ui/review.ts",
+      "sha256": "16da55935e1ea9d0478574f2c67e97b23c04d6fe821fdc1b0d6012f19573e6bc"
+    },
+    {
+      "path": "packages/studio-ui/run-results.ts",
+      "sha256": "20e4230f241b7d077707d76a943047ef9db537cec1f605e56ff191a65c8da3cb"
+    },
+    {
+      "path": "packages/studio-ui/table-contract-editor.tsx",
+      "sha256": "266a08dea4de60e66fd8b24d558bac7abc69addda228fbe5a49a860ba5d616fa"
+    },
+    {
+      "path": "packages/studio-ui/table-workbench.tsx",
+      "sha256": "deea453d6c6daf9113978930d7100b67b57c9feb221fd75d5ee10dc52f5f11dd"
+    },
+    {
+      "path": "packages/studio-ui/provider-model.ts",
+      "sha256": "e461d532103b65633db7c8b0eae812ca2717e2045fac6ab50e6f749074108d0e"
+    },
+    {
+      "path": "packages/studio-ui/connector-model.ts",
+      "sha256": "76b94474113469fbc2031e39ae6aded9a20293fee77db5ec8b8bb54311c7e891"
+    },
+    {
+      "path": "packages/studio-ui/source-setup.ts",
+      "sha256": "344230289ce89b57f4d026b6dc9fca0d0d769b0db6c9044ba85672e1cdaf91f1"
+    },
+    {
+      "path": "packages/studio-ui/operations.ts",
+      "sha256": "1f79d7f798b71f97070a3c9947cb276bd1ec8adceb1f9a12e95dd73a2a4c42a0"
+    },
+    {
+      "path": "packages/studio-ui/preparation.ts",
+      "sha256": "884c9f7de90db19e54712cff8116c537e0bcaea7cb1d4fca81cef2964d54fe60"
+    },
+    {
+      "path": "packages/studio-ui/preparation-workspace.tsx",
+      "sha256": "70742bb0155f32650f9383f2c6a7ac5bb4e0a11775b188c490d5264c573f3fb7"
+    },
+    {
+      "path": "packages/studio-ui/native-target-model.ts",
+      "sha256": "3fa8133e6eef3e6c3993f0497ae6ad7bb665bbd5c6705884449ae6d110f7f4f8"
+    },
+    {
+      "path": "packages/studio-ui/source-target-settings.tsx",
+      "sha256": "dcee127eb3232d19bf0943d30fafe7260a9c890ab1348343bd275c67a0a49668"
+    },
+    {
+      "path": "packages/studio-ui/checkpoint-model.ts",
+      "sha256": "b388ac7fd5a3773f366f8f44874debe4692c2c507a3d909d55e553dae01a3710"
+    },
+    {
+      "path": "packages/studio-ui/checkpoint-upgrade-panel.tsx",
+      "sha256": "6f2eb8d5516b674a3817e30b6a2b1c6feaa3aede70814123dcad595aef74ef8e"
+    },
+    {
+      "path": "packages/studio-ui/discovery-model.ts",
+      "sha256": "bebbe387bc9c7a90dd5d4ab522596f8dabe92a67fed886dfc32688ec3490ebd9"
+    },
+    {
+      "path": "packages/studio-ui/setup-recovery.ts",
+      "sha256": "2779fa5ac5024395394be275aa4473860284bb654cbf369a64e5403d66051bad"
+    },
+    {
+      "path": "packages/studio-ui/setup-recovery-panel.tsx",
+      "sha256": "5e8d89fdad4012027a623f5bb6d28ef35d54de3de60a15ff1bbb27b395a796d0"
+    },
+    {
+      "path": "packages/studio-ui/run-results-panel.tsx",
+      "sha256": "6b48d398b5f089244554236c609e57c5c97908f21d4c6e6c390f26afefa7b8be"
+    },
+    {
+      "path": "packages/studio-ui/source-flow-review.tsx",
+      "sha256": "5f1cbbd47536eb6d6c92d44b7b52709e29d1314b58d779f5d6996ff2488fbbe9"
+    },
+    {
+      "path": "packages/studio-ui/review-panel.tsx",
+      "sha256": "40499342a8ba0740369af6c037b536d6a73f1295e5916f7aa8fbbcaae69e6576"
+    },
+    {
+      "path": "packages/studio-ui/artifact-model.ts",
+      "sha256": "3cd49942eacd8e3caf0e714e861cc4d1c65f8837534ab47e112a15e1a0afbb97"
+    },
+    {
+      "path": "packages/studio-ui/artifact-controller.ts",
+      "sha256": "ebcd6bdb80a67a239d49846a1d2e4f5ee682badf8120d8e0cf9f762e7831d659"
+    },
+    {
+      "path": "packages/studio-ui/artifact-workspace.tsx",
+      "sha256": "fe0064044fda5427be42604ad4bf1472d41e4233dad533b6c12d6b6e5cd0f7ca"
+    },
+    {
+      "path": "packages/studio-ui/journey.tsx",
+      "sha256": "c152ade68b855e3977f71f03ef8e9427e8b96cad75987860d858b2d3262b811d"
+    },
+    {
+      "path": "packages/studio-ui/discovery-workspace.tsx",
+      "sha256": "8cb427ff5bed377f173bf1e23b43935f2fc49b0f6d0f1f0caf52f7d261bcc2d8"
+    },
+    {
+      "path": "packages/studio-ui/source-access-model.ts",
+      "sha256": "ec5a4fe6e92de73b9bec5ed45845e26e32922c16a5458f197bd0b63b0a1f84d4"
+    }
+  ]
+}

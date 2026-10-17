@@ -1,6 +1,6 @@
 apiVersion: ingestron.provider/v1
 id: local
-version: 0.4.6
+version: 0.4.18
 platform: local
 activities: {}
 compatibility:
@@ -11,7 +11,13 @@ compatibility:
     - project-connections
     - odcs-connections
     - project-assembly
+    - connection-metadata-documents
     - provider-execution
+    - source-checkpoint-migration
+    - provider-execution-resources
+    - provider-execution-acknowledgement
+    - connector-schedule-handover
+    - portable-scheduler
 execution:
   apiVersion: ingestron.execution/v1
   transport: local-python/v1
@@ -23,9 +29,19 @@ execution:
     - review
     - approve
     - run
+    - checkpoint_preview
+    - checkpoint_apply
   status: receipt
   retry: same-run-id
   cancellation: interrupt
+  acknowledgement: provider-journal/v1
+  resources:
+    apiVersion: ingestron.execution-resources/v1
+    command: execution resources
+sourceAccess:
+  apiVersion: ingestron.source-access-host/v1
+  transport: local-python/v1
+  entryPoint: source_access_host.py
 connectorRuntimes:
   ingestron.snapshot/python/v1:
     selectionSchema:
@@ -50,6 +66,8 @@ connectorRuntimes:
                     - number
                     - decimal
                     - json
+                    - date
+                    - timestamp
                 nullable:
                   type: boolean
                 target:
@@ -74,12 +92,25 @@ connectorRuntimes:
           type: string
           enum:
             - local
+        ingestion:
+          type: string
+          enum:
+            - incremental
       required:
         - mode
       additionalProperties: false
     executionPlatforms:
       - local
+    scheduling:
+      apiVersion: ingestron.connector-schedule/v1
+      clock: portable
+      recurrences:
+        - interval
+        - daily
+        - weekly
+        - monthly
     prepareCommand: connection prepare
+    metadataDocuments: ingestron.metadata-documents/v1
     contractsCommand: connector contracts
 lifecycle:
   apiVersion: ingestron.provider-lifecycle/v1
@@ -89,6 +120,28 @@ commands:
   execution: offline-json
   module: ./commands.mjs
   definitions:
+    - name: execution resources
+      description: Declare the selected compiled local output namespaces without
+        source access
+      inputSchema:
+        type: object
+        properties:
+          packageRoot:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          flows:
+            type: array
+            items:
+              type: string
+              minLength: 1
+              maxLength: 100
+            minItems: 1
+            maxItems: 100
+        required:
+          - packageRoot
+          - flows
+        additionalProperties: false
     - name: connection prepare
       description: Prepare a project-resolved connection, selected fields and
         runtime-only secrets
@@ -113,3 +166,4 @@ commands:
 projectAssembly:
   apiVersion: ingestron.project-assembly/v1
   command: project assemble
+  metadataDocuments: ingestron.metadata-documents/v1

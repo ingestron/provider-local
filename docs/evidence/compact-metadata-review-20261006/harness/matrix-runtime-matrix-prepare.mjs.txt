@@ -1,0 +1,411 @@
+/** Freeze all sixteen sources for current installed source-to-result acceptance.
+ * No source reads, production package edits, public tags or sibling runtime imports.
+ */
+import assert from "node:assert/strict";
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  realpathSync,
+  writeFileSync,
+} from "node:fs";
+import { resolve, dirname, join } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { createRequire } from "node:module";
+import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
+
+const required = (key) => {
+  assert.ok(process.env[`INGESTRON_ACCEPTANCE_${key}`], `Set ${key}`);
+  return realpathSync(process.env[`INGESTRON_ACCEPTANCE_${key}`]);
+};
+const owner = process.env.INGESTRON_ACCEPTANCE_SOURCE_OWNER
+    ? required("SOURCE_OWNER")
+    : resolve(dirname(fileURLToPath(import.meta.url)), ".."),
+  cliRoot = required("CLI_PACKAGE"),
+  coreRoot = realpathSync(resolve(cliRoot, "../@ingestron/core")),
+  cli = join(cliRoot, "build/cli/cli/index.js"),
+  providerOwner = required("PROVIDER"),
+  output = required("OUTPUT"),
+  python = required("PYTHON");
+const require = createRequire(join(cliRoot, "package.json")),
+  { parse, stringify } = require("yaml"),
+  { installPackage } = await import(
+    pathToFileURL(join(coreRoot, "dist/sdk/adapter.js")).href
+  );
+const cliPackage = JSON.parse(readFileSync(join(cliRoot, "package.json"))),
+  corePackage = JSON.parse(readFileSync(join(coreRoot, "package.json")));
+assert.ok(
+  ["0.17.18/0.12.42", "0.17.18/0.12.43", "0.17.20/0.12.47", "0.17.21/0.12.50", "0.17.21/0.12.51", "0.17.21/0.12.53"].includes(
+    cliPackage.version + "/" + corePackage.version,
+  ),
+  "Use an exact qualified private archive pair",
+);
+assert.equal(cliPackage.dependencies["@ingestron/core"], "0.12.14");
+// The private acceptance override is explicit; the public pin stays unchanged.
+const sha = (file) =>
+  createHash("sha256").update(readFileSync(file)).digest("hex");
+const archives = Object.fromEntries(
+  ["CORE_ARCHIVE", "CLI_ARCHIVE"].map((key) => {
+    const path = required(key);
+    return [key, { path, sha256: sha(path) }];
+  }),
+);
+const base = mkdtempSync(join(output, "source-runtime-matrix-")),
+  root = join(base, "project"),
+  sources = join(base, "source-origin"),
+  provider = join(base, "provider-origin"),
+  fixtures = join(base, "fixtures"),
+  data = join(root, "data");
+for (const folder of [root, sources, provider, data])
+  mkdirSync(folder, { recursive: true });
+const ids = readdirSync(join(owner, "connectors"), { withFileTypes: true })
+  .filter((p) => p.isDirectory())
+  .map((p) => p.name)
+  .sort();
+assert.equal(ids.length, 16);
+for (const id of ids)
+  cpSync(join(owner, "connectors", id), join(sources, "connectors", id), {
+    recursive: true,
+  });
+cpSync(join(providerOwner, "plugin"), join(provider, "plugin"), {
+  recursive: true,
+  filter: (p) => !p.includes("__pycache__"),
+});
+cpSync(join(owner, "test/mocks"), join(fixtures, "mocks"), {
+  recursive: true,
+  filter: (p) => !p.includes("__pycache__"),
+});
+cpSync(
+  join(owner, "test/github_fixture.py"),
+  join(fixtures, "github_fixture.py"),
+);
+const git = (cwd, ...args) =>
+  execFileSync("git", args, { cwd, encoding: "utf8", stdio: "pipe" }).trim();
+for (const cwd of [sources, provider]) {
+  git(cwd, "init", "-q");
+  git(cwd, "add", ".");
+  git(
+    cwd,
+    "-c",
+    "user.name=Synthetic fixture",
+    "-c",
+    "user.email=fixture@example.invalid",
+    "commit",
+    "-qm",
+    "Frozen current source runtime matrix",
+  );
+}
+const providerManifest = parse(
+  readFileSync(join(provider, "plugin/provider.yaml"), "utf8"),
+);
+assert.equal(providerManifest.version, "0.4.16");
+git(provider, "tag", providerManifest.version);
+const providerRef = `ingestron/provider-local/plugin/provider.yaml@${providerManifest.version}`;
+installPackage(root, providerRef, { fromGit: provider });
+const secretName = (id) =>
+  `INGESTRON_MATRIX_${id.toUpperCase().replaceAll("-", "_")}`;
+const secret = (id) => ({ $secret: { env: secretName(id) } });
+const db = (id) => ({
+  connection: {
+    host: "db.example.invalid",
+    ...(id === "oracle" ? { service: "retail" } : { database: "retail" }),
+    user: "reader",
+    password: secret(id),
+    tls: "require",
+  },
+});
+const graph = {
+  tenant_id: "11111111-2222-3333-4444-555555555555",
+  client_id: "66666666-7777-8888-9999-000000000000",
+};
+const fileSource = { path: "retail/orders.csv", format: "csv" };
+const cases = {
+  "azure-blob": {
+    settings: {
+      account: "sampleaccount",
+      container: "samples",
+      sas_token: secret("azure-blob"),
+    },
+    source: fileSource,
+    scope: { prefix: "retail/", format: "csv" },
+  },
+  files: {
+    settings: {},
+    source: { path: join(data, "orders.csv"), format: "csv" },
+    scope: { directory: data, format: "csv" },
+  },
+  gcs: {
+    settings: {
+      bucket: "bronze",
+      access_key_id: "matrix-key",
+      secret_access_key: secret("gcs"),
+    },
+    source: fileSource,
+    scope: { prefix: "retail/", format: "csv" },
+  },
+  github: {
+    settings: {
+      authentication: "token",
+      repositories: ["demo/repo"],
+      auth_token: secret("github"),
+    },
+    source: { stream: "issues" },
+    columns: ["id", "title"],
+    rows: 2,
+  },
+  hubspot: {
+    settings: { access_token: secret("hubspot") },
+    source: { object: "contacts" },
+    columns: ["id", "email"],
+    stringKey: true,
+  },
+  jira: {
+    settings: {
+      site: "https://acme.atlassian.net",
+      email: "reader@example.invalid",
+      api_token: secret("jira"),
+    },
+    source: { object: "issues", jql: "project = RETAIL" },
+    columns: ["id", "summary"],
+    stringKey: true,
+  },
+  mysql: {
+    settings: db("mysql"),
+    source: { schema: "retail", table: "orders" },
+  },
+  onedrive: {
+    settings: {
+      ...graph,
+      client_secret: secret("onedrive"),
+      user: "reader@contoso.example",
+    },
+    source: fileSource,
+    scope: { directory: "retail", format: "csv" },
+  },
+  oracle: {
+    settings: db("oracle"),
+    source: { schema: "RETAIL", table: "ORDERS" },
+  },
+  postgresql: {
+    settings: db("postgresql"),
+    source: { schema: "public", table: "orders" },
+  },
+  s3: {
+    settings: {
+      bucket: "bronze",
+      region: "us-east-1",
+      access_key_id: "matrix-key",
+      secret_access_key: secret("s3"),
+    },
+    source: fileSource,
+    scope: { prefix: "retail/", format: "csv" },
+  },
+  salesforce: {
+    settings: {
+      instance_url: "https://acme.my.salesforce.com",
+      client_id: "matrix-client",
+      client_secret: secret("salesforce"),
+    },
+    source: { object: "Account" },
+    columns: ["Id", "Name"],
+    stringKey: true,
+  },
+  sftp: {
+    settings: {
+      host: "sftp.example.invalid",
+      user: "reader",
+      private_key: secret("sftp"),
+      host_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAISyntheticHostKey",
+    },
+    source: fileSource,
+    scope: { directory: "retail", format: "csv" },
+  },
+  sharepoint: {
+    settings: {
+      ...graph,
+      client_secret: secret("sharepoint"),
+      site: "https://contoso.sharepoint.com/sites/finance",
+    },
+    source: {
+      ...fileSource,
+      path: "Shared Documents/retail/orders.csv",
+      entity: "file",
+    },
+    scope: {
+      directory: "Shared Documents/retail",
+      format: "csv",
+      entity: "file",
+    },
+  },
+  "sql-server": {
+    settings: {
+      connection: {
+        server: "db.example.invalid",
+        database: "retail",
+        authentication: {
+          method: "sql-password",
+          username: "reader",
+          password: secret("sql-server"),
+        },
+      },
+    },
+    source: { schema: "dbo", table: "Orders" },
+  },
+  stripe: {
+    settings: { api_key: secret("stripe") },
+    source: { object: "customers" },
+    columns: ["id", "name"],
+    stringKey: true,
+  },
+};
+assert.deepEqual(Object.keys(cases).sort(), ids);
+writeFileSync(
+  join(data, "orders.csv"),
+  "id,label\n1,MATRIX_PRIVATE_ROW\n2,Second\n3,Third\n",
+);
+writeFileSync(join(data, "products.csv"), "id,label\n4,Product\n");
+const packages = { local: providerRef },
+  connections = {},
+  flows = [],
+  records = [];
+for (const id of ids) {
+  const folder = join(sources, "connectors", id),
+    manifest = parse(readFileSync(join(folder, "connector.yaml"), "utf8"));
+  assert.equal(sha(join(folder, "runtime.json")), manifest.runtime.sha256);
+  const runtime = JSON.parse(readFileSync(join(folder, "runtime.json")));
+  assert.ok(
+    !Object.keys(runtime).some((p) => /fixture|loopback|mock/.test(p)),
+    "Fixtures must not ship as runtime assets",
+  );
+  git(sources, "tag", `${id}-${manifest.version}`);
+  const reference = `ingestron/connectors/connectors/${id}/connector.yaml@${manifest.version}`;
+  installPackage(root, reference, { fromGit: sources, tagPrefix: `${id}-` });
+  packages[id] = reference;
+  connections[id] = {
+    package: id,
+    sourceId: id,
+    tenantId: "synthetic",
+    settings: cases[id].settings,
+  };
+  const columns = cases[id].columns ?? ["id", "label"],
+    flow = `flow_${id.replaceAll("-", "_")}`;
+  flows.push({
+    apiVersion: "ingestron.flow/v1",
+    id: flow,
+    kind: "ingestion",
+    provider: "local",
+    ingestion: { connection: id, execution: { mode: "local" } },
+    tables: {
+      records: {
+        source: cases[id].source,
+        contract: {
+          apiVersion: "v3.1.0",
+          kind: "DataContract",
+          id: `contract_${id}`,
+          name: "records",
+          version: "1.0.0",
+          status: "draft",
+          schema: [
+            {
+              name: "records",
+              logicalType: "object",
+              physicalType: "table",
+              properties: columns.map((name, index) => ({
+                name,
+                logicalType:
+                  index === 0 && !cases[id].stringKey ? "integer" : "string",
+                physicalType:
+                  index === 0 && !cases[id].stringKey ? "BIGINT" : "STRING",
+                required: true,
+                ...(index === 0 ? { primaryKey: true } : {}),
+              })),
+            },
+          ],
+        },
+      },
+    },
+  });
+  records.push({
+    id,
+    version: manifest.version,
+    reference,
+    manifestSha256: sha(join(folder, "connector.yaml")),
+    runtimeSha256: manifest.runtime.sha256,
+    actions: manifest.sourceAccess.actions,
+    flow,
+    source: cases[id].source,
+    scope: cases[id].scope,
+    columns,
+    rows: cases[id].rows ?? 3,
+    secretName: secretName(id),
+  });
+}
+writeFileSync(
+  join(root, "project.yaml"),
+  stringify({
+    apiVersion: "ingestron.project/v1",
+    id: "source_runtime_matrix",
+    packages,
+    providers: {
+      configurations: { local: { package: "local", binding: "runtime" } },
+    },
+    defaults: { provider: "local" },
+    environments: {
+      dev: {
+        apiVersion: "ingestron.environment/v1",
+        environment: "dev",
+        bindings: { runtime: { kind: "local" } },
+      },
+    },
+    connections,
+    flows,
+  }),
+);
+// Only copy existing qualified cache entries; missing locks are prepared normally.
+for (const cache of JSON.parse(
+  process.env.INGESTRON_ACCEPTANCE_CACHES ?? "[]",
+)) {
+  for (const key of readdirSync(cache, { withFileTypes: true })
+    .filter((p) => p.isDirectory() && /^[a-f0-9]{64}$/.test(p.name))
+    .map((p) => p.name)) {
+    for (const area of ["runtime-cache", "runtimes"])
+      cpSync(join(cache, key), join(root, ".ingestron", area, key), {
+        recursive: true,
+      });
+  }
+}
+const config = {
+  apiVersion: "ingestron.source-runtime-matrix/v1",
+  base,
+  root,
+  cli,
+  core: coreRoot,
+  python,
+  provider: providerRef,
+  records,
+  fixtures,
+  sourceData: data,
+  archives,
+  candidate: {
+    cli: cliPackage.version,
+    core: corePackage.version,
+    declaredCore: cliPackage.dependencies["@ingestron/core"],
+    privateOverride: true,
+  },
+  sourceCommit: git(sources, "rev-parse", "HEAD"),
+  providerCommit: git(provider, "rev-parse", "HEAD"),
+  cliEntrySha256: sha(cli),
+};
+const configPath = join(base, "acceptance.json");
+writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n");
+console.log(
+  JSON.stringify({
+    configPath,
+    root,
+    sources: ids.length,
+    candidate: config.candidate,
+  }),
+);

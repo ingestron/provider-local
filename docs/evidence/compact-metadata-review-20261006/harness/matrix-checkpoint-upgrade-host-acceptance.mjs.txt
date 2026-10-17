@@ -1,0 +1,256 @@
+/** Adapter for the source-owned installed fixture. Exercises the actual packaged shared host. */
+import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
+import { createInterface } from "node:readline";
+import { resolve } from "node:path";
+
+export async function createHost({
+  project,
+  cli,
+  flow,
+  baseline,
+  record,
+  trusted = true,
+  python,
+  environment = {},
+  sourceAdapter,
+}) {
+  const bundle = process.env.INGESTRON_ACCEPTANCE_STUDIO_HOST;
+  assert.ok(bundle, "Immutable packaged Studio host is required");
+  assert.ok(
+    Object.keys(environment).every((key) =>
+      /^INGESTRON_MATRIX_[A-Z0-9_]+$/.test(key),
+    ),
+    "Only named synthetic source values may be forwarded by this test adapter",
+  );
+  const name = baseline.split("/").at(-1);
+  const requests = [];
+  function connect(trusted) {
+    const child = spawn(process.execPath, [resolve(bundle)], {
+      cwd: project,
+      env: {
+        PATH: process.env.PATH,
+        ...environment,
+        INGESTRON_STUDIO_PROJECT: project,
+        INGESTRON_STUDIO_CLI: resolve(cli, "build/cli/cli/index.js"),
+        INGESTRON_STUDIO_TRUSTED: trusted ? "1" : "0",
+        ...(python ? { INGESTRON_STUDIO_PYTHON: python } : {}),
+        ...(trusted && sourceAdapter
+          ? { INGESTRON_STUDIO_SOURCE_ADAPTER: sourceAdapter }
+          : {}),
+      },
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+    const pending = new Map();
+    let nextId = 0;
+    const fail = (error) => {
+      for (const item of pending.values()) {
+        clearTimeout(item.timer);
+        item.reject(error);
+      }
+      pending.clear();
+    };
+    createInterface({ input: child.stdout }).on("line", (line) => {
+      const response = JSON.parse(line),
+        item = pending.get(response.id);
+      assert.equal(response.apiVersion, "ingestron.studio/v1");
+      if (!item) return;
+      clearTimeout(item.timer);
+      pending.delete(response.id);
+      response.error
+        ? item.reject(new Error(response.error))
+        : item.resolve(response.result);
+    });
+    child.stderr.resume();
+    child.on("error", fail);
+    child.on("exit", () => fail(new Error("Shared host exited")));
+    return {
+      request(method, args = {}) {
+        requests.push({ method, operation: args.operation });
+        const id = String(++nextId);
+        return new Promise((resolve, reject) => {
+          const timer = setTimeout(() => {
+            pending.delete(id);
+            reject(new Error("Shared host request timed out"));
+          }, 60000);
+          pending.set(id, { resolve, reject, timer });
+          child.stdin.write(
+            JSON.stringify({
+              apiVersion: "ingestron.studio/v1",
+              id,
+              method,
+              args,
+            }) + "\n",
+          );
+        });
+      },
+      async close() {
+        if (child.exitCode !== null || child.signalCode !== null) return;
+        const exited = new Promise((done) => child.once("exit", done));
+        child.stdin.end();
+        await exited;
+        assert.equal(pending.size, 0);
+      },
+    };
+  }
+  let host = connect(trusted);
+  async function scope() {
+    const snapshot = await host.request("snapshot", { environment: "dev" });
+    assert.equal(snapshot.providers.local.checkpointMigration, true);
+    return {
+      flow,
+      environment: "dev",
+      revision: snapshot.revision,
+      baseline: name,
+    };
+  }
+  async function start(operation, request) {
+    let job = await host.request("start", {
+      environment: "dev",
+      operation,
+      request,
+    });
+    const end = Date.now() + 60000;
+    while (job.status === "running" && Date.now() < end) {
+      await new Promise((done) => setTimeout(done, 25));
+      job = (await host.request("jobs")).find((j) => j.id === job.id);
+      assert.ok(job);
+    }
+    assert.equal(job.status, "succeeded", job.error);
+    assert.ok(job.completedAt);
+    return job;
+  }
+  return {
+    request: (method, args) => host.request(method, args),
+    async retain() {
+      // The old provider can retain a baseline even before it supports migration.
+      const snapshot = await host.request("snapshot", { environment: "dev" });
+      const job = await start("checkpoint_retain", {
+        flow,
+        revision: snapshot.revision,
+        baseline: name,
+      });
+      assert.ok(job.result.files > 0);
+      const status = await host.request("checkpoint.status", {
+        flow,
+        environment: "dev",
+        revision: snapshot.revision,
+        baseline: name,
+      });
+      assert.equal(status.selected.contentDigest, job.result.contentDigest);
+      record(
+        "Packaged shared host retains the original build through the installed CLI; bounded status matches the sealed baseline",
+      );
+    },
+    async maintenance(action, digest) {
+      const { environment, ...args } = await scope();
+      if (action === "checkpoint_apply") {
+        const status = await host.request("checkpoint.status", {
+          ...args,
+          environment,
+        });
+        assert.equal(status.canMigrate, true);
+        await assert.rejects(
+          host.request("start", {
+            environment,
+            operation: action,
+            request: { ...args, expectedDigest: "0".repeat(64) },
+          }),
+          /exact review digest/,
+        );
+        await assert.rejects(
+          host.request("start", {
+            environment,
+            operation: action,
+            request: { ...args, revision: "stale", expectedDigest: digest },
+          }),
+          /STALE/,
+        );
+        const readonly = connect(false);
+        try {
+          const inspect = await readonly.request("checkpoint.status", {
+            ...args,
+            environment,
+          });
+          assert.equal(inspect.canMigrate, false);
+          assert.equal(inspect.canRetain, false);
+          await assert.rejects(
+            readonly.request("start", {
+              environment,
+              operation: action,
+              request: { ...args, expectedDigest: digest },
+            }),
+            /not enabled/,
+          );
+        } finally {
+          await readonly.close();
+        }
+      }
+      const job = await start(action, {
+        ...args,
+        ...(digest ? { expectedDigest: digest } : {}),
+      });
+      const receipt = await host.request("checkpoint.inspect", {
+        flow,
+        environment,
+        id: job.result.id,
+      });
+      assert.equal(receipt.id, job.result.id);
+      assert.equal(receipt.action, action);
+      assert.equal(receipt.baseline, name);
+      assert.equal(receipt.status, "succeeded");
+      assert.equal(receipt.recoveryRequired, false);
+      if (action === "checkpoint_preview") {
+        await host.close();
+        host = connect(true);
+        const reopened = (await host.request("jobs")).find(
+          (j) => j.id === job.id,
+        );
+        assert.equal(
+          reopened.result.migration.digest,
+          receipt.migration.digest,
+        );
+        record(
+          "Packaged shared host reopens the exact reviewed operation; no review or row data is fabricated",
+        );
+      } else
+        record(
+          "Packaged shared host applies the exact review; stale digest/revision and untrusted-host changes are refused",
+        );
+      return {
+        status: "Succeeded",
+        migration: receipt.migration,
+        runId: receipt.id,
+      };
+    },
+    async verifyAlreadyApplied(digest) {
+      const { environment, ...args } = await scope();
+      const request = {
+        environment,
+        operation: "checkpoint_apply",
+        request: { ...args, expectedDigest: digest },
+      };
+      await assert.rejects(
+        host.request("start", request),
+        /exact review digest/,
+      );
+      const preview = await start("checkpoint_preview", args);
+      assert.equal(preview.result.migration.applied, true);
+      assert.equal(preview.result.migration.digest, digest);
+      assert.equal(preview.result.recoveryRequired, false);
+      await assert.rejects(
+        host.request("start", request),
+        /exact review digest/,
+      );
+      record(
+        "Reopening an already applied upgrade reports its committed state without uncertainty; Studio refuses redundant apply",
+      );
+    },
+    async close() {
+      await host.close();
+      record("All acceptance-owned packaged host processes exited", {
+        requests: requests.length,
+      });
+    },
+  };
+}

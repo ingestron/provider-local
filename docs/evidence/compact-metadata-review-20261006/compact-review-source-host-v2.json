@@ -1,0 +1,991 @@
+{
+  "result": "passed",
+  "phase": "client",
+  "candidate": {
+    "cli": "0.17.21",
+    "core": "0.12.53",
+    "declaredCore": "0.12.14",
+    "privateOverride": true
+  },
+  "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.16",
+  "archives": {
+    "CORE_ARCHIVE": {
+      "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-runtime-v2/ingestron-core-0.12.53.tgz",
+      "sha256": "28539a55cb7555b2f8691d9bebc2dd97f1c9cab61ad0e2a9e99747e281694389"
+    },
+    "CLI_ARCHIVE": {
+      "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-batch-runtime-v1/ingestron-0.17.21.tgz",
+      "sha256": "4808a9f6fd6441ef1e389f50484bced448691fc9aa642c1eaaff80dbc2c2a439"
+    }
+  },
+  "archiveParity": {
+    "CORE_ARCHIVE": 156,
+    "CLI_ARCHIVE": 29
+  },
+  "sources": [
+    {
+      "result": "passed",
+      "id": "azure-blob",
+      "reference": "ingestron/connectors/connectors/azure-blob/connector.yaml@2.1.9",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "files",
+      "reference": "ingestron/connectors/connectors/files/connector.yaml@1.5.11",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "gcs",
+      "reference": "ingestron/connectors/connectors/gcs/connector.yaml@0.1.9",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "github",
+      "reference": "ingestron/connectors/connectors/github/connector.yaml@1.36.9",
+      "stage": "privacy",
+      "rows": 2,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "hubspot",
+      "reference": "ingestron/connectors/connectors/hubspot/connector.yaml@0.1.7",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "jira",
+      "reference": "ingestron/connectors/connectors/jira/connector.yaml@0.1.7",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "mysql",
+      "reference": "ingestron/connectors/connectors/mysql/connector.yaml@1.1.8",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "onedrive",
+      "reference": "ingestron/connectors/connectors/onedrive/connector.yaml@0.1.10",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "oracle",
+      "reference": "ingestron/connectors/connectors/oracle/connector.yaml@1.1.8",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "postgresql",
+      "reference": "ingestron/connectors/connectors/postgresql/connector.yaml@1.1.9",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "s3",
+      "reference": "ingestron/connectors/connectors/s3/connector.yaml@1.0.9",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "salesforce",
+      "reference": "ingestron/connectors/connectors/salesforce/connector.yaml@0.1.7",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "sftp",
+      "reference": "ingestron/connectors/connectors/sftp/connector.yaml@1.0.10",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "sharepoint",
+      "reference": "ingestron/connectors/connectors/sharepoint/connector.yaml@0.1.10",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "sql-server",
+      "reference": "ingestron/connectors/connectors/sql-server/connector.yaml@1.5.8",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    },
+    {
+      "result": "passed",
+      "id": "stripe",
+      "reference": "ingestron/connectors/connectors/stripe/connector.yaml@0.1.7",
+      "stage": "privacy",
+      "rows": 3,
+      "checks": [
+        "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused",
+        "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector",
+        "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it",
+        "All acceptance-owned packaged host processes exited",
+        "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs",
+        "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused",
+        "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused",
+        "Shared job histories and durable source receipts contain no sampled business rows or source-secret values",
+        "All acceptance-owned packaged host processes exited"
+      ],
+      "host": {
+        "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-readiness-host-v2/shared/host.cjs",
+        "sha256": "4456d16eca5c38d580e362b48a0b02ab57de284a917357de1fbe0833a82352cf"
+      },
+      "scope": "Immutable packaged Studio host with installed archives and frozen synthetic transports; no browser or webview interaction, live account reads or native cloud execution"
+    }
+  ],
+  "checks": [
+    {
+      "source": "azure-blob",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "azure-blob",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "azure-blob",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "azure-blob",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "azure-blob",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "azure-blob",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "azure-blob",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "azure-blob",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "azure-blob",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "files",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "files",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "files",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "files",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "files",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "files",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "files",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "files",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "files",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "gcs",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "gcs",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "gcs",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "gcs",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "gcs",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "gcs",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "gcs",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "gcs",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "gcs",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "github",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "github",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "github",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "github",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "github",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "github",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "github",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "github",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "github",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "hubspot",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "hubspot",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "hubspot",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "hubspot",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "hubspot",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "hubspot",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "hubspot",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "hubspot",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "hubspot",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "jira",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "jira",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "jira",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "jira",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "jira",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "jira",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "jira",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "jira",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "jira",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "mysql",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "mysql",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "mysql",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "mysql",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "mysql",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "mysql",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "mysql",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "mysql",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "mysql",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "onedrive",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "onedrive",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "onedrive",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "onedrive",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "onedrive",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "onedrive",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "onedrive",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "onedrive",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "onedrive",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "oracle",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "oracle",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "oracle",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "oracle",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "oracle",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "oracle",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "oracle",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "oracle",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "oracle",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "postgresql",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "postgresql",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "postgresql",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "postgresql",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "postgresql",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "postgresql",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "postgresql",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "postgresql",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "postgresql",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "s3",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "s3",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "s3",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "s3",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "s3",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "s3",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "s3",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "s3",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "s3",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "salesforce",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "salesforce",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "salesforce",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "salesforce",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "salesforce",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "salesforce",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "salesforce",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "salesforce",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "salesforce",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "sftp",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "sftp",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "sftp",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "sftp",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "sftp",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "sftp",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "sftp",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "sftp",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "sftp",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "sharepoint",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "sharepoint",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "sharepoint",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "sharepoint",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "sharepoint",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "sharepoint",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "sharepoint",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "sharepoint",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "sharepoint",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "sql-server",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "sql-server",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "sql-server",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "sql-server",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "sql-server",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "sql-server",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "sql-server",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "sql-server",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "sql-server",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "stripe",
+      "check": "Exact logical dataset and locked source selection; availability is read-free; malformed limits and stale/unknown selections refused"
+    },
+    {
+      "source": "stripe",
+      "check": "Packaged host dispatches source test and selected metadata to the installed CLI/core and exact locked connector"
+    },
+    {
+      "source": "stripe",
+      "check": "Bounded scalar sample uses the host-selected source and inherited synthetic secret references; caller paths, streams and env files cannot redirect it"
+    },
+    {
+      "source": "stripe",
+      "check": "All acceptance-owned packaged host processes exited"
+    },
+    {
+      "source": "stripe",
+      "check": "Untrusted packaged host keeps source execution unavailable and refuses sample reads and source jobs"
+    },
+    {
+      "source": "stripe",
+      "check": "Guided local preparation, current discovery and exact digest approval produce a measured current run; stale approval is refused"
+    },
+    {
+      "source": "stripe",
+      "check": "Committed Parquet preview resolves the current exact run and wire stream with measured rows and contract projection; a foreign output is refused"
+    },
+    {
+      "source": "stripe",
+      "check": "Shared job histories and durable source receipts contain no sampled business rows or source-secret values"
+    },
+    {
+      "source": "stripe",
+      "check": "All acceptance-owned packaged host processes exited"
+    }
+  ],
+  "matrixSize": 16,
+  "selectedSize": 16,
+  "liveAccounts": false,
+  "vendorQualified": false,
+  "browserInteraction": false,
+  "config": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v2/source-runtime-matrix-p5nvui/acceptance.json",
+  "clientAdapter": {
+    "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-matrix-harness-v2/source-runtime-host-acceptance.mjs",
+    "sha256": "8e68d67e60e54b2f5fd57cfee1e2c82e24a7289c302547a23d7eb0d56db64b82"
+  },
+  "clientScenario": "standard",
+  "transportFixtureSha256": "ce67ebc1f766ca984cb4668b5d807ead3b85034b25dd7f3aa2852141cdf33282",
+  "githubFixtureSha256": "52f2158e03f3705fe91897fbd134a966b5eaf8260763ea309a946d9597b6e09f",
+  "fixtureHooksRemoved": true,
+  "transportRequests": 124,
+  "allSixteenComplete": false,
+  "allSixteenClientCasesPassed": true,
+  "updatedAt": "2026-10-05T23:44:27Z"
+}

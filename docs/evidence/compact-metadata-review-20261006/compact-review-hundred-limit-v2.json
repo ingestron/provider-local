@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "checks": [
+    "Actual installed compiler resolves one hundred two-hundred-column tables and refuses over-limit connection preparation with safe byte counts and actionable guidance before runtime preparation"
+  ],
+  "details": {
+    "root": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-hundred-limit-OqYsnl",
+    "tables": 100,
+    "columnsPerTable": 200,
+    "projectSchemaFields": 20000,
+    "candidate": {
+      "cli": "0.17.21",
+      "core": "0.12.52"
+    },
+    "scope": "Actual installed compiler and frozen shared host with real local synthetic CSV, shared model and provider Parquet; static actual UI rows/paging, no mounted/browser/native-vendor proof.",
+    "resolveBytes": 2371135,
+    "failedJob": {
+      "id": "6d4739ee-678e-4ac8-a205-8616274e62a8",
+      "operation": "test_prepare",
+      "flow": "flow_files",
+      "environment": "dev",
+      "hostPid": 96943,
+      "revision": "060cf7d437ca2dfc01a94ac020361fff966ae234c34147c7e6dac6fb2ec3a396",
+      "status": "failed",
+      "output": [
+        {
+          "at": "2026-10-05T23:16:54.139Z",
+          "operation": "validate",
+          "status": "running",
+          "command": "ingestron --project <project> --environment dev --json --no-input operation validate --allow-write"
+        },
+        {
+          "at": "2026-10-05T23:16:55.050Z",
+          "operation": "validate",
+          "status": "failed"
+        }
+      ],
+      "startedAt": "2026-10-05T23:16:51.028Z",
+      "executionLocation": "VS Code extension host",
+      "result": {
+        "stages": [
+          {
+            "operation": "validate",
+            "status": "failed",
+            "startedAt": "2026-10-05T23:16:54.139Z",
+            "completedAt": "2026-10-05T23:16:55.050Z"
+          }
+        ]
+      },
+      "error": "LIMIT: Input for 'connection prepare' is 4452977 bytes; the limit is 2000000 bytes. Split large flows or select fewer fields, then retry.",
+      "completedAt": "2026-10-05T23:16:55.050Z",
+      "canCancel": false
+    }
+  },
+  "remaining": "The hundred-table project remains beyond the existing transport boundary; this is refusal evidence, not readiness"
+}

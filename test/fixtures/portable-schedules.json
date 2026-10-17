@@ -1,0 +1,251 @@
+{
+  "source": "Immutable core0.12.25 archive227fe6acfbc85307f9506e969df4f001ed9aca35a4141d34922aebb4c2464bcb",
+  "fixtures": [
+    {
+      "apiVersion": "ingestron.connector-schedule/v1",
+      "owner": {
+        "project": "retail",
+        "environment": "dev",
+        "flow": "bronze",
+        "connection": "files"
+      },
+      "clock": "portable",
+      "definition": {
+        "apiVersion": "ingestron.schedule/v1",
+        "enabled": true,
+        "end": "2026-10-07T00:00:00Z",
+        "missed": "latest",
+        "overlap": "queue",
+        "recurrence": {
+          "kind": "interval",
+          "minutes": 1
+        },
+        "start": "2026-10-05T00:00:00Z",
+        "timeZone": "UTC"
+      },
+      "boundaries": {
+        "apiVersion": "ingestron.schedule-boundaries/v1",
+        "definitionDigest": "b5ba0ccb6405fba709e50c32f8e477d6c0c0a8d4d20d86c9e843a3d70ce4f8eb",
+        "timeZone": "UTC",
+        "clock": {
+          "implementation": "temporal-polyfill@0.5.1",
+          "timeZoneData": "2026a",
+          "icu": "78.2"
+        },
+        "start": {
+          "instant": "2026-10-05T00:00:00Z",
+          "localTime": "2026-10-05T00:00:00",
+          "offset": "+00:00",
+          "ambiguous": false,
+          "possibleInstants": [
+            {
+              "instant": "2026-10-05T00:00:00Z",
+              "offset": "+00:00"
+            }
+          ]
+        },
+        "end": {
+          "instant": "2026-10-07T00:00:00Z",
+          "localTime": "2026-10-07T00:00:00",
+          "offset": "+00:00",
+          "ambiguous": false,
+          "possibleInstants": [
+            {
+              "instant": "2026-10-07T00:00:00Z",
+              "offset": "+00:00"
+            }
+          ]
+        }
+      },
+      "digest": "0d1f834802e4f518c94a12a3e4d7bc4285e17f275cd09293f8deb894f80a42da"
+    },
+    {
+      "apiVersion": "ingestron.connector-schedule/v1",
+      "owner": {
+        "project": "retail",
+        "environment": "dev",
+        "flow": "bronze",
+        "connection": "files"
+      },
+      "clock": "portable",
+      "definition": {
+        "apiVersion": "ingestron.schedule/v1",
+        "daylightSaving": {
+          "fold": "both",
+          "gap": "shift-forward"
+        },
+        "enabled": true,
+        "end": "2026-10-07T00:00:00Z",
+        "missed": "latest",
+        "overlap": "queue",
+        "recurrence": {
+          "kind": "daily",
+          "times": ["09:15", "17:45"]
+        },
+        "start": "2026-10-05T00:00:00Z",
+        "timeZone": "Pacific/Auckland"
+      },
+      "boundaries": {
+        "apiVersion": "ingestron.schedule-boundaries/v1",
+        "definitionDigest": "195e067b7aa081bc51c1fb50943c5c62b26adec2a16a09d3af4b3629a7654934",
+        "timeZone": "Pacific/Auckland",
+        "clock": {
+          "implementation": "temporal-polyfill@0.5.1",
+          "timeZoneData": "2026a",
+          "icu": "78.2"
+        },
+        "start": {
+          "instant": "2026-10-05T00:00:00Z",
+          "localTime": "2026-10-05T13:00:00",
+          "offset": "+13:00",
+          "ambiguous": false,
+          "possibleInstants": [
+            {
+              "instant": "2026-10-05T00:00:00Z",
+              "offset": "+13:00"
+            }
+          ]
+        },
+        "end": {
+          "instant": "2026-10-07T00:00:00Z",
+          "localTime": "2026-10-07T13:00:00",
+          "offset": "+13:00",
+          "ambiguous": false,
+          "possibleInstants": [
+            {
+              "instant": "2026-10-07T00:00:00Z",
+              "offset": "+13:00"
+            }
+          ]
+        }
+      },
+      "digest": "bdbbc4dbc388c67ca72e34efb5f5d293afdfb3b1674ebdefd109f6feb275c663"
+    },
+    {
+      "apiVersion": "ingestron.connector-schedule/v1",
+      "owner": {
+        "project": "retail",
+        "environment": "dev",
+        "flow": "bronze",
+        "connection": "files"
+      },
+      "clock": "portable",
+      "definition": {
+        "apiVersion": "ingestron.schedule/v1",
+        "daylightSaving": {
+          "fold": "both",
+          "gap": "shift-forward"
+        },
+        "enabled": true,
+        "end": "2026-10-07T00:00:00Z",
+        "missed": "latest",
+        "overlap": "queue",
+        "recurrence": {
+          "kind": "weekly",
+          "times": ["09:15"],
+          "weekDays": ["Monday", "Friday"]
+        },
+        "start": "2026-10-05T00:00:00Z",
+        "timeZone": "Pacific/Auckland"
+      },
+      "boundaries": {
+        "apiVersion": "ingestron.schedule-boundaries/v1",
+        "definitionDigest": "76b8b7715380cfb2dbaeef5cc7b068434358ad61be9bd219875c2b1514fdf31d",
+        "timeZone": "Pacific/Auckland",
+        "clock": {
+          "implementation": "temporal-polyfill@0.5.1",
+          "timeZoneData": "2026a",
+          "icu": "78.2"
+        },
+        "start": {
+          "instant": "2026-10-05T00:00:00Z",
+          "localTime": "2026-10-05T13:00:00",
+          "offset": "+13:00",
+          "ambiguous": false,
+          "possibleInstants": [
+            {
+              "instant": "2026-10-05T00:00:00Z",
+              "offset": "+13:00"
+            }
+          ]
+        },
+        "end": {
+          "instant": "2026-10-07T00:00:00Z",
+          "localTime": "2026-10-07T13:00:00",
+          "offset": "+13:00",
+          "ambiguous": false,
+          "possibleInstants": [
+            {
+              "instant": "2026-10-07T00:00:00Z",
+              "offset": "+13:00"
+            }
+          ]
+        }
+      },
+      "digest": "ebb6d145a49fd7d7b50f56878fb7ca104ab292f4bd2a5c34c8524133309b8391"
+    },
+    {
+      "apiVersion": "ingestron.connector-schedule/v1",
+      "owner": {
+        "project": "retail",
+        "environment": "dev",
+        "flow": "bronze",
+        "connection": "files"
+      },
+      "clock": "portable",
+      "definition": {
+        "apiVersion": "ingestron.schedule/v1",
+        "daylightSaving": {
+          "fold": "both",
+          "gap": "shift-forward"
+        },
+        "enabled": true,
+        "end": "2026-10-07T00:00:00Z",
+        "missed": "latest",
+        "overlap": "queue",
+        "recurrence": {
+          "kind": "monthly",
+          "monthDays": [1, 31],
+          "times": ["09:15"]
+        },
+        "start": "2026-10-05T00:00:00Z",
+        "timeZone": "Pacific/Auckland"
+      },
+      "boundaries": {
+        "apiVersion": "ingestron.schedule-boundaries/v1",
+        "definitionDigest": "4fadd5671f22d1c14dad79e7437f27542fb3a86bd74c7dc8172427772206d208",
+        "timeZone": "Pacific/Auckland",
+        "clock": {
+          "implementation": "temporal-polyfill@0.5.1",
+          "timeZoneData": "2026a",
+          "icu": "78.2"
+        },
+        "start": {
+          "instant": "2026-10-05T00:00:00Z",
+          "localTime": "2026-10-05T13:00:00",
+          "offset": "+13:00",
+          "ambiguous": false,
+          "possibleInstants": [
+            {
+              "instant": "2026-10-05T00:00:00Z",
+              "offset": "+13:00"
+            }
+          ]
+        },
+        "end": {
+          "instant": "2026-10-07T00:00:00Z",
+          "localTime": "2026-10-07T13:00:00",
+          "offset": "+13:00",
+          "ambiguous": false,
+          "possibleInstants": [
+            {
+              "instant": "2026-10-07T00:00:00Z",
+              "offset": "+13:00"
+            }
+          ]
+        }
+      },
+      "digest": "184889e87eada07ef9973d61d8f41b7c816a938e3adc45345459e4eda5750d55"
+    }
+  ]
+}

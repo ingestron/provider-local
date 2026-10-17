@@ -1,0 +1,145 @@
+
+> @ingestron/provider-local@0.4.16 validate /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/provider-local
+> pnpm format:check && pnpm build && pnpm test && pnpm docs:check && pnpm secrets:check
+
+
+> @ingestron/provider-local@0.4.16 format:check /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/provider-local
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> @ingestron/provider-local@0.4.16 build /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/provider-local
+> node scripts/build.mjs
+
+
+> @ingestron/provider-local@0.4.16 test /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/provider-local
+> node --test test/*.test.mjs && python3 -m unittest discover -s test -p "test_*.py"
+
+TAP version 13
+# Subtest: project preparation embeds only references, projection and immutable input provenance
+ok 1 - project preparation embeds only references, projection and immutable input provenance
+  ---
+  duration_ms: 2.369125
+  type: 'test'
+  ...
+# Subtest: direct command rejects plaintext credentials, unsupported options and empty projection
+ok 2 - direct command rejects plaintext credentials, unsupported options and empty projection
+  ---
+  duration_ms: 1.14625
+  type: 'test'
+  ...
+# Subtest: ODCS columns derive the runtime projection; unsupported types fail explicitly
+ok 3 - ODCS columns derive the runtime projection; unsupported types fail explicitly
+  ---
+  duration_ms: 0.631083
+  type: 'test'
+  ...
+# Subtest: runtime capability accepts a source unknown to the engine and rejects another ABI
+ok 4 - runtime capability accepts a source unknown to the engine and rejects another ABI
+  ---
+  duration_ms: 0.227125
+  type: 'test'
+  ...
+# Subtest: incremental execution requires a policy on every reviewed table
+ok 5 - incremental execution requires a policy on every reviewed table
+  ---
+  duration_ms: 11.068417
+  type: 'test'
+  ...
+# Subtest: local preparation rejects cloud mode, unsafe identity, timeout and missing source assets
+ok 6 - local preparation rejects cloud mode, unsafe identity, timeout and missing source assets
+  ---
+  duration_ms: 3.623667
+  type: 'test'
+  ...
+# Subtest: wide multilingual metadata keeps exact contracts within the runtime byte bound
+ok 7 - wide multilingual metadata keeps exact contracts within the runtime byte bound
+  ---
+  duration_ms: 113.13975
+  type: 'test'
+  ...
+# Subtest: local provider declares the exact runtime data namespace independently of flow selection and package version
+ok 8 - local provider declares the exact runtime data namespace independently of flow selection and package version
+  ---
+  duration_ms: 1.911208
+  type: 'test'
+  ...
+# Subtest: ODCS target names survive provider selection
+ok 9 - ODCS target names survive provider selection
+  ---
+  duration_ms: 1.178791
+  type: 'test'
+  ...
+# Subtest: temporal ODCS projections retain source and target identities with exact nullable semantics
+ok 10 - temporal ODCS projections retain source and target identities with exact nullable semantics
+  ---
+  duration_ms: 0.194458
+  type: 'test'
+  ...
+# Subtest: local project defaults require no Azure or workspace settings
+ok 11 - local project defaults require no Azure or workspace settings
+  ---
+  duration_ms: 0.655792
+  type: 'test'
+  ...
+# Subtest: local project has one dependency environment and selectable isolated flow folders
+ok 12 - local project has one dependency environment and selectable isolated flow folders
+  ---
+  duration_ms: 1.109917
+  type: 'test'
+  ...
+# Subtest: runner preserves virtual environment interpreter identity
+ok 13 - runner preserves virtual environment interpreter identity
+  ---
+  duration_ms: 121.850167
+  type: 'test'
+  ...
+# Subtest: standalone runner defaults to the active interpreter
+ok 14 - standalone runner defaults to the active interpreter
+  ---
+  duration_ms: 110.865417
+  type: 'test'
+  ...
+# Subtest: local adapter retains complete core-owned schedule intent in every scoped runtime artifact
+ok 15 - local adapter retains complete core-owned schedule intent in every scoped runtime artifact
+  ---
+  duration_ms: 3.895625
+  type: 'test'
+  ...
+# Subtest: local adapter refuses foreign scope, native policies and unsupported handovers before preparation
+ok 16 - local adapter refuses foreign scope, native policies and unsupported handovers before preparation
+  ---
+  duration_ms: 1.974375
+  type: 'test'
+  ...
+# Subtest: manual local preparation retains its previous request shape without invented schedule intent
+ok 17 - manual local preparation retains its previous request shape without invented schedule intent
+  ---
+  duration_ms: 0.218334
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 368.830791
+..................
+----------------------------------------------------------------------
+Ran 18 tests in 2.734s
+
+OK
+
+> @ingestron/provider-local@0.4.16 docs:check /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/provider-local
+> node scripts/docs-check.mjs
+
+11 local documentation links passed
+
+> @ingestron/provider-local@0.4.16 secrets:check /Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/provider-local
+> node scripts/secrets.mjs
+
+Secret-pattern scan passed (not a comprehensive secret detector).

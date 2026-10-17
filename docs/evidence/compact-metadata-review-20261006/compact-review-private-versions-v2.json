@@ -1,0 +1,105 @@
+{
+  "result": "passed",
+  "privateSources": [
+    {
+      "id": "azure-blob",
+      "before": "2.1.8",
+      "after": "2.1.9",
+      "privateFrozenReference": "ingestron/connectors/connectors/azure-blob/connector.yaml@2.1.9"
+    },
+    {
+      "id": "files",
+      "before": "1.5.10",
+      "after": "1.5.11",
+      "privateFrozenReference": "ingestron/connectors/connectors/files/connector.yaml@1.5.11"
+    },
+    {
+      "id": "gcs",
+      "before": "0.1.8",
+      "after": "0.1.9",
+      "privateFrozenReference": "ingestron/connectors/connectors/gcs/connector.yaml@0.1.9"
+    },
+    {
+      "id": "github",
+      "before": "1.36.8",
+      "after": "1.36.9",
+      "privateFrozenReference": "ingestron/connectors/connectors/github/connector.yaml@1.36.9"
+    },
+    {
+      "id": "hubspot",
+      "before": "0.1.6",
+      "after": "0.1.7",
+      "privateFrozenReference": "ingestron/connectors/connectors/hubspot/connector.yaml@0.1.7"
+    },
+    {
+      "id": "jira",
+      "before": "0.1.6",
+      "after": "0.1.7",
+      "privateFrozenReference": "ingestron/connectors/connectors/jira/connector.yaml@0.1.7"
+    },
+    {
+      "id": "mysql",
+      "before": "1.1.7",
+      "after": "1.1.8",
+      "privateFrozenReference": "ingestron/connectors/connectors/mysql/connector.yaml@1.1.8"
+    },
+    {
+      "id": "onedrive",
+      "before": "0.1.9",
+      "after": "0.1.10",
+      "privateFrozenReference": "ingestron/connectors/connectors/onedrive/connector.yaml@0.1.10"
+    },
+    {
+      "id": "oracle",
+      "before": "1.1.7",
+      "after": "1.1.8",
+      "privateFrozenReference": "ingestron/connectors/connectors/oracle/connector.yaml@1.1.8"
+    },
+    {
+      "id": "postgresql",
+      "before": "1.1.8",
+      "after": "1.1.9",
+      "privateFrozenReference": "ingestron/connectors/connectors/postgresql/connector.yaml@1.1.9"
+    },
+    {
+      "id": "s3",
+      "before": "1.0.8",
+      "after": "1.0.9",
+      "privateFrozenReference": "ingestron/connectors/connectors/s3/connector.yaml@1.0.9"
+    },
+    {
+      "id": "salesforce",
+      "before": "0.1.6",
+      "after": "0.1.7",
+      "privateFrozenReference": "ingestron/connectors/connectors/salesforce/connector.yaml@0.1.7"
+    },
+    {
+      "id": "sftp",
+      "before": "1.0.9",
+      "after": "1.0.10",
+      "privateFrozenReference": "ingestron/connectors/connectors/sftp/connector.yaml@1.0.10"
+    },
+    {
+      "id": "sharepoint",
+      "before": "0.1.9",
+      "after": "0.1.10",
+      "privateFrozenReference": "ingestron/connectors/connectors/sharepoint/connector.yaml@0.1.10"
+    },
+    {
+      "id": "sql-server",
+      "before": "1.5.7",
+      "after": "1.5.8",
+      "privateFrozenReference": "ingestron/connectors/connectors/sql-server/connector.yaml@1.5.8"
+    },
+    {
+      "id": "stripe",
+      "before": "0.1.6",
+      "after": "0.1.7",
+      "privateFrozenReference": "ingestron/connectors/connectors/stripe/connector.yaml@0.1.7"
+    }
+  ],
+  "publicCatalogueSha256": "c6d99ca12be6188b3b4f9a0fd21bb3406c8667d2895be83d5376fe0c533fed07",
+  "publicCatalogueUnchanged": true,
+  "declaredPublicCorePin": "0.12.14",
+  "publicPinsChanged": false
+}

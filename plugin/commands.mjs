@@ -5,6 +5,7 @@ import datetime
 import fcntl
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import platform
@@ -75,6 +76,29 @@ def quality_message(failed):
             '. Fix the source data or review the rule severity, then retry with the same run ID.')
 
 
+class SourceFailure(ValueError):
+    def __init__(self,code,message):
+        self.code=code
+        super().__init__(message)
+
+
+class QualityFailure(ValueError):
+    def __init__(self, failed):
+        self.quality = []
+        for rule in failed[:20] if isinstance(failed, list) else []:
+            if not isinstance(rule, dict):
+                continue
+            value = rule.get('value')
+            if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value) or value < 0:
+                continue
+            if rule.get('metric') not in ('nullValues', 'missingValues', 'invalidValues', 'duplicateValues', 'rowCount'):
+                continue
+            if any(not isinstance(rule.get(k), str) or not re.fullmatch(r'[A-Za-z0-9_.:-]{1,120}', rule[k]) for k in ('id', 'stream')):
+                continue
+            self.quality.append({k: rule[k] for k in ('id', 'stream', 'metric', 'value')})
+        super().__init__(quality_message(self.quality))
+
+
 def child(args, cwd, timeout=900, env=None):
     # Discard upstream errors: they can contain credentials or data.
     with subprocess.Popen(args, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
@@ -84,12 +108,27 @@ def child(args, cwd, timeout=900, env=None):
             output, _ = process.communicate(timeout=timeout)
             if process.returncode != 0:
                 messages = {
+                    'SOURCE_METADATA_COLLECTION_LIMIT': 'This flow exceeds the 7 MB metadata collection limit. Split tables into smaller flows or select fewer fields, then prepare again.',
+                    'SOURCE_METADATA_LIMIT': 'This flow exceeds the 2 MB metadata limit. Split tables into smaller flows or select fewer fields, then prepare again.',
                     'SQL_CONNECT': 'Cannot connect to SQL. Check network access, credentials and TLS. If the database was paused, wait for it to resume before retrying.',
                     'SQL_READ': 'SQL read failed. Check table permissions and source availability.',
                     'SQL_TABLE': 'SQL table is absent or its metadata is not visible. Check schema, table and metadata permissions.',
                     'DB_CONNECT': 'Cannot connect to the database. Check host, port, network access, credentials and TLS.',
                     'DB_READ': 'Database read failed. Check table permissions and source availability.',
                     'DB_TABLE': 'Database table is absent or its metadata is not visible. Check schema, table and permissions.',
+                    'TEMPORAL_DATE': 'DATE requires a valid calendar date in YYYY-MM-DD format; review the source field or contract mapping.',
+                    'TEMPORAL_TIMESTAMP': 'TIMESTAMP requires a valid full calendar date and time; review the source field or contract mapping.',
+                    'TEMPORAL_TIMEZONE': 'TIMESTAMP requires a timezone-less value; review an explicit timezone mapping before ingestion.',
+                    'TEMPORAL_PRECISION': 'Source timestamp precision exceeds six fractional digits; review an exact precision mapping before ingestion.',
+                    'TEMPORAL_TYPE': 'Select a supported reviewed temporal type.',
+                    'CHECKPOINT_HISTORY': 'Incremental commit history is incomplete or changed. Restore the committed output and receipts before retrying.',
+                    'CHECKPOINT_MIGRATION': 'The reviewed checkpoint transition is absent, changed or belongs to another history. Inspect the retained build and review again.',
+                    'CHECKPOINT_MIGRATION_STALE': 'The committed checkpoint head changed after review. Preview the current migration before applying.',
+                    'CHECKPOINT_POLICY': 'The incremental source, schema or policy changed. Review a migration before continuing this output namespace.',
+                    'CHECKPOINT_LIMIT': 'Incremental history reached 10000 batches. Review an archive migration before continuing.',
+                    'CHECKPOINT_CURSOR': 'The connector returned an invalid or regressing cursor. Check the reviewed ordered append policy before retrying.',
+                    'CHECKPOINT_MISSING': 'The connector omitted its final checkpoint. Output and cursor were not committed.',
+                    'OUTPUT_BUSY': 'Another run is writing this output namespace. Retry after that run finishes.',
 
                     'GITHUB_AUTH': 'GitHub rejected the supplied token. Check or replace it; no anonymous fallback was attempted.',
                     'GITHUB_FORBIDDEN': 'GitHub denied access. Check permissions or retry after any secondary rate limit.',
@@ -105,8 +144,9 @@ def child(args, cwd, timeout=900, env=None):
                 except (ValueError, AttributeError):
                     failure, code = {}, None
                 if code == 'QUALITY_FAILED':
-                    raise ValueError(quality_message(failure.get('failed')))
+                    raise QualityFailure(failure.get('failed'))
                 if code in messages:
+                    if code.startswith(('TEMPORAL_', 'CHECKPOINT_')) or code in ('OUTPUT_BUSY', 'SOURCE_METADATA_LIMIT', 'SOURCE_METADATA_COLLECTION_LIMIT'):raise SourceFailure(code,messages[code])
                     raise ValueError(messages[code])
                 # Other connectors' codes are named, never their messages; each
                 # connector's documentation explains its codes.
@@ -180,6 +220,23 @@ def environment(root, info, cache, request, prepare=False):
     return str(python), lock_key, True
 
 
+def verify_runtime_identity(python, folder):
+    # Preserve only known safe metadata codes from the source-owned preflight.
+    # Older source runtimes need no new imports; other errors stay private.
+    script = '''import json,pathlib,singer_runtime as r
+p=pathlib.Path.cwd()
+try:
+    r.runtime_identity(json.loads((p/"connector.json").read_text()),p)
+except ValueError as error:
+    code=getattr(error,"code",None)
+    if code not in ("SOURCE_METADATA_LIMIT","SOURCE_METADATA_COLLECTION_LIMIT"):
+        raise
+    print(json.dumps({"errorCode":code}))
+    raise SystemExit(1)
+'''
+    child([python, '-c', script], folder, 30)
+
+
 def execute(request):
     require(request.get('apiVersion') == 'ingestron.execution-request/v1' and os.name == 'posix', 'Unsupported execution protocol/platform')
     root = Path(__file__).resolve().parent
@@ -190,7 +247,9 @@ def execute(request):
     require(not cache.is_symlink(), 'Runtime cache cannot be a symlink')
     cache.mkdir(parents=True, exist_ok=True)
     action = request['action']
-    require(action in ('prepare', 'catalogue', 'discover', 'review', 'approve', 'run'), 'Unsupported local action')
+    require(action in ('prepare', 'catalogue', 'discover', 'review', 'approve', 'run', 'checkpoint_preview', 'checkpoint_apply'), 'Unsupported local action')
+    maintenance = action in ('checkpoint_preview', 'checkpoint_apply')
+    require(not maintenance or len(ids) == 1, 'Checkpoint maintenance requires one flow')
     results = []
     for flow in ids:
         info = project['flows'][flow]
@@ -201,8 +260,27 @@ def execute(request):
             results.append({'flow': flow, 'environment': key, 'reused': reused,
                             'python': python, 'pythonVersion': load(cache / key / 'ready.json')['python']})
             continue
+        if maintenance:
+            declaration = info.get('checkpointMigration')
+            require(declaration == {'apiVersion': 'ingestron.checkpoint-migration/v1', 'strategy': 'preserve-cursor-runtime-upgrade'}, 'Upgrade the selected source package to support reviewed checkpoint migration')
+            project_root, prior_root = Path(request.get('projectRoot', '')), Path(request.get('previousRoot', ''))
+            require(project_root.is_absolute() and prior_root.is_absolute() and root.resolve().is_relative_to(project_root.resolve()) and prior_root.resolve().is_relative_to(project_root.resolve()), 'Checkpoint baseline must remain in the selected project')
+            # Validate all path components, including the retained package root.
+            prior_root = inside(project_root, str(prior_root.relative_to(project_root)))
+            prior = load(inside(prior_root, 'project-runtime.json'))
+            require(all(prior.get(key) == project.get(key) for key in ('project', 'environment', 'configuration')) and flow in prior.get('flows', {}), 'Checkpoint baseline has another project or flow scope')
+            previous_folder = inside(prior_root, prior['flows'][flow]['directory'])
+            args = [python, '-B', str(inside(folder, 'singer_runtime.py')), action, '--config', str(inside(folder, 'connector.json')), '--previous-config', str(inside(previous_folder, 'connector.json')), '--output', str(inside(root, 'data/' + flow))]
+            if action == 'checkpoint_apply':
+                require(isinstance(request.get('expectedDigest'), str) and re.fullmatch(r'[a-f0-9]{64}', request['expectedDigest']), 'Review the exact checkpoint migration digest before apply')
+                args += ['--expected-digest', request['expectedDigest']]
+            with locked(folder / '.execution.lock'):
+                result = json.loads(child(args, folder, 300))
+            require(set(result) == {'status', 'migration'} and result['status'] == 'Succeeded', 'Invalid source checkpoint response')
+            results.append({'flow': flow, 'status': 'Succeeded', 'migration': result['migration']})
+            continue
         # All flows are verified against their exact source-owned runtime before source access.
-        child([python, '-c', 'import json,pathlib,singer_runtime as r; p=pathlib.Path.cwd(); r.runtime_identity(json.loads((p/"connector.json").read_text()),p)'], folder, 30)
+        verify_runtime_identity(python, folder)
         config = load(folder / 'connector.json')
         args = [python, str(folder / 'singer_runtime.py'), action, '--config', str(folder / 'connector.json')]
         staged = folder / ('.' + action + '.' + uuid.uuid4().hex + '.tmp') if action in ('catalogue', 'discover', 'review') else None
@@ -239,19 +317,152 @@ def execute(request):
                             'catalogue': str((folder / 'catalogue.json').relative_to(root)),
                             'tables': {t: len(v.get('columns', [])) for t, v in catalogue.get('tables', {}).items()}})
             continue
+        checkpoint = result.get('checkpoint')
+        if checkpoint is not None:
+            require(isinstance(checkpoint, dict) and set(checkpoint) == {'sequence', 'bookmarks', 'hasMore'}
+                    and type(checkpoint['sequence']) is int and 1 <= checkpoint['sequence'] <= 10000
+                    and type(checkpoint['hasMore']) is bool and isinstance(checkpoint['bookmarks'], dict)
+                    and 1 <= len(checkpoint['bookmarks']) <= 100,
+                    'Invalid incremental checkpoint result')
+            for name, value in checkpoint['bookmarks'].items():
+                require(isinstance(name, str) and re.fullmatch(r'[A-Za-z_][A-Za-z0-9_-]{0,100}', name)
+                        and isinstance(value, str) and re.fullmatch(r'0|[1-9][0-9]{0,18}', value)
+                        and int(value) <= 9223372036854775807, 'Invalid incremental cursor result')
         results.append({'flow': flow, 'status': result.get('status'), 'tables': result.get('tables', []),
-                        **({'quality': result['quality']} if isinstance(result.get('quality'), list) else {})})
+                        **({'quality': result['quality']} if isinstance(result.get('quality'), list) else {}),
+                        **({'checkpoint': checkpoint} if checkpoint is not None else {})})
     return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'action': action, 'flows': results}
+
+
+CHECKPOINT_FAILURES = ('CHECKPOINT_MIGRATION', 'CHECKPOINT_MIGRATION_STALE', 'CHECKPOINT_POLICY', 'CHECKPOINT_HISTORY', 'CHECKPOINT_LIMIT', 'CHECKPOINT_CURSOR', 'CHECKPOINT_MISSING', 'OUTPUT_BUSY')
+EXECUTION_FAILURES = (*CHECKPOINT_FAILURES, 'SOURCE_METADATA_LIMIT', 'SOURCE_METADATA_COLLECTION_LIMIT')
+
+SETUP_ACTIONS = ('prepare', 'catalogue', 'discover', 'review', 'approve', 'checkpoint_preview', 'checkpoint_apply')
+
+
+class OperationUncertain(ValueError):
+    """No durable provider acknowledgement exists; never claim a known failure."""
+
+
+def operation_location(request):
+    action = request.get('originalAction') if request.get('action') == 'acknowledge' else request.get('action')
+    require(action in SETUP_ACTIONS, 'Only setup actions use this acknowledgement protocol')
+    run_id, fingerprint, flows = request.get('runId'), request.get('fingerprint'), request.get('flows')
+    require(isinstance(run_id, str) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,99}', run_id), 'Invalid original operation identity')
+    require(isinstance(fingerprint, str) and re.fullmatch(r'[a-f0-9]{64}', fingerprint), 'Invalid operation build fingerprint')
+    require(isinstance(flows, list) and 1 <= len(flows) <= 100 and len(flows) == len(set(flows))
+            and all(isinstance(flow, str) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,99}', flow) for flow in flows), 'Invalid original flow selection')
+    cache = Path(request['cache'])
+    require(cache.is_absolute() and not cache.is_symlink(), 'Invalid operation cache')
+    cache.mkdir(parents=True, exist_ok=True)
+    area = inside(cache, '.ingestron-operation-receipts')
+    area.mkdir(mode=0o700, exist_ok=True)
+    namespace = inside(cache, '.ingestron-operation-receipts/' + fingerprint)
+    namespace.mkdir(mode=0o700, exist_ok=True)
+    folder = inside(namespace, run_id)
+    binding = {'apiVersion': 'ingestron.execution-operation/v1', 'id': run_id,
+               'action': action, 'flows': flows, 'fingerprint': fingerprint}
+    return folder, binding
+
+
+def journal_read(folder, name):
+    path = inside(folder, name)
+    require(path.is_file() and not path.is_symlink(), 'Invalid operation acknowledgement file')
+    return load(path)
+
+
+def operation_acknowledgement(request):
+    folder, binding = operation_location(request)
+    if not folder.exists() or not (folder / 'acknowledgement.json').exists():
+        raise OperationUncertain('Original operation has no durable acknowledgement; retain its build ownership')
+    ack = journal_read(folder, 'acknowledgement.json')
+    expected = {'apiVersion': 'ingestron.execution-acknowledgement/v1', **{k: binding[k] for k in ('id', 'action', 'flows', 'fingerprint')}}
+    require(isinstance(ack, dict) and set(ack) == {*expected, 'result'} and all(ack[k] == v for k, v in expected.items()), 'Original operation acknowledgement does not match its binding')
+    result = ack['result']
+    require(isinstance(result, dict) and {'apiVersion', 'status', 'action', 'flows'} <= set(result) <= {'apiVersion', 'status', 'action', 'flows', 'errorCode'}
+            and result['apiVersion'] == 'ingestron.execution-result/v1' and result['action'] == binding['action']
+            and result['status'] in ('succeeded', 'failed') and isinstance(result['flows'], list)
+            and len(result['flows']) <= 100, 'Invalid original operation result')
+    require('errorCode' not in result or (result['status'] == 'failed' and result['errorCode'] in EXECUTION_FAILURES), 'Invalid execution failure evidence')
+    require(result['status'] == 'failed' or [flow.get('flow') for flow in result['flows']] == binding['flows'], 'Original operation result has another selection')
+    return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'succeeded', 'acknowledgement': ack}
+
+
+def operation_response(request):
+    try:
+        return execute(request)
+    except KeyboardInterrupt:
+        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'interrupted'}
+    except QualityFailure as error:
+        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed', 'errorCode': 'QUALITY_FAILED', 'quality': error.quality, 'message': str(error)}
+    except SourceFailure as error:
+        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed', 'errorCode': error.code, 'message': str(error)}
+    except Exception as error:
+        return {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed', 'message': str(error) if isinstance(error, ValueError) else 'Local execution failed; check runtime preparation and reviewed inputs'}
+
+
+def operation_worker(request):
+    # This independently grouped finaliser survives the original adapter parent.
+    # It records evidence only after execute has finished all owned child work.
+    folder, binding = operation_location(request)
+    submission = journal_read(folder, 'submission.json')
+    require(submission == {'binding': binding, 'nonce': request.get('operationNonce')}, 'Operation worker does not own this submission')
+    with locked(inside(folder, 'worker.lock')):
+        require(not (folder / 'acknowledgement.json').exists(), 'Original operation already finalised')
+        write(inside(folder, 'worker.json'), {'pid': os.getpid(), 'nonce': submission['nonce']})
+        result = operation_response(request)
+        acknowledgement = {'apiVersion': 'ingestron.execution-acknowledgement/v1',
+                           **{k: binding[k] for k in ('id', 'action', 'flows', 'fingerprint')},
+                           'result': {'apiVersion': 'ingestron.execution-result/v1',
+                                      'status': 'succeeded' if result['status'] == 'succeeded' else 'failed',
+                                      'action': binding['action'], 'flows': result.get('flows', []),
+                                      **({'errorCode': result['errorCode']} if result.get('status') == 'failed' and result.get('errorCode') in EXECUTION_FAILURES else {})}}
+        # No executable operation or source write follows this atomic commit.
+        write(inside(folder, 'acknowledgement.json'), acknowledgement)
+        return result
+
+
+def operation_dispatch(request):
+    require(request.get('apiVersion') == 'ingestron.execution-request/v1', 'Unsupported execution protocol')
+    if request.get('action') == 'acknowledge':
+        return operation_acknowledgement(request)
+    if request.get('action') not in SETUP_ACTIONS:
+        return operation_response(request)
+    folder, binding = operation_location(request)
+    try:
+        require(sum(1 for _ in folder.parent.iterdir()) < 10000, 'Review an operation receipt archive before starting more setup work')
+        folder.mkdir(mode=0o700)
+    except FileExistsError:
+        submission = journal_read(folder, 'submission.json')
+        require(submission.get('binding') == binding, 'Original identity belongs to another operation')
+        return operation_acknowledgement(request)['acknowledgement']['result']
+    nonce = uuid.uuid4().hex
+    write(inside(folder, 'submission.json'), {'binding': binding, 'nonce': nonce})
+    worker_request = {**request, 'operationNonce': nonce}
+    with subprocess.Popen([sys.executable, str(Path(__file__).resolve()), '--operation-worker'],
+                          stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                          start_new_session=True) as worker:
+        worker.communicate(json.dumps(worker_request).encode())
+    # Child absence, a failed exit, or elapsed time is not an acknowledgement.
+    return operation_acknowledgement(request)['acknowledgement']['result']
 
 
 if __name__ == '__main__':
     try:
-        request = json.loads(sys.stdin.read(2_000_001))
-        response = execute(request)
-    except KeyboardInterrupt:
-        response = {'apiVersion': 'ingestron.execution-result/v1', 'status': 'interrupted', 'message': 'Execution interrupted; use the same run identity to retry'}
-    except Exception as error:
-        response = {'apiVersion': 'ingestron.execution-result/v1', 'status': 'failed', 'message': str(error) if isinstance(error, ValueError) else 'Local execution failed; check runtime preparation and reviewed inputs'}
+        payload = sys.stdin.read(2_000_001)
+        require(len(payload) <= 2_000_000, 'Execution request exceeds limit')
+        request = json.loads(payload)
+        if sys.argv[1:] == ['--operation-worker']:
+            def interrupt_worker(_signal, _frame):
+                raise KeyboardInterrupt()
+            signal.signal(signal.SIGTERM, interrupt_worker)
+        response = operation_worker(request) if sys.argv[1:] == ['--operation-worker'] else operation_dispatch(request)
+    except (KeyboardInterrupt, OperationUncertain):
+        response = {'apiVersion': 'ingestron.execution-result/v1', 'status': 'interrupted', 'message': 'Original operation outcome is unconfirmed; inspect its durable acknowledgement'}
+    except Exception:
+        # Failure to read or write acknowledgement metadata cannot prove that an
+        # already dispatched worker stopped. Retain source uncertainty.
+        response = {'apiVersion': 'ingestron.execution-result/v1', 'status': 'interrupted', 'message': 'Operation acknowledgement is unavailable; retain the original identity'}
     print(json.dumps(response))
     sys.exit(0 if response['status'] == 'succeeded' else 1)
 `;
@@ -336,7 +547,7 @@ function assemble(input) {
     !Object.keys(input.nativeFiles).length,
     "Local native standards are not implemented"
   );
-  const artifacts = {}, flows = {}, environments = {};
+  const artifacts = {}, flows = {}, environments = {}, metadataDocumentRoots = {};
   for (const c of input.connections) {
     check(
       /^[A-Za-z0-9_][A-Za-z0-9_-]*$/.test(c.flow) && !flows[c.flow],
@@ -345,16 +556,27 @@ function assemble(input) {
     for (const [name, content] of Object.entries(c.artifacts))
       artifacts[`flows/${c.flow}/${name}`] = content;
     const config = JSON.parse(c.artifacts["connector.json"]);
+    if (c.metadataDocuments) {
+      check(
+        c.metadataDocuments.apiVersion === "ingestron.metadata-documents/v1" && JSON.stringify(c.metadataDocuments) === JSON.stringify(config.projectLock.tableDocuments) && !Object.keys(c.artifacts).some(
+          (name) => name.startsWith("metadata/project/")
+        ),
+        "Indexed assembly requires the original index and external documents"
+      );
+      metadataDocumentRoots[c.flow] = `flows/${c.flow}`;
+    }
     const runtime = config.projectLock.runtimeAssetSha256;
     environments[runtime] = {
       requirements: `flows/${c.flow}/requirements.lock.txt`,
       buildTools: `flows/${c.flow}/build-tools.lock.txt`,
       source: config.projectLock.sourcePackage
     };
+    const checkpointMigration = c.artifacts["runtime.lock.json"] ? JSON.parse(c.artifacts["runtime.lock.json"]).checkpointMigration : void 0;
     flows[c.flow] = {
       directory: `flows/${c.flow}`,
       runtime,
-      timeout: config.timeoutSeconds * 2 + 300
+      timeout: config.timeoutSeconds * 2 + 300,
+      ...checkpointMigration ? { checkpointMigration } : {}
     };
   }
   artifacts["run.py"] = runner;
@@ -375,6 +597,7 @@ function assemble(input) {
   return {
     apiVersion: "ingestron.project-package/v1",
     artifacts,
+    metadataDocumentRoots,
     details: {
       entryPoint: "run.py",
       flows: Object.keys(flows),
@@ -394,13 +617,45 @@ var object = (properties, required = Object.keys(properties)) => ({
 });
 var text = { type: "string", minLength: 1 };
 
+// src/contracts/metadata-projection.mjs
+function validateMetadataProjection(input, tables) {
+  const index = input.tableDocuments;
+  const object2 = (value) => value && typeof value === "object" && !Array.isArray(value);
+  const keys = (value, expected) => object2(value) && Object.keys(value).length === expected.length && expected.every((key) => Object.hasOwn(value, key));
+  if (Object.hasOwn(input, "tables") || Object.hasOwn(input, "selection") || !keys(index, ["apiVersion", "kind", "documents", "totalBytes"]) || index.apiVersion !== "ingestron.metadata-documents/v1" || index.kind !== "project" || !object2(index.documents) || !object2(tables))
+    throw Error("Invalid indexed connection metadata");
+  const names = Object.keys(index.documents);
+  if (!names.length || names.length > 100 || Object.keys(tables).length !== names.length)
+    throw Error("Invalid indexed connection metadata");
+  let bytes = 0;
+  for (const name of names) {
+    const record = index.documents[name], table = tables[name];
+    if (!/^[A-Za-z_][A-Za-z0-9_-]{0,100}$/.test(name) || !Object.hasOwn(tables, name) || !keys(record, ["path", "sha256", "bytes"]) || !/^[a-f0-9]{64}$/.test(record.sha256) || record.path !== `metadata/project/${record.sha256}.json` || !Number.isInteger(record.bytes) || record.bytes < 1 || record.bytes > 2e6 || !object2(table) || Object.keys(table).some(
+      (key) => !["source", "columns", "contract"].includes(key)
+    ) || !object2(table.source) || !Array.isArray(table.columns) || table.columns.length > 500 || (Object.hasOwn(table, "contract") ? table.contract !== true || !table.columns.length : table.columns.length !== 0))
+      throw Error("Invalid indexed connection metadata");
+    bytes += record.bytes;
+  }
+  if (bytes > 7e6 || index.totalBytes !== bytes)
+    throw Error("Indexed metadata exceeds its collection bounds");
+}
+
 // src/contracts/connection-contract.mjs
 var runtimeContract = "ingestron.snapshot/python/v1";
 var field = object(
   {
     type: {
       type: "string",
-      enum: ["integer", "string", "boolean", "number", "decimal", "json"]
+      enum: [
+        "integer",
+        "string",
+        "boolean",
+        "number",
+        "decimal",
+        "json",
+        "date",
+        "timestamp"
+      ]
     },
     nullable: { type: "boolean" },
     target: { type: "string", minLength: 1 },
@@ -421,7 +676,12 @@ var projectConnectionDefinition = {
   description: "Prepare a project-resolved connection, selected fields and runtime-only secrets",
   inputSchema: { type: "object", additionalProperties: true }
 };
-function validateProjectConnection(input, descriptor) {
+function validateProjectConnection(input, descriptor, projectionTables) {
+  if (Object.hasOwn(input, "tableDocuments"))
+    validateMetadataProjection(input, projectionTables);
+  else if (projectionTables !== void 0)
+    throw Error("Projection requires indexed connection metadata");
+  const tables = projectionTables ?? input.tables;
   if (input.apiVersion !== "ingestron.connection-request/v1" || !/^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*@\d+\.\d+\.\d+$/.test(input.connector) || input.runtimeContract !== runtimeContract || !input.specificationSha256)
     throw Error("Invalid project connection request");
   if (Object.keys(input).some(
@@ -437,19 +697,52 @@ function validateProjectConnection(input, descriptor) {
       "settings",
       "selection",
       "tables",
+      "tableDocuments",
       "execution",
       "timeoutSeconds",
       "sourcePackage",
       "executionPackage",
       "specificationSha256",
       "runtimeAssetSha256",
-      "runtimeContract"
+      "runtimeContract",
+      "schedule"
     ].includes(k)
   ))
     throw Error("Unknown project connection setting");
+  if (Object.hasOwn(input, "schedule")) {
+    const schedule = input.schedule;
+    const keys = [
+      "apiVersion",
+      "owner",
+      "clock",
+      "definition",
+      "boundaries",
+      "digest"
+    ];
+    const ownerKeys = ["project", "environment", "flow", "connection"];
+    const object2 = (value) => value && typeof value === "object" && !Array.isArray(value);
+    if (!object2(schedule) || Object.keys(schedule).length !== keys.length || !keys.every((key) => Object.hasOwn(schedule, key)) || schedule.apiVersion !== descriptor.scheduling?.apiVersion || schedule.clock !== "portable" || descriptor.scheduling?.clock !== "portable" || !object2(schedule.owner) || Object.keys(schedule.owner).length !== ownerKeys.length || !ownerKeys.every(
+      (key) => typeof input[key] === "string" && input[key].length > 0 && schedule.owner[key] === input[key]
+    ) || !object2(schedule.definition) || schedule.definition.apiVersion !== "ingestron.schedule/v1" || !descriptor.scheduling.recurrences.includes(
+      schedule.definition.recurrence?.kind
+    ) || !["skip", "queue"].includes(schedule.definition.overlap) || !["skip", "latest"].includes(schedule.definition.missed) || !object2(schedule.boundaries) || schedule.boundaries.apiVersion !== "ingestron.schedule-boundaries/v1" || schedule.boundaries.timeZone !== schedule.definition.timeZone || !/^[a-f0-9]{64}$/.test(schedule.digest) || !/^[a-f0-9]{64}$/.test(input.specificationSha256))
+      throw Error(
+        "Local execution requires a scope-bound reviewed portable schedule"
+      );
+  }
   if (input.tables && input.selection)
     throw Error("Use ODCS tables or legacy selection, never both");
-  const selection = input.tables ? selectionFromTables(input.tables) : input.selection;
+  const incremental = input.execution?.ingestion === "incremental";
+  if (incremental && !tables)
+    throw Error(
+      "Incremental append execution requires reviewed table policies"
+    );
+  for (const table of Object.values(tables ?? {}))
+    if (!!table.source?.incremental !== incremental)
+      throw Error(
+        "Use an incremental policy on every table only in incremental execution"
+      );
+  const selection = tables ? selectionFromTables(tables) : input.selection;
   if (!conforms(descriptor.settingsSchema, input.settings) || !conforms(descriptor.selectionSchema, selection) || !conforms(descriptor.executionSchema, input.execution))
     throw Error("Invalid connector settings, selection or execution");
   const values = [];
@@ -472,7 +765,7 @@ function validateProjectConnection(input, descriptor) {
   const names = Object.values(selection).map((table) => table.name);
   if (new Set(names).size !== names.length || names.some((name) => !/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)))
     throw Error("Invalid or duplicate selected table name");
-  const discoveryOnly = input.tables && Object.values(input.tables).every((t) => !t.contract);
+  const discoveryOnly = tables && Object.values(tables).every((t) => !t.contract);
   if (!Object.keys(selection).length && !discoveryOnly)
     throw Error("Select at least one source stream");
   for (const [stream, table] of Object.entries(selection)) {
@@ -572,7 +865,9 @@ function selectionFromTables(tables) {
         SMALLINT: "integer",
         DOUBLE: "number",
         FLOAT: "number",
-        BOOLEAN: "boolean"
+        BOOLEAN: "boolean",
+        DATE: "date",
+        TIMESTAMP: "timestamp"
       }[type];
       const decimal = /^DECIMAL\((\d+),\s*(\d+)\)$/.exec(type);
       if (!mapped && !decimal)
@@ -639,13 +934,38 @@ function connectorContracts(input) {
 var connectorRuntimes = {
   [runtimeContract]: {
     selectionSchema,
-    executionSchema: object({ mode: { type: "string", enum: ["local"] } }),
+    executionSchema: object(
+      {
+        mode: { type: "string", enum: ["local"] },
+        ingestion: { type: "string", enum: ["incremental"] }
+      },
+      ["mode"]
+    ),
     executionPlatforms: ["local"],
+    scheduling: {
+      apiVersion: "ingestron.connector-schedule/v1",
+      clock: "portable",
+      recurrences: ["interval", "daily", "weekly", "monthly"]
+    },
     prepareCommand: "connection prepare",
+    metadataDocuments: "ingestron.metadata-documents/v1",
     contractsCommand: "connector contracts"
   }
 };
 var definitions = [
+  {
+    name: "execution resources",
+    description: "Declare the selected compiled local output namespaces without source access",
+    inputSchema: object({
+      packageRoot: { type: "string", minLength: 1, maxLength: 2048 },
+      flows: {
+        type: "array",
+        items: { type: "string", minLength: 1, maxLength: 100 },
+        minItems: 1,
+        maxItems: 100
+      }
+    })
+  },
   projectConnectionDefinition,
   {
     name: "connector contracts",
@@ -654,13 +974,17 @@ var definitions = [
   }
 ];
 function prepare(request) {
-  const { runtimeAssets, ...input } = request;
+  const { runtimeAssets, projectionTables, ...input } = request;
   if (!runtimeAssets || !input.runtimeAssetSha256)
     throw Error("Install a source package with locked runtime assets");
-  const selection = validateProjectConnection(input, {
-    ...connectorRuntimes[runtimeContract],
-    settingsSchema: JSON.parse(runtimeAssets["settings.schema.json"])
-  });
+  const selection = validateProjectConnection(
+    input,
+    {
+      ...connectorRuntimes[runtimeContract],
+      settingsSchema: JSON.parse(runtimeAssets["settings.schema.json"])
+    },
+    projectionTables
+  );
   if (![input.sourceId, input.tenantId].every(
     (v) => typeof v === "string" && /^[A-Za-z0-9][A-Za-z0-9_-]{0,100}$/.test(v)
   ))
@@ -689,9 +1013,9 @@ function prepare(request) {
     execution: "local-posix-preview",
     artifacts: {
       ...runtimeAssets,
-      "connector.json": JSON.stringify(config, null, 2),
-      "selection.json": JSON.stringify(selection, null, 2),
-      "project-connection.lock.json": JSON.stringify(input, null, 2)
+      "connector.json": JSON.stringify(config),
+      "selection.json": JSON.stringify(selection),
+      "project-connection.lock.json": JSON.stringify(input)
     },
     review: [
       "Prepare a separate hash-locked Python 3.12 environment on POSIX.",
@@ -703,6 +1027,27 @@ function prepare(request) {
 function command(request) {
   if (request.apiVersion !== "ingestron.provider-command-request/v1")
     throw Error("Unsupported command request");
+  if (request.command === "execution resources") {
+    const { packageRoot, flows } = request.input;
+    if (typeof packageRoot !== "string" || packageRoot.length > 2048 || !packageRoot.startsWith("/") || packageRoot.includes("\\") || packageRoot.split("/").slice(1).some((part) => !part || [".", ".."].includes(part)) || !Array.isArray(flows) || !flows.length || flows.length > 100 || new Set(flows).size !== flows.length || flows.some(
+      (flow) => typeof flow !== "string" || !/^[A-Za-z0-9][A-Za-z0-9_-]{0,99}$/.test(flow)
+    ))
+      throw Error(
+        "Select a canonical POSIX package directory and unique compiled flows"
+      );
+    return {
+      apiVersion: "ingestron.execution-resources/v1",
+      flows: flows.map((flow) => ({
+        flow,
+        resources: [
+          {
+            namespace: "local-filesystem",
+            identity: packageRoot + "/data/" + flow
+          }
+        ]
+      }))
+    };
+  }
   if (request.command === "project assemble") return assemble(request.input);
   if (request.command === "connection prepare") return prepare(request.input);
   if (request.command === "connector contracts")

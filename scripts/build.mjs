@@ -22,6 +22,10 @@ for (const name of ["commands", "lifecycle"])
     target: "es2022",
   });
 writeFileSync("plugin/execution.py", readFileSync("src/execution.py"));
+writeFileSync(
+  "plugin/source_access_host.py",
+  readFileSync("src/source_access_host.py"),
+);
 const version = JSON.parse(readFileSync("package.json")).version;
 const manifest = {
   apiVersion: "ingestron.provider/v1",
@@ -42,10 +46,29 @@ const manifest = {
     apiVersion: "ingestron.execution/v1",
     transport: "local-python/v1",
     entryPoint: "execute.py",
-    actions: ["prepare", "catalogue", "discover", "review", "approve", "run"],
+    actions: [
+      "prepare",
+      "catalogue",
+      "discover",
+      "review",
+      "approve",
+      "run",
+      "checkpoint_preview",
+      "checkpoint_apply",
+    ],
     status: "receipt",
     retry: "same-run-id",
     cancellation: "interrupt",
+    acknowledgement: "provider-journal/v1",
+    resources: {
+      apiVersion: "ingestron.execution-resources/v1",
+      command: "execution resources",
+    },
+  },
+  sourceAccess: {
+    apiVersion: "ingestron.source-access-host/v1",
+    transport: "local-python/v1",
+    entryPoint: "source_access_host.py",
   },
   connectorRuntimes,
   lifecycle: {
@@ -63,12 +86,19 @@ const manifest = {
 manifest.projectAssembly = {
   apiVersion: "ingestron.project-assembly/v1",
   command: "project assemble",
+  metadataDocuments: "ingestron.metadata-documents/v1",
 };
 manifest.compatibility.requiredFeatures = [
   ...new Set([
     ...manifest.compatibility.requiredFeatures,
     "project-assembly",
+    "connection-metadata-documents",
     "provider-execution",
+    "source-checkpoint-migration",
+    "provider-execution-resources",
+    "provider-execution-acknowledgement",
+    "connector-schedule-handover",
+    "portable-scheduler",
   ]),
 ];
 manifest.commands.definitions = manifest.commands.definitions.filter(

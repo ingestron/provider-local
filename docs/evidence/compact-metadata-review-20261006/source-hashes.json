@@ -1,0 +1,320 @@
+[
+  {
+    "owner": "core",
+    "path": "src/core/provider-commands.ts",
+    "sha256": "c05ed7d7380010432a2d8237f8cd9a667268c90acc5e59e87d8c1012a03c9723",
+    "afterSha256": "101989ae05d19d138b3b7d2610e0bf28e36de1db515d9a8b9930fce1594d15f0"
+  },
+  {
+    "owner": "core",
+    "path": "package.json",
+    "sha256": "1d8d33cffa537d7294c32fd2e9a0927b06181a62dae74356c579e6d8ce3b4de4",
+    "afterSha256": "db73631ff34d1eafa0540c0134dac88c3ca5ce8807d9ce28e57b3ad1d06958c4"
+  },
+  {
+    "owner": "provider-local",
+    "path": "src/commands.mjs",
+    "sha256": "5c0e087f3e2a019323fe3318e03c981df8bf28f953056a7b2aeafce382a62ed2",
+    "afterSha256": "f32f4940f56624e72d7c7b523f75d767d087ffce7b48d2f1afba40caffbb628b"
+  },
+  {
+    "owner": "provider-local",
+    "path": "src/execution.py",
+    "sha256": "cbdae2b392cdbc29774bbf2715ddf54f8531743368ba73ee485eac7ac481418f",
+    "afterSha256": "872def6397f8d7e95dc62eb45b3875026a2f9e79a61519c20932ea7047a112dc"
+  },
+  {
+    "owner": "provider-local",
+    "path": "src/execution-source.mjs",
+    "sha256": "5686aee2061969bb9c0c2c4f09db5bc0e37709e00dbcde05e8a7a0c25d14e60f",
+    "afterSha256": "842523fb14c1628bf8e08a64abd94102e1f0fadc547a7dde555374f6476be992"
+  },
+  {
+    "owner": "provider-local",
+    "path": "package.json",
+    "sha256": "cc7ffe85311d9d6baa653e8bdb999c0a9aaafaac8035dfb9b4e70d2135bccf09",
+    "afterSha256": "5af1feb6913e68e5fffb34569fbe6808f9b39acfa2d4bdbc246e12d060693d1c"
+  },
+  {
+    "owner": "provider-local",
+    "path": "plugin/commands.mjs",
+    "sha256": "444d15dabc077ee0f52277114cacbb67c04c7eba063fec1f0061817c160cefdf",
+    "afterSha256": "740c06e69ff069ca60fe4a615561a430454a61aea26823a83ef931cfdf4bf1fa"
+  },
+  {
+    "owner": "provider-local",
+    "path": "plugin/lifecycle.mjs",
+    "sha256": "311b7d944c19127a22b899b631d2ac6c05fe0660d14130a77b3ff1b89776420f",
+    "afterSha256": "311b7d944c19127a22b899b631d2ac6c05fe0660d14130a77b3ff1b89776420f"
+  },
+  {
+    "owner": "provider-local",
+    "path": "plugin/execution.py",
+    "sha256": "cbdae2b392cdbc29774bbf2715ddf54f8531743368ba73ee485eac7ac481418f",
+    "afterSha256": "872def6397f8d7e95dc62eb45b3875026a2f9e79a61519c20932ea7047a112dc"
+  },
+  {
+    "owner": "provider-local",
+    "path": "plugin/source_access_host.py",
+    "sha256": "122a6097cff7cd8e92de7ffdfbf22c5bbc48a6f38889fc7d0bde8cc848f025b6",
+    "afterSha256": "122a6097cff7cd8e92de7ffdfbf22c5bbc48a6f38889fc7d0bde8cc848f025b6"
+  },
+  {
+    "owner": "provider-local",
+    "path": "plugin/provider.yaml",
+    "sha256": "8ef2e9ac56af9e3d80db3f924e1d0b085e032b4ccdd7d6b2b0193d654314ebd0",
+    "afterSha256": "8700092b10f1855b8b44c774c440bd9fd4b476817efc66689e3017ad12b1ba44"
+  },
+  {
+    "owner": "connectors",
+    "path": "runtime/singer_runtime.py",
+    "sha256": "8733f2fb4c6dad861a323fbb6dcc5086f01b7eac0ed91ae59673e05e9a19b8a8",
+    "afterSha256": "503f26d8d11883373301e76f83b3bd7b069d4821d558b95e1fd4407466d2bd40"
+  },
+  {
+    "owner": "connectors",
+    "path": "test/runtime/test_project_identity.py",
+    "sha256": "f49b19757a2f92db702e60aa1ef0e4386d60e2929a45f23507262a1bc2533a8b",
+    "afterSha256": "d1eacdf6df47cda8254e586cc3989de4e914a39e791e9b09a89a67b202d4bcc4"
+  },
+  {
+    "owner": "connectors",
+    "path": "scripts/build-source-access.mjs",
+    "sha256": "921b3bba223711e112be348c6a7d41a2e8812af38d2035bcc4feef032849cb6f",
+    "afterSha256": "32d45badfc23522150d34031475092f967215000517b1dfa9c2020cc0faab77b"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/postgresql/connector.yaml",
+    "sha256": "0e9e54f3c9aa27e9b5068d6cc1f68a21f440ddba90f5191850f8ae1083b1a69c",
+    "afterSha256": "3e930a039e30ee4153f1861b8edd523d65472699102a379300f81ba9fade7645"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/s3/connector.yaml",
+    "sha256": "e4ab02a697b29265101d6777d845439fa4fb28cdd82237e8edbe1307a4512465",
+    "afterSha256": "60348e4b84eb02b035f88f2b9bae4d7cd9fd7cbb3fe420e5c03eaf95c6bff4e3"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/onedrive/connector.yaml",
+    "sha256": "307635e4890e1229b80a65d7db74ce6987d73ab6ac2370c010b849c333825e9b",
+    "afterSha256": "d747b99e90220b9f19f3b08a44d761c4bfc4bdc0e292b5fb7bc8523846a58307"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/oracle/connector.yaml",
+    "sha256": "e1a3f14cb78446cbde688dfba5fb502c5964d9b18de3152ee3de81cbcac7688e",
+    "afterSha256": "3b75bcf927c7fdb57bb3cfe97c5f5b6813eb2e120431add5150a4aecc9bb0b0c"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/sftp/connector.yaml",
+    "sha256": "f96bf2773888324868dee410c0c7d72d098c9e5de09c0ed64f6d1e048d8ce1ff",
+    "afterSha256": "d722f1b49b642c7a4766225b30fae1eeb0c8820985268677b476a514e1e73e13"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/hubspot/connector.yaml",
+    "sha256": "d5662f0888ef8249a9d5f01902d52e63e68b921b51294799a1b2d518a82dd7e3",
+    "afterSha256": "d7878e51dfe532bfa0ef4048feade6e9736801d9d317b1c00ce7278346c1ac90"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/jira/connector.yaml",
+    "sha256": "defdc842e086dbb0c2016c43cea692409527bafdf0e5992e75a217e6eac32196",
+    "afterSha256": "0c75188380184cadf32200b031c2bfb8975a54a0f57691c39a232a0d0bc412a8"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/github/connector.yaml",
+    "sha256": "8f41bbe0e163fe4edd91a8242b68b55d588f6f408f5d04a2971c52f5bd60837b",
+    "afterSha256": "d62d8a517642a942271bc205c616b911b6c310717351dafdbc99ff90a8826740"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/sql-server/connector.yaml",
+    "sha256": "8da87c29123b37eaa47404b9190df775a3203db4e6da591b04be32b217f9b833",
+    "afterSha256": "8f1a319855399b785dc753f805234fa50b6ef98b813e230c310642f646546a1d"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/mysql/connector.yaml",
+    "sha256": "e8319634e46fb3bf1f0d0965d4a6b0ca0a7c11102fcf9fcd45f5f2d069e0dba9",
+    "afterSha256": "ac41762c74941a369c3eb0c4320df29aeeef117ec1caf190f01f3725ad18e185"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/azure-blob/connector.yaml",
+    "sha256": "d69844120da84a763c2d039f3c69ca9e07e42a26ca7f0402f3a376f4334a0b07",
+    "afterSha256": "4f9264dfe8f6abd4d9e228bddfbd858c240f2984408d0c69fee32a69f57614b8"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/sharepoint/connector.yaml",
+    "sha256": "5a19ac3376c068473c82a823b22bfe83d14560ba1c6e3224e4c1c25f54ace4b3",
+    "afterSha256": "33b5359823daacbcf301b722cb5c2e8436d15d314ff0a2d931ee5854ee1e36c1"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/files/connector.yaml",
+    "sha256": "76f2936eaf428a94cf88885f4c80d5e1d88dc49e535534fc16cf004c32d9f867",
+    "afterSha256": "de4f0278434243865a00f16cb8d4a09c0750b7d6df4075d6b3335dfd910fbf0e"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/salesforce/connector.yaml",
+    "sha256": "683590d0beaa71b84ae8719fb39143471f3400795c2cdea61b265d2e25e9e3ba",
+    "afterSha256": "82e0c18f079700cde1e30d075587518b7e52cb8cc22dc0a862323073cbc4e8bf"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/stripe/connector.yaml",
+    "sha256": "bc79e26ed72d8db46657f3a3bbe608f6eba6b6d6eec7fd433a854c4877e54cf9",
+    "afterSha256": "ea64a64b92dbaff7dddae3d0e96fa4c84c0af8ce150de5f5a96f0ddf69cc8863"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/gcs/connector.yaml",
+    "sha256": "33eb0f85a412d386a6a1124be3e5a359515621022582e5de045b1368cb52547d",
+    "afterSha256": "25f0fc47ea6af3e46d44d988543703ae47fc53214f04a705eb3b46d6336af852"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/postgresql/runtime.json",
+    "sha256": "3321cc9e745b0ff7f918c42a7dc37c3e1cbe794f6897976122379a0161b6c9e3",
+    "afterSha256": "17915b4064d8698cbac221a5e043f9c87720e2116bb5008e9496d91470e06658"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/s3/runtime.json",
+    "sha256": "63f7e5cd3da43331b6878c222e4dd079c1ea104ff301900b4e098d3580cc3642",
+    "afterSha256": "614cf38ffb23c4e61d6636476431c636fb8fe1e4ccbd32ae83f29671993dc8a9"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/onedrive/runtime.json",
+    "sha256": "1bc0712c64ea2817250177a1c55bfe4b4463e32ff64d6dd88533a8530200e636",
+    "afterSha256": "22af4ebe703b6daea5a1eb3d058c5e05b08acec89d2a6fa0328897261f29cf2a"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/oracle/runtime.json",
+    "sha256": "7a5a13af6430bf65c76614ad2b5320a21b5d4cddf1816fcee8c8be472d07d9de",
+    "afterSha256": "1939e2704e860ad54eb7f88f4e3acffd1f8228e7c96235bbbb3d25cfb8bc9847"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/sftp/runtime.json",
+    "sha256": "010092f01517d1e2018a1c9f6c3d0890531b58b8579d59ec20fb5a5c2824dd1e",
+    "afterSha256": "0a4e10dbefb2f78102fac2a8b1090c33192d144e5f6413ba6796c76c2a0c7ee6"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/hubspot/runtime.json",
+    "sha256": "74a772c7af88d436f924001ab851ba82052114adee2850beae7deff07cfa41a3",
+    "afterSha256": "05eea431f1a266577d6a97756e88a9b34e9613e070e72cb664e476a455ba6bc5"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/jira/runtime.json",
+    "sha256": "2b9c814ab12426a9b41b46a92c52a0ec2f6a9611ae80509662436f4615f2afd3",
+    "afterSha256": "edf19bb7dece17f29c0172975977b8df6828e98b0ce559947e9c0353ccf8f09d"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/github/runtime.json",
+    "sha256": "9a126ff1b89caddcf7df993070add8621b32cfc7d39fc37c98fb3d4f3246093f",
+    "afterSha256": "ae9c6c67920cc6673f3cb42eddce342f6319584cd90f6ee27bffd6d2bac0bbbe"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/sql-server/runtime.json",
+    "sha256": "26a098abfcce398d975583751d9b7c111e4520180963d5f959dd9e504467506d",
+    "afterSha256": "364281fda88abbef22bbc1d7cb0206361ca4a619a1ed76951d0130169a6d47cf"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/mysql/runtime.json",
+    "sha256": "4be1d7d6ddb5b872c4238122d246a2560c0cf77cf0328340bd2dad37b8ec6771",
+    "afterSha256": "89da347b3f1d3567a1d6f0b77aab377711ec67f9a9e3865407cbaab6769fbc97"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/azure-blob/runtime.json",
+    "sha256": "c640dececaec667a0ea2384ce8fd94816c7c15bd499223b006014ec4687acb7f",
+    "afterSha256": "548108f2fe17f2cea6ac3a809421fcad7a41a4244728af90ae7ccf51d21e883e"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/sharepoint/runtime.json",
+    "sha256": "323d1d3c6cc44e510a2baf1eace1398a87b0003937b8cb84bd0e4ffd22dff3f5",
+    "afterSha256": "8aba86effc9372d35666598bc84695cba5bcc53410e3e0a8ec5fe27041ed5a0a"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/files/runtime.json",
+    "sha256": "18c50245a71867c9dfc5ec5095e06c7fc1cb68860038152e916a57992d1441c9",
+    "afterSha256": "ec475ac3111c10f59d6fc7e44f479f29d95d7c07a0b0ab8e1a6cb108e2ac8e35"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/salesforce/runtime.json",
+    "sha256": "523e9d43215642ba8b33f44491631f0e7404c4fc3717376d3f1887cf29accc53",
+    "afterSha256": "7ce3adaed46fb5e82571758b02b564ef4f33539500d02b2f73ab7bff04dceb55"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/stripe/runtime.json",
+    "sha256": "b1bae5be3fe776ebbf443c3f92a17bae46ef0931a6ebec2524b1d45a81ad0a17",
+    "afterSha256": "9348b60930dcd3d104810239c56fc5b8a4a2d609be037cbb818b01864a45b0cc"
+  },
+  {
+    "owner": "connectors",
+    "path": "connectors/gcs/runtime.json",
+    "sha256": "bc073eeecea9fd3bd53cd62429c04042a2a69cb4cfd33f0d22b3a3f468d0c38a",
+    "afterSha256": "f57a23954098736bba16e2f8723c70d6d299a9b38cf41113278fa5a174b99a88"
+  },
+  {
+    "owner": "provider-local",
+    "path": "test/connections.test.mjs",
+    "sha256": "439bd8da5cf373950f99e172808a45927c4175921fe66401ba9fa3faf2f22ebf",
+    "afterSha256": "db3f76eaccb442706f371f89efbe171b7a7482ac41167815de7ad68c23438af6"
+  },
+  {
+    "owner": "connectors",
+    "path": "test/runtime/test_runtime.py",
+    "sha256": "2b6ef03775b90f163d31fb648ff703e5078843c7a543977ac4260cdf675a78a5",
+    "afterSha256": "8dd0df1b9aa42cfb3526754c3375ce13fec8989c2bd8daeb0fbd08e854578019"
+  },
+  {
+    "owner": "core",
+    "path": "src/core/execution.ts",
+    "sha256": "ca6b195f98ebcd9dfa0192f22b8488db78a2af54f68a89ddd34974204ead254c",
+    "afterSha256": "09af64fb13fcd8ab702848537f1f60e97e815b9f52b218fc2097551ff91855b1"
+  },
+  {
+    "owner": "core",
+    "path": "src/core/execution-acknowledgement.ts",
+    "sha256": "81565fe39b053bc193685b7635c470148e42f481f0f3d0b540f3a21bf9544997",
+    "afterSha256": "104c6a96c5a02da5eecbf619f3f93d5f1c9f4e1eef06634ba3d45a18a00d0d21"
+  },
+  {
+    "owner": "core",
+    "path": "test/unit/execution-quality.test.ts",
+    "sha256": "c8e694bf4a65f7ff5a7fee88489ba3120240d42daeeb4c56b8820181d02ca646",
+    "afterSha256": "17400cbc019c981a8fe4033c89c24ce3d43c91a0999e06d9e5346681aff2e8fe"
+  },
+  {
+    "owner": "core",
+    "path": "test/unit/execution-acknowledgement.test.ts",
+    "sha256": "54feef310604f56adf38083b11d5245f534afcb507398c3fb864d6eab70065d3",
+    "afterSha256": "66689f0e419c5a5cf566eac6fb9b4fb9f1b7cc8a1d1532f006d052b508db2373"
+  },
+  {
+    "owner": "provider-local",
+    "path": "test/test_metadata_limit.py",
+    "sha256": null,
+    "afterSha256": "4762fb369c0ba320130618df1be61f75e7474c02fe4c2ded3d326a3103c8862e"
+  }
+]

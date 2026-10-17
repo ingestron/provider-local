@@ -71,6 +71,13 @@ class Execution(unittest.TestCase):
 
 
 
+    def test_temporal_source_errors_retain_static_actionable_codes_without_record_messages(self):
+        import sys
+        for code,expected in [('CHECKPOINT_MIGRATION_STALE','head changed after review'),('CHECKPOINT_MIGRATION','reviewed checkpoint transition'),('TEMPORAL_DATE','YYYY-MM-DD'),('TEMPORAL_TIMESTAMP','calendar date and time'),('TEMPORAL_TIMEZONE','timezone mapping'),('TEMPORAL_PRECISION','six fractional digits'),('TEMPORAL_TYPE','reviewed temporal type')]:
+            payload=json.dumps({'errorCode':code,'error':'PRIVATE_SOURCE_VALUE_OR_TOKEN'})
+            with self.assertRaises(module.SourceFailure) as caught:
+                module.child([sys.executable,'-c','import sys;print('+repr(payload)+');sys.exit(1)'],Path.cwd())
+            self.assertEqual(caught.exception.code,code);self.assertIn(expected,str(caught.exception));self.assertNotIn('PRIVATE_SOURCE',str(caught.exception))
     def test_source_errors_are_allowlisted_and_do_not_echo_messages(self):
         import sys
         for code,expected in [('SQL_CONNECT','Cannot connect to SQL'),('SQL_TABLE','metadata is not visible'),('SQL_READ','SQL read failed'),('DB_CONNECT','Cannot connect to the database'),('DB_TABLE','metadata is not visible'),('GITHUB_AUTH','rejected the supplied token'),('GITHUB_RATE_LIMIT','rate limit'),('STRIPE_AUTH','Source error STRIPE_AUTH; see the connector documentation'),('GRAPH_NOT_FOUND','Source error GRAPH_NOT_FOUND'),('lower_case','Runtime operation failed'),('A'*50,'Runtime operation failed'),('unknown','Runtime operation failed')]:
@@ -88,6 +95,20 @@ class Execution(unittest.TestCase):
         with self.assertRaises(ValueError) as caught:
             module.child([sys.executable,'-c','import sys;print('+repr(payload)+');sys.exit(1)'],Path.cwd())
         message=str(caught.exception)
-        self.assertIn('nothing was committed: orders.key-unique (2), bad_id__sensitive-value_',message)
+        self.assertIn('nothing was committed: orders.key-unique (2)',message)
+        self.assertNotIn('sensitive-value',message)
         self.assertNotIn('sensitive-text',message)
         self.assertNotIn('sensitive-row',message)
+
+
+class QualityEvidenceTests(unittest.TestCase):
+    def test_quality_failure_keeps_only_rule_identities_and_finite_counts(self):
+        error = module.QualityFailure([
+            {'id': 'orders.unique', 'stream': 'orders', 'metric': 'duplicateValues', 'value': 2, 'row': 'private row', 'token': 'do-not-emit'},
+            {'id': 'bad', 'stream': 'orders', 'metric': 'duplicateValues', 'value': float('nan')},
+            {'id': 'bad\nmessage', 'stream': 'orders', 'metric': 'rowCount', 'value': 1},
+            {'id': 'bad', 'stream': 'orders', 'metric': 'unsupported', 'value': 1},
+        ])
+        self.assertEqual(error.quality, [{'id': 'orders.unique', 'stream': 'orders', 'metric': 'duplicateValues', 'value': 2}])
+        self.assertNotIn('private row', str(error))
+        self.assertNotIn('do-not-emit', str(error))

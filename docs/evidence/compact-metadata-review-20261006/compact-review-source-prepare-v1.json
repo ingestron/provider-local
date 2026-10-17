@@ -1,0 +1,1062 @@
+{
+  "result": "passed",
+  "phase": "prepare",
+  "candidate": {
+    "cli": "0.17.21",
+    "core": "0.12.52",
+    "declaredCore": "0.12.14",
+    "privateOverride": true
+  },
+  "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+  "archives": {
+    "CORE_ARCHIVE": {
+      "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/compact-review-runtime-v1/ingestron-core-0.12.52.tgz",
+      "sha256": "36c5316c35be831d9545ce9952b08db1ac0b9b15c5a5bb7ea808397f0417f575"
+    },
+    "CLI_ARCHIVE": {
+      "path": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/artifacts/review-batch-runtime-v1/ingestron-0.17.21.tgz",
+      "sha256": "4808a9f6fd6441ef1e389f50484bced448691fc9aa642c1eaaff80dbc2c2a439"
+    }
+  },
+  "archiveParity": {
+    "CORE_ARCHIVE": 156,
+    "CLI_ARCHIVE": 29
+  },
+  "sources": [
+    {
+      "id": "azure-blob",
+      "reference": "ingestron/connectors/connectors/azure-blob/connector.yaml@2.1.9",
+      "runtimeSha256": "548108f2fe17f2cea6ac3a809421fcad7a41a4244728af90ae7ccf51d21e883e",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "1d81c41d-6b49-4d5f-851b-43b7a3bfebc2",
+        "fingerprint": "17475452c13c2f5c5a4d279584043d8eefed49ca85d99e8de23b44c24c8f6b48",
+        "connection": "azure-blob"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "7e8ed1a6-d1e4-46eb-a10b-a886d8b492a6",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 90838,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_azure_blob"],
+        "fingerprint": "c1792b5c9c12c5cdd8bafc02d333dcd4be98aa310b69561c63367df7b3b21476",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:26.481Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:26.534Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_azure_blob",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "files",
+      "reference": "ingestron/connectors/connectors/files/connector.yaml@1.5.11",
+      "runtimeSha256": "ec475ac3111c10f59d6fc7e44f479f29d95d7c07a0b0ab8e1a6cb108e2ac8e35",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "ec87eeff-2b4a-465e-9c76-dfce2d4ec0b6",
+        "fingerprint": "634c26c8aa37b22a085ad6445bcee39e23d7d81c87840ac46983b00975d0bd62",
+        "connection": "files"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "b75bac63-fc68-485d-86b1-110cafd4994e",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 90889,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_files"],
+        "fingerprint": "8eaaa41967da3c559acdc8c0a936c4171de2fc4a0e2f520794b0c43b8fd5e8e9",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:29.263Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:29.315Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_files",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "gcs",
+      "reference": "ingestron/connectors/connectors/gcs/connector.yaml@0.1.9",
+      "runtimeSha256": "f57a23954098736bba16e2f8723c70d6d299a9b38cf41113278fa5a174b99a88",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "ae6ac5be-1933-4b9e-88a3-093c2ded2168",
+        "fingerprint": "85c2f44e7d20bd12dc4f951b608774b6761c51559069723391df746a93bae107",
+        "connection": "gcs"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "6fa9d371-f93e-45a0-92cf-73686cd9cb56",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 90949,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_gcs"],
+        "fingerprint": "accb899bd1af45d8be21d7a393a20fc3edb5c3d23586fc422a5a510548af0698",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:31.920Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:31.971Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_gcs",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "github",
+      "reference": "ingestron/connectors/connectors/github/connector.yaml@1.36.9",
+      "runtimeSha256": "ae9c6c67920cc6673f3cb42eddce342f6319584cd90f6ee27bffd6d2bac0bbbe",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "761da787-4d0e-421e-8ec6-ccd8d9ab415a",
+        "fingerprint": "65be0bd76d9fd640a7db2baa9b487cb128fbbb69cfe4a1b8c00c15705c437e09",
+        "connection": "github"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "8d7b5b67-7acc-4188-8efe-511851c97ce4",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 90998,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_github"],
+        "fingerprint": "6132561f9efccdb90b1ea51d999d1682644b43cd504e8ea4f9a063898c125938",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:34.600Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:34.649Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "6ab6ea4de08b4daa910f9919faf1cb0d1e02a8eac18be6a7b3f23c0e10cbb1dc",
+              "flow": "flow_github",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/6ab6ea4de08b4daa910f9919faf1cb0d1e02a8eac18be6a7b3f23c0e10cbb1dc/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "hubspot",
+      "reference": "ingestron/connectors/connectors/hubspot/connector.yaml@0.1.7",
+      "runtimeSha256": "05eea431f1a266577d6a97756e88a9b34e9613e070e72cb664e476a455ba6bc5",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "61199592-d787-47bc-9f4f-b76a9630f8b8",
+        "fingerprint": "a1322175e81313025d5749e568243de2028f98def72c51f9fc41505065870d43",
+        "connection": "hubspot"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "b58a0e33-f876-4fd8-9253-28768ea37b38",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91048,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_hubspot"],
+        "fingerprint": "80f654ffc4d96e670b8874e509b7538c5019b558e37253d8fd2094d1d950ee96",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:37.285Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:37.333Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_hubspot",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "jira",
+      "reference": "ingestron/connectors/connectors/jira/connector.yaml@0.1.7",
+      "runtimeSha256": "edf19bb7dece17f29c0172975977b8df6828e98b0ce559947e9c0353ccf8f09d",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "41800080-1f13-4ea2-a5e7-4c98c3e58c7f",
+        "fingerprint": "c9c8fabbe21066ca7aa49401077a6c3761da8b576ad8923f4b47ed4ca36a2104",
+        "connection": "jira"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "7bedda84-6757-419d-8046-66d083a5f9cd",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91111,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_jira"],
+        "fingerprint": "07078c04762b0c4bde4fe7f4e04b1050aa382863751b73fec8ed737a061801ec",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:40.005Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:40.056Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_jira",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "mysql",
+      "reference": "ingestron/connectors/connectors/mysql/connector.yaml@1.1.8",
+      "runtimeSha256": "89da347b3f1d3567a1d6f0b77aab377711ec67f9a9e3865407cbaab6769fbc97",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "4ed43196-bb70-4c1e-86d2-55290679ad1c",
+        "fingerprint": "acb5c2498a8c5e3e2625679c020c5da5271e63e85143aef8ffd7cb96362c2f66",
+        "connection": "mysql"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "378520be-a16a-4b9f-9df1-2e1a63c636f2",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91162,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_mysql"],
+        "fingerprint": "ee63666ec7a1915b1d3b5c0be3852136c80017892ce742b5134490a65836cd2f",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:42.707Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:42.755Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "2e164273362823352201325b555277c044c01fb5433433af08432f3964a32f0f",
+              "flow": "flow_mysql",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/2e164273362823352201325b555277c044c01fb5433433af08432f3964a32f0f/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "onedrive",
+      "reference": "ingestron/connectors/connectors/onedrive/connector.yaml@0.1.10",
+      "runtimeSha256": "22af4ebe703b6daea5a1eb3d058c5e05b08acec89d2a6fa0328897261f29cf2a",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "92443a3d-6725-4edf-8539-026c2899ba0f",
+        "fingerprint": "2773fb8be2878a6a507cb9c48ffd68c270099b63630c95ee10e058232af7c793",
+        "connection": "onedrive"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "cf326ab9-62f2-47c1-a42b-8ddfcf99f3d2",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91224,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_onedrive"],
+        "fingerprint": "52fcc35358c55a2b1ae141ffb98a9d340e9e6e99b536f9b681487a8aef3ec825",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:45.707Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:45.763Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_onedrive",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "oracle",
+      "reference": "ingestron/connectors/connectors/oracle/connector.yaml@1.1.8",
+      "runtimeSha256": "1939e2704e860ad54eb7f88f4e3acffd1f8228e7c96235bbbb3d25cfb8bc9847",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "80148f51-6605-4c4f-9d26-eba497c0daaf",
+        "fingerprint": "4752d2e021abc670f59d624a7c03046db272840d71b99eef3d19274796653083",
+        "connection": "oracle"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "64492278-a1b5-44e5-8c28-7a34583d2c17",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91274,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_oracle"],
+        "fingerprint": "9790448a8482241832c91262edb134e3278f2556a6e17d96bf0ae58c8e684a64",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:48.789Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:48.863Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "5e3a3bedad2198d32c2381dc4b10357ffe4b974598e2d7530cd98f7308ba3737",
+              "flow": "flow_oracle",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/5e3a3bedad2198d32c2381dc4b10357ffe4b974598e2d7530cd98f7308ba3737/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "postgresql",
+      "reference": "ingestron/connectors/connectors/postgresql/connector.yaml@1.1.9",
+      "runtimeSha256": "17915b4064d8698cbac221a5e043f9c87720e2116bb5008e9496d91470e06658",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "94e3c187-f378-40c3-9eb1-c346f781399d",
+        "fingerprint": "9061ac6edfac1442cf2a7fd14cc3dcb2f76ec394751b9d4b2926b70990345443",
+        "connection": "postgresql"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "056ab58d-5f8e-4d39-875d-2ae986457c38",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91336,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_postgresql"],
+        "fingerprint": "5d9f88dd3d3e2697f1eba8a9f8731ca4771359ea2c630437dcda0e432bac0b0b",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:52.430Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:52.548Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "83be215b279338521be6770ca6d1c547f59915b901ae704e733764406b7ecea2",
+              "flow": "flow_postgresql",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/83be215b279338521be6770ca6d1c547f59915b901ae704e733764406b7ecea2/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "s3",
+      "reference": "ingestron/connectors/connectors/s3/connector.yaml@1.0.9",
+      "runtimeSha256": "614cf38ffb23c4e61d6636476431c636fb8fe1e4ccbd32ae83f29671993dc8a9",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "0ef366e9-cf99-4cda-a198-6e9b080e883d",
+        "fingerprint": "a8e3b1ad8a7df29a99cb382086ce4cf4739a930067a0c09cdc68513ce31a1d00",
+        "connection": "s3"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "76a65d80-a605-43d5-937f-ea4b01ac74ba",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91457,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_s3"],
+        "fingerprint": "59483d3c655b56932ba0dfa4c195f185fd3fbd2c804d75cfad8de9b3ae51f45e",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:12:56.837Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:12:56.892Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_s3",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "salesforce",
+      "reference": "ingestron/connectors/connectors/salesforce/connector.yaml@0.1.7",
+      "runtimeSha256": "7ce3adaed46fb5e82571758b02b564ef4f33539500d02b2f73ab7bff04dceb55",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "632fdc25-760e-4674-ace4-f21aab3c6a73",
+        "fingerprint": "125d4a345d7dd38ec56506deb32e3a9d18d1f495f8697ed23066e8f92c50f5da",
+        "connection": "salesforce"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "4d51ca40-14ce-417a-94cc-b8796a238e89",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91535,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_salesforce"],
+        "fingerprint": "71c177cf054f09d1830a2d167261b3aff5b85bb72fbfe032372fbe397e58d82c",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:13:00.626Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:13:00.693Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_salesforce",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "sftp",
+      "reference": "ingestron/connectors/connectors/sftp/connector.yaml@1.0.10",
+      "runtimeSha256": "0a4e10dbefb2f78102fac2a8b1090c33192d144e5f6413ba6796c76c2a0c7ee6",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "98b79894-7e49-4cbd-adc7-0b680303f2e0",
+        "fingerprint": "fa1a2d439ecf01372941b5645c83986872d004c758c0bbc4761aba7c0cdd7b7e",
+        "connection": "sftp"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "5550157c-fa52-4215-8d26-1d3a1ad58f11",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91633,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_sftp"],
+        "fingerprint": "848f2c6d615c7edd71265a1242203ec6e8b20d15579b5e9999621929b81b097f",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:13:03.991Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:13:04.046Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_sftp",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "sharepoint",
+      "reference": "ingestron/connectors/connectors/sharepoint/connector.yaml@0.1.10",
+      "runtimeSha256": "8aba86effc9372d35666598bc84695cba5bcc53410e3e0a8ec5fe27041ed5a0a",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "484bc355-6c8f-4a65-9de7-7b90bed7bddd",
+        "fingerprint": "f1a60f04017a49e37c060bfe53d0ff7f449efe77abed1c190d5c1b692816e23d",
+        "connection": "sharepoint"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "a87a12ee-4e4b-4469-9338-19d6eddf0cb7",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91708,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_sharepoint"],
+        "fingerprint": "30719fdc588155d4dfbbf69a4cc380054c2e56af8c2bc4f7f39224a8b3c366a4",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:13:06.932Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:13:06.988Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_sharepoint",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "sql-server",
+      "reference": "ingestron/connectors/connectors/sql-server/connector.yaml@1.5.8",
+      "runtimeSha256": "364281fda88abbef22bbc1d7cb0206361ca4a619a1ed76951d0130169a6d47cf",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "436e1825-3cc3-4da8-bb70-0738c733d1ad",
+        "fingerprint": "19991b834d5cfa921a6be5e37691f467dc70d4cda6ccfee7135ede39b1fd26ea",
+        "connection": "sql-server"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "c21b2633-8791-4b6c-8bcc-5b4f72e838f9",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91793,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_sql_server"],
+        "fingerprint": "3ab329df1737e34b40194d60e9a69e9e6b67f6f9e09679babe72306be5b996b9",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:13:10.576Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:13:10.646Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "457bb50e34526c0b8d71bff1b5ea2105aa6ff558de14bcdcda8f46b147ebb404",
+              "flow": "flow_sql_server",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/457bb50e34526c0b8d71bff1b5ea2105aa6ff558de14bcdcda8f46b147ebb404/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    },
+    {
+      "id": "stripe",
+      "reference": "ingestron/connectors/connectors/stripe/connector.yaml@0.1.7",
+      "runtimeSha256": "9348b60930dcd3d104810239c56fc5b8a4a2d609be037cbb818b01864a45b0cc",
+      "sourceRuntime": {
+        "apiVersion": "ingestron.source-access-prepared/v1",
+        "status": "succeeded",
+        "environment": "dev",
+        "reused": true,
+        "receipt": "c0192de3-0503-4c67-af74-333439c2bed1",
+        "fingerprint": "f08daa1c11062c8f993285208b76a28be08bc145e16dd5c09b4d64b08fa69c67",
+        "connection": "stripe"
+      },
+      "flowRuntime": {
+        "apiVersion": "ingestron.run/v1",
+        "id": "650d319c-4dab-442a-a336-3ba4bde94251",
+        "action": "prepare",
+        "status": "succeeded",
+        "pid": 91921,
+        "environment": "dev",
+        "project": "source_runtime_matrix",
+        "provider": "ingestron/provider-local/plugin/provider.yaml@0.4.15",
+        "providerCommit": "e083b1c3f3b8ee9fb51cb05b6442eb5a0bc69da8",
+        "from": "build/generated",
+        "configuration": "local",
+        "flows": ["flow_stripe"],
+        "fingerprint": "4ab6dab33c17d439b02d8b4a381a20a442fa8d55a8a84c46d0593e3c4a155988",
+        "compiler": {
+          "version": "0.12.52",
+          "digest": "c62726e6c8bced451efbbeb4935f9726aaa13404d80370d78f49a4ce6f6bccef"
+        },
+        "attempt": 1,
+        "startedAt": "2026-10-05T23:13:13.917Z",
+        "outcome": "succeeded",
+        "recoveryRequired": false,
+        "finishedAt": "2026-10-05T23:13:14.003Z",
+        "result": {
+          "action": "prepare",
+          "apiVersion": "ingestron.execution-result/v1",
+          "flows": [
+            {
+              "environment": "415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a",
+              "flow": "flow_stripe",
+              "python": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/project/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+              "pythonVersion": "3.12.12",
+              "reused": true
+            }
+          ],
+          "status": "succeeded"
+        }
+      }
+    }
+  ],
+  "checks": [
+    {
+      "source": "azure-blob",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "azure-blob",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "azure-blob",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "files",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "files",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "files",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "gcs",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "gcs",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "gcs",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "github",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "github",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "github",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "hubspot",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "hubspot",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "hubspot",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "jira",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "jira",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "jira",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "mysql",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "mysql",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "mysql",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "onedrive",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "onedrive",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "onedrive",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "oracle",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "oracle",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "oracle",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "postgresql",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "postgresql",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "postgresql",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "s3",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "s3",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "s3",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "salesforce",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "salesforce",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "salesforce",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "sftp",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "sftp",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "sftp",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "sharepoint",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "sharepoint",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "sharepoint",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "sql-server",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "sql-server",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "sql-server",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    },
+    {
+      "source": "stripe",
+      "check": "Installed declared source access"
+    },
+    {
+      "source": "stripe",
+      "check": "Sample execution permission refused before access"
+    },
+    {
+      "source": "stripe",
+      "check": "Source access and generated flow prepare exact locked runtimes"
+    }
+  ],
+  "matrixSize": 16,
+  "selectedSize": 16,
+  "liveAccounts": false,
+  "vendorQualified": false,
+  "browserInteraction": false,
+  "config": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-matrix-v1/source-runtime-matrix-Wc9QIC/acceptance.json",
+  "allSixteenComplete": false,
+  "allSixteenClientCasesPassed": false,
+  "updatedAt": "2026-10-05T23:13:14Z"
+}

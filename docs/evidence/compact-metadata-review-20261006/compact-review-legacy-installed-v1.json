@@ -1,0 +1,14 @@
+{
+  "result": "passed",
+  "runtimePython": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-wide-UMbEbn/.ingestron/runtimes/415e8dd8a937cda72a08ec672aa8fb7010c22c962a57186abcf1c7d6ba60a91a/bin/python",
+  "runtimePath": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/compact-review-wide-UMbEbn/build/studio/dev/flow_files/flows/flow_files",
+  "legacyReview": "/Users/sacode/sa.projects/intentlabs/repo/ingestron/repo/.studio-finalisation-20261005/fixtures/unicode-project-identity-wide-hUyQqj/build/studio/dev/flow_files/flows/flow_files/review.json",
+  "legacySha256": "b885e0b9b33c51a98f04b4bf58c97d5a75fcb8bfda90de6905e06f004eb43295",
+  "currentSha256": "6830f2c664fedb128b505d52a67c155de124abde82d35a2250f2dbcbe5d086e4",
+  "checks": {
+    "legacyTables": 10,
+    "currentTables": 20,
+    "noFileWrites": true
+  },
+  "scope": "Read-only accepted projection checks with the new installed locked source workflow; not old-version checkpoint migration"
+}

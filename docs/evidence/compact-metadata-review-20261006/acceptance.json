@@ -1,0 +1,110 @@
+{
+  "apiVersion": "ingestron.compact-metadata-review-acceptance/v1",
+  "date": "2026-10-06",
+  "status": "passed",
+  "candidate": {
+    "cli": "0.17.21",
+    "core": "0.12.53",
+    "providerLocal": "0.4.16",
+    "publicPinsChanged": false
+  },
+  "scope": {
+    "installedLocalMultilingualMetadata": true,
+    "actualFrozenSharedHost": true,
+    "sdkCliMcpPagedRead": true,
+    "staticActualMappingRows": true,
+    "sixteenSyntheticSources": true,
+    "realVendorAccounts": false,
+    "mountedInteraction": false,
+    "enterpriseComplete": false
+  },
+  "verification": {
+    "coreTests": 270,
+    "providerNodeTests": 17,
+    "providerPythonTests": 18,
+    "connectorsNodeTests": 5,
+    "connectorsRuntimeTests": 293,
+    "sourcePreparationChecks": 48,
+    "sharedHostChecks": 144,
+    "businessQualityChecks": 22,
+    "lockedPackages": 17,
+    "consumedOwnerFiles": 773,
+    "coreRuntimeFiles": 156,
+    "cliRuntimeFiles": 29,
+    "unchangedExactSharedAssets": 5,
+    "staticUiSourceFiles": 52,
+    "multilingualTables": 20,
+    "columnsPerTable": 200,
+    "physicalOutputs": 20,
+    "measuredRows": 60,
+    "staticMappingRows": 4000,
+    "staticPages": 160,
+    "previewDisplayedColumns": 50,
+    "previewTotalColumns": 200,
+    "reviewBytes": 1609401,
+    "reviewPages": 7,
+    "approvalDigest": "ea59ff03d43bcda2a7f3af6bd7f74e740b964a9e3e226b2e98b7842b94567a41",
+    "wholeReviewBytesExact": true,
+    "decodedDescriptionsExact": true,
+    "denialGroups": 5,
+    "preservedCommittedOutputFiles": 21,
+    "sourceMetadataLimit": {
+      "encodedReviewBytes": 2717398,
+      "configBytes": 1378437,
+      "projectLockBytes": 1378187
+    },
+    "durableSafeFailureCode": true,
+    "legacyReviewReadInstalled": true,
+    "legacyDataReceiptCheckpointCodecByteUnchanged": true
+  },
+  "remaining": [
+    "Hundred-table/two-hundred-column connection preparation exceeds the existing two-million-byte provider transport limit; safe measured guidance is verified but successful scale handling remains open",
+    "Encoded review larger than two million bytes is refused before review/output publication; the actual 2717398-byte fixture is refusal evidence, not larger-project readiness",
+    "Mounted, keyboard and narrow-layout usability; broader native/provider, cross-project ownership, recovery/CDC and independent engineer qualification remain open",
+    "Complete older source-version checkpoint migration was not rerun; unchanged codec bytes and current regression tests are narrower evidence",
+    "The original preview retains its older configured compiler; private candidates are isolated"
+  ],
+  "programmeVerification": {
+    "checks": [
+      {
+        "name": "format-scoped",
+        "status": "passed",
+        "exit": 0
+      },
+      {
+        "name": "programme",
+        "status": "passed",
+        "exit": 0
+      },
+      {
+        "name": "test",
+        "status": "passed",
+        "exit": 0
+      },
+      {
+        "name": "secrets",
+        "status": "passed",
+        "exit": 0
+      },
+      {
+        "name": "ledger",
+        "status": "passed",
+        "exit": 0
+      },
+      {
+        "name": "diff",
+        "status": "passed",
+        "exit": 0
+      },
+      {
+        "name": "format-full-known-exception",
+        "status": "passed",
+        "exit": 0
+      }
+    ],
+    "fullRootValidatePassed": false,
+    "knownUnrelatedFormatException": "docs/solution/data-contract-documentation-mockups.md",
+    "structuredEvidencePaths": 879,
+    "allSixteenRowsImplementing": true
+  }
+}
